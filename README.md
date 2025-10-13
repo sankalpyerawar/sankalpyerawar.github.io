@@ -12,6 +12,7 @@
 
 🌱 **Currently exploring:**
 - LLMs
+- Agentic tools
 - DevOps
 
 🌐 **Let's Connect:**
