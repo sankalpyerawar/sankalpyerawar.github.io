@@ -146,3 +146,23 @@ async function initPortfolio() {
 }
 
 initPortfolio();
+
+// Mobile Collapsible Sections
+function setupCollapsible(toggleId, contentId) {
+  const toggle = document.getElementById(toggleId);
+  const content = document.getElementById(contentId);
+
+  if (toggle && content) {
+    toggle.addEventListener('click', () => {
+      content.classList.toggle('open');
+      const chevron = toggle.querySelector('.chevron');
+      if (chevron) chevron.classList.toggle('rotate-icon');
+    });
+  }
+}
+
+// Initialize Toggles
+setupCollapsible('skills-toggle', 'skills-list');
+setupCollapsible('education-toggle', 'education-list');
+setupCollapsible('summary-toggle', 'profile-summary');
+setupCollapsible('experience-toggle', 'experience-list');

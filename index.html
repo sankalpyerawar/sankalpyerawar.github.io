@@ -22,21 +22,50 @@
         </div>
         <p class="subtitle" id="profile-subtitle"></p>
 
-        <nav class="social-links" id="profile-socials">
-          <!-- Dynamic Social Links -->
-        </nav>
+        <div class="social-actions"
+          style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <nav class="social-links" id="profile-socials">
+            <!-- Dynamic Social Links -->
+          </nav>
+
+          <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+              <input type="checkbox" id="checkbox" />
+              <div class="slider round">
+                <svg class="icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"
+                  style="position: absolute; left: 4px; top: 3px;">
+                  <circle cx="12" cy="12" r="5" />
+                  <path
+                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+                <svg class="icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"
+                  style="position: absolute; right: 4px; top: 3px;">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              </div>
+            </label>
+          </div>
+        </div>
       </header>
 
-      <section class="section education-section" style="margin-bottom: 2rem;">
-        <h2>Education</h2>
-        <div id="education-list">
+      <section class="section education-section" style="margin-bottom: 2rem;" id="education-section">
+        <h2 id="education-toggle"
+          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+          Education
+          <span class="chevron rotate-icon" style="transition: transform 0.3s ease;">▼</span>
+        </h2>
+        <div id="education-list" class="collapsible-content open">
           <!-- Dynamic Education -->
         </div>
       </section>
 
-      <section class="section skills-section">
-        <h2>Skills</h2>
-        <div class="skills-tags" id="skills-list">
+      <section class="section skills-section" id="skills-section">
+        <h2 id="skills-toggle"
+          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+          Skills
+          <span class="chevron" style="transition: transform 0.3s ease;">▼</span>
+        </h2>
+        <div class="skills-tags collapsible-content" id="skills-list">
           <!-- Dynamic Skills -->
         </div>
       </section>
@@ -46,31 +75,25 @@
 
     <main class="content">
       <!-- Theme Switch (Top Right) -->
-      <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-          <input type="checkbox" id="checkbox" />
-          <div class="slider round">
-            <svg class="icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"
-              style="position: absolute; left: 4px; top: 3px;">
-              <circle cx="12" cy="12" r="5" />
-              <path
-                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-            </svg>
-            <svg class="icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"
-              style="position: absolute; right: 4px; top: 3px;">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-          </div>
-        </label>
-      </div>
 
-      <div class="summary-section" id="profile-summary"
-        style="margin-bottom: 3rem; border-bottom: 1px solid var(--color-border); padding-bottom: 2rem;">
-        <!-- Dynamic Summary -->
+
+      <div class="summary-section" style="margin-bottom: 3rem;">
+        <h2 id="summary-toggle"
+          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          Summary
+          <span class="chevron rotate-icon" style="transition: transform 0.3s ease;">▼</span>
+        </h2>
+        <div id="profile-summary" class="collapsible-content open">
+          <!-- Dynamic Summary -->
+        </div>
       </div>
       <section class="section experience-section">
-        <h2>Experience</h2>
-        <div id="experience-list">
+        <h2 id="experience-toggle"
+          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+          Experience
+          <span class="chevron" style="transition: transform 0.3s ease;">▼</span>
+        </h2>
+        <div id="experience-list" class="collapsible-content">
           <!-- Dynamic Experience -->
         </div>
       </section>
