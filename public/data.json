@@ -1,0 +1,127 @@
+{
+    "meta": {
+        "title": "Sankalp Yerawar | Backend Engineer",
+        "description": "Portfolio of Sankalp Yerawar - Senior Backend Engineer specializing in distributed systems, cloud architectures, and data streaming."
+    },
+    "profile": {
+        "name": "SANKALP YERAWAR",
+        "initials": "SY",
+        "subtitle": "Backend Development & Distributed Systems Architect",
+        "summary": [
+            "7+ years in backend development, distributed systems, and cloud architectures across automotive, healthcare, and manufacturing.",
+            "Built real-time streaming, HIPAA-compliant apps, and automated supply chain systems. Expertise in microservices, high-scale data processing, and cloud-native applications. Designed large-scale pipelines with Kafka, Cassandra, PostgreSQL, and Redis.",
+            "Collaborated with clients to drive business decisions and improve product design. Passionate about clean architecture, DDD, TDD, and system optimization."
+        ],
+        "social": {
+            "email": "mailto:sankalpyerawar@gmail.com",
+            "linkedin": "https://www.linkedin.com/in/sankalpyerawar/",
+            "github": "https://github.com/sankalpyerawar"
+        }
+    },
+    "skills": {
+        "Programming Languages": [
+            "Kotlin",
+            "Java",
+            "Python",
+            "C#"
+        ],
+        "Frameworks & Architectures": [
+            "Spring Boot",
+            "Micronaut",
+            "Event-Driven Architecture",
+            "Microservices",
+            "Domain-Driven Design (DDD)"
+        ],
+        "Data Streaming & Processing": [
+            "Kafka",
+            "Kafka Streams",
+            "Telemetry, CAN",
+            "Event Data Processing"
+        ],
+        "Databases & Storage": [
+            "PostgreSQL",
+            "Cassandra",
+            "Redis"
+        ],
+        "Cloud & Infrastructure": [
+            "AWS",
+            "Kubernetes",
+            "Docker",
+            "Swarm",
+            "Terraform",
+            "Vault"
+        ],
+        "CI/CD & DevOps": [
+            "Jenkins",
+            "CI/CD Pipelines",
+            "IaC"
+        ],
+        "Testing & Code Quality": [
+            "TDD",
+            "JUnit",
+            "MockK",
+            "Kotest",
+            "SonarCloud",
+            "Detekt"
+        ],
+        "API & Communication": [
+            "REST APIs",
+            "GraphQL",
+            "gRPC"
+        ],
+        "Monitoring & Observability": [
+            "Prometheus",
+            "Grafana"
+        ]
+    },
+    "experience": [
+        {
+            "title": "Solution Consultant",
+            "company": "Sahaj Software, Pune",
+            "date": "Oct 2022 - Present",
+            "details": [
+                "Working on a connected vehicle project for a vehicle manufacturer in Java. Managing real-time streaming data (Telemetry, CAN, event data) using Kafka and Kafka Streams.",
+                "Handling large-scale data storage with Cassandra, Redis, and PostgreSQL, ensuring high availability and performance.",
+                "Collaborating with clients to design and improve connected vehicle solutions, contributing to business decisions that enhance product development.",
+                "Developed an MES application using Kotlin and Spring Boot to optimize manufacturing workflows.",
+                "Built a replenishment application to automate supply chain processes and reduce manual inefficiencies in 15 days.",
+                "Managing service deployments on Kubernetes hosted on AWS, utilizing Jenkins, Vault, and Terraform for CI/CD and infrastructure automation.",
+                "Implemented monitoring and observability with Prometheus and Grafana to optimize system performance."
+            ]
+        },
+        {
+            "title": "Software Development Engineer - 2",
+            "company": "Medly Pharmacy, Pune",
+            "date": "Nov 2021 - Oct 2022",
+            "details": [
+                "Developed HIPAA-compliant cloud-based applications to streamline administrative services for healthcare entities.",
+                "Collaborated with cross-functional teams to design distributed systems using Serverless computing, AWS Lambda, and event-driven architecture.",
+                "Built REST APIs with a domain-driven design approach in Kotlin using the Micronaut framework. Utilized Kotest for testing and SonarCloud/Detekt for static code analysis.",
+                "Managed data storage and retrieval using Amazon RDS for PostgreSQL.",
+                "Developed dynamic browser applications using React.",
+                "Worked on addressing technical debt to enhance the performance and maintainability of existing codebases."
+            ]
+        },
+        {
+            "title": "Software Engineer",
+            "company": "Siemens PLM Software, Pune",
+            "date": "2018 - Nov 2021",
+            "details": [
+                "Designed and implemented a Command Prediction microservice in C# using advanced data structures and prediction algorithms.",
+                "Applied MVC architecture principles, including Dependency Injection, Singleton pattern, Repository pattern, and Factory pattern.",
+                "Developed a dashboard application using GraphQL and Python for enhanced data visualization.",
+                "Integrated multi-database support (Oracle, MSSQL, PostgreSQL).",
+                "Deployed microservices using Docker and Swarm.",
+                "Authored a white paper on Object-Based APIs using GraphQL and OData.",
+                "Prototyped a multi-API support framework using gRPC and Protocol Buffers."
+            ]
+        }
+    ],
+    "education": [
+        {
+            "degree": "B.Tech (Information Technology)",
+            "university": "Walchand College of Engineering, Sangli",
+            "date": "2014 - 2018"
+        }
+    ]
+}
