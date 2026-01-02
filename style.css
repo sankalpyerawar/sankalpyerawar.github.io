@@ -130,7 +130,6 @@ input:checked+.slider:before {
     font-family: var(--font-sans);
     font-weight: 800;
     font-size: 2.4rem;
-    /* Increased size */
     width: 3.5rem;
     height: 3.5rem;
     background: var(--color-accent);
@@ -140,9 +139,7 @@ input:checked+.slider:before {
     justify-content: center;
     border-radius: 5px;
     flex-shrink: 0;
-    /* Prevent shrinking */
     margin-bottom: 0;
-    /* Remove bottom margin */
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -151,24 +148,22 @@ input:checked+.slider:before {
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
-    /* Increased spacing */
 }
 
 h1 {
     font-family: var(--font-sans);
     font-weight: 800;
     font-size: 1.5rem;
-    /* Adjusted to fit 2 lines in 3.5rem height */
     letter-spacing: -0.02em;
     line-height: 1.1;
-    /* Tight leading */
     margin-bottom: 0;
     color: var(--color-accent);
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 3.5rem;
-    /* Match logo height */
+    white-space: nowrap;
+    /* Keep name on one line */
 }
 
 .subtitle {
@@ -419,7 +414,25 @@ h2 {
     }
 
     h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        /* Larger on desktop but fits in row */
+        margin-bottom: 0;
+        width: auto;
+    }
+
+    .profile-intro {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .logo {
+        width: 5rem;
+        height: 5rem;
+        font-size: 3rem;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        margin-bottom: 0;
     }
 
     /* Force display on desktop */
