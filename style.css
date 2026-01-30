@@ -394,6 +394,101 @@ h2 {
     /* Right align footer */
 }
 
+/* Resume Button */
+.resume-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    width: 100%; /* Full width in sidebar */
+    cursor: pointer;
+}
+
+.resume-button:hover {
+    border-color: var(--color-text-main);
+    color: var(--color-text-main);
+    background-color: var(--color-tag-bg);
+}
+
+/* Projects Section */
+.project-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    animation: fadeIn 0.6s ease backwards;
+}
+
+.project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--color-text-muted);
+}
+
+/* Light mode shadow fix */
+body.light-mode .project-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.8rem;
+}
+
+.project-title {
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin: 0;
+}
+
+.project-link {
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    border-bottom: none;
+    font-weight: 500;
+}
+
+.project-link:hover {
+    text-decoration: underline;
+}
+
+.project-description {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-tag {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background-color: var(--color-tag-bg);
+    color: var(--color-tag-text);
+    border-radius: 4px;
+}
+
 /* Desktop Styles */
 @media (min-width: 1024px) {
     #layout {
@@ -451,6 +546,7 @@ h2 {
     #skills-toggle,
     #education-toggle,
     #summary-toggle,
+    #projects-toggle,
     #experience-toggle {
         cursor: default !important;
     }

@@ -83,6 +83,19 @@ async function initPortfolio() {
       socialContainer.innerHTML = socialHtml;
     }
 
+    // Resume Button
+    const resumeContainer = document.getElementById('resume-container');
+    if (resumeContainer && data.profile.resumeUrl) {
+      resumeContainer.innerHTML = `
+        <a href="${data.profile.resumeUrl}" class="resume-button" target="_blank" rel="noopener noreferrer">
+           <svg class="icon-download" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;">
+             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+           </svg>
+           Resume
+        </a>
+      `;
+    }
+
     // Skills (Categorized)
     const skillsContainer = document.getElementById('skills-list');
     if (skillsContainer && data.skills) {
@@ -104,6 +117,23 @@ async function initPortfolio() {
           `)
           .join('');
       }
+    }
+
+    // Projects
+    const projectsContainer = document.getElementById('projects-list');
+    if (projectsContainer && data.projects) {
+      projectsContainer.innerHTML = data.projects.map(project => `
+        <div class="project-card">
+          <div class="project-header">
+             <h3 class="project-title">${project.title}</h3>
+             ${project.link ? `<a href="${project.link}" target="_blank" rel="noopener noreferrer" class="project-link">${project.linkText || 'View'} ↗</a>` : ''}
+          </div>
+          <p class="project-description">${project.description}</p>
+          <div class="project-tech">
+            ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
     }
 
     // Experience
@@ -165,4 +195,5 @@ function setupCollapsible(toggleId, contentId) {
 setupCollapsible('skills-toggle', 'skills-list');
 setupCollapsible('education-toggle', 'education-list');
 setupCollapsible('summary-toggle', 'profile-summary');
+setupCollapsible('projects-toggle', 'projects-list');
 setupCollapsible('experience-toggle', 'experience-list');
