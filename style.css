@@ -55,10 +55,15 @@ body.terminal-mode a:hover {
 body.terminal-mode h1,
 body.terminal-mode h2,
 body.terminal-mode h3,
-body.terminal-mode .logo,
 body.terminal-mode .job h3,
 body.terminal-mode .school h3 {
     color: var(--color-accent);
+}
+
+body.terminal-mode .logo {
+    background: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
 }
 
 body.terminal-mode .tag {
