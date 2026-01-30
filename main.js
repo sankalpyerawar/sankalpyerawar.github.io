@@ -1,27 +1,52 @@
 import './style.css'
 
 // Theme Logic
-const toggleSwitch = document.getElementById('checkbox');
 const body = document.body;
+const themeToggle = document.getElementById('theme-toggle');
 
-function switchTheme(e) {
-  if (e.target.checked) {
+const themeIcons = {
+  light: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/></svg>`,
+  dark: `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+  terminal: `<svg viewBox="0 0 24 24"><polyline points="4 17 10 12 4 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+};
+
+const themes = ['light', 'dark', 'terminal'];
+
+function applyTheme(themeName) {
+  // Remove all theme classes first
+  body.classList.remove('light-mode', 'terminal-mode');
+
+  if (themeName === 'light') {
     body.classList.add('light-mode');
-    localStorage.setItem('theme', 'light');
-  } else {
-    body.classList.remove('light-mode');
-    localStorage.setItem('theme', 'dark');
+  } else if (themeName === 'terminal') {
+    body.classList.add('terminal-mode');
+  }
+
+  localStorage.setItem('theme', themeName);
+
+  // Update toggle icon
+  if (themeToggle) {
+    themeToggle.innerHTML = themeIcons[themeName] || themeIcons.dark;
   }
 }
 
-// Check local storage (default is null -> dark -> unchecked)
-if (localStorage.getItem('theme') === 'light') {
-  body.classList.add('light-mode');
-  if (toggleSwitch) toggleSwitch.checked = true;
+function cycleTheme() {
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  // Ensure we have a valid index, default to 1 (dark) if not found
+  let currentIndex = themes.indexOf(currentTheme);
+  if (currentIndex === -1) currentIndex = 1;
+
+  const nextIndex = (currentIndex + 1) % themes.length;
+  const nextTheme = themes[nextIndex];
+  applyTheme(nextTheme);
 }
 
-if (toggleSwitch) {
-  toggleSwitch.addEventListener('change', switchTheme);
+// Initialize
+const savedTheme = localStorage.getItem('theme') || 'terminal';
+applyTheme(savedTheme);
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', cycleTheme);
 }
 
 // Social Icons (Logos)
@@ -143,20 +168,60 @@ async function initPortfolio() {
     // Experience
     const experienceContainer = document.getElementById('experience-list');
     if (experienceContainer && data.experience) {
-      experienceContainer.innerHTML = data.experience.map(job => `
-        <article class="job">
-          <div class="job-header">
-            <h3>${job.title}</h3>
-            <div class="job-meta">
-              <span class="company">${job.company}</span>
-              <span class="date">${job.date}</span>
+      experienceContainer.innerHTML = `
+        <div class="timeline-container">
+          ${data.experience.map((job, index) => `
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="experience-card" data-index="${index}">
+                <div class="experience-header">
+                  <h3>${job.title}</h3>
+                  <div class="experience-meta">
+                    <span class="experience-company">${job.company}</span>
+                    <span class="experience-date">${job.date}</span>
+                  </div>
+                </div>
+
+                <p class="experience-summary">${job.summary}</p>
+
+                <div class="project-tech" style="margin-bottom: 1rem;">
+                    ${job.technologies ? job.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('') : ''}
+                </div>
+
+                ${job.nestedProjects && job.nestedProjects.length > 0 ? `
+                  <div class="expand-hint">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    View Projects
+                  </div>
+                  <div class="nested-projects-container">
+                    ${job.nestedProjects.map(proj => `
+                      <div class="nested-project-card">
+                        <h4>${proj.title}</h4>
+                        <p class="nested-project-summary">${proj.summary}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
             </div>
-          </div>
-          <ul class="job-details">
-            ${job.details.map(detail => `<li>${detail}</li>`).join('')}
-          </ul>
-        </article>
-      `).join('');
+          `).join('')}
+        </div>
+      `;
+
+      // Event Delegation for Experience Cards
+      experienceContainer.addEventListener('click', (e) => {
+        const card = e.target.closest('.experience-card');
+        if (card) {
+          const nestedContainer = card.querySelector('.nested-projects-container');
+          if (nestedContainer) {
+             // Don't toggle if clicking a link (if any)
+             if (e.target.tagName === 'A') return;
+
+             nestedContainer.classList.toggle('open');
+             card.classList.toggle('expanded');
+          }
+        }
+      });
     }
 
     // Education
@@ -187,9 +252,9 @@ function setupCollapsible(toggleId, contentId) {
   const content = document.getElementById(contentId);
 
   if (toggle && content) {
+    const chevron = toggle.querySelector('.chevron');
     toggle.addEventListener('click', () => {
       content.classList.toggle('open');
-      const chevron = toggle.querySelector('.chevron');
       if (chevron) chevron.classList.toggle('rotate-icon');
     });
   }

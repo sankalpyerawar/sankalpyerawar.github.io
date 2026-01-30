@@ -27,6 +27,59 @@ body.light-mode {
     --color-tag-text: #444444;
 }
 
+/* Terminal Mode Override */
+body.terminal-mode {
+    --color-bg: #050505;
+    --color-text-main: #D1D5DB;
+    --color-text-muted: #9CA3AF;
+    --color-border: #2a2a2a;
+    --color-accent: #00FF88;
+    --color-tag-bg: #111111;
+    --color-tag-text: #00D1FF;
+    --color-terminal-cyan: #00D1FF;
+    --font-serif: 'Courier New', 'Fira Code', 'Roboto Mono', monospace;
+    --font-sans: 'Courier New', 'Fira Code', 'Roboto Mono', monospace;
+}
+
+body.terminal-mode a {
+    color: var(--color-terminal-cyan);
+    border-bottom-color: rgba(0, 209, 255, 0.3);
+}
+
+body.terminal-mode a:hover {
+    color: var(--color-terminal-cyan);
+    border-bottom-color: var(--color-terminal-cyan);
+    text-shadow: 0 0 8px rgba(0, 209, 255, 0.5);
+}
+
+body.terminal-mode h1,
+body.terminal-mode h2,
+body.terminal-mode h3,
+body.terminal-mode .job h3,
+body.terminal-mode .school h3 {
+    color: var(--color-accent);
+}
+
+body.terminal-mode .logo {
+    background: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+}
+
+body.terminal-mode .tag {
+    border: 1px solid rgba(0, 209, 255, 0.2);
+}
+
+body.terminal-mode #theme-toggle {
+    color: var(--color-terminal-cyan);
+    border-color: rgba(0, 209, 255, 0.3);
+}
+
+body.terminal-mode #theme-toggle:hover {
+    background: rgba(0, 209, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 209, 255, 0.2);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -76,54 +129,30 @@ a:hover {
     margin-bottom: 0;
 }
 
-.theme-switch {
-    display: inline-block;
-    height: 24px;
-    position: relative;
-    width: 48px;
-}
-
-.theme-switch input {
-    display: none;
-}
-
-.slider {
-    background-color: var(--color-border);
-    bottom: 0;
+#theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
     cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    background-color: var(--color-accent);
-    bottom: 3px;
-    content: "";
-    height: 18px;
-    left: 3px;
-    position: absolute;
-    transition: .4s;
-    width: 18px;
+    color: var(--color-text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
     border-radius: 50%;
-    z-index: 2;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
 }
 
-input:checked+.slider {
-    background-color: var(--color-border);
+#theme-toggle:hover {
+    background: var(--color-tag-bg);
+    color: var(--color-accent);
 }
 
-input:checked+.slider:before {
-    transform: translateX(24px);
-}
-
-.icon-sun,
-.icon-moon {
-    z-index: 1;
-    color: var(--color-text-muted);
+#theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
 }
 
 .logo {
@@ -590,4 +619,148 @@ body.light-mode .project-card:hover {
         margin-top: 10rem;
         /* Extra spacing on desktop */
     }
+}
+/* --- Experience Timeline Refactor --- */
+
+.timeline-container {
+    position: relative;
+    padding-left: 2rem;
+    border-left: 2px solid var(--color-border);
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: calc(-2rem - 6px);
+    top: 1.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    z-index: 2;
+    box-shadow: 0 0 0 4px var(--color-bg); /* Spacing from line */
+}
+
+.experience-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer; /* Clickable for toggle */
+}
+
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--color-text-muted);
+}
+
+body.light-mode .experience-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.experience-header h3 {
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 0.25rem;
+}
+
+.experience-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.experience-company {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.experience-date {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+}
+
+.experience-summary {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--color-text-main);
+    line-height: 1.6;
+}
+
+/* Nested Projects */
+.nested-projects-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--color-border);
+    display: none;
+}
+
+.nested-projects-container.open {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.nested-project-card {
+    background-color: var(--color-tag-bg);
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nested-project-card:hover {
+    border-color: var(--color-border);
+}
+
+.nested-project-card h4 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 0.5rem;
+}
+
+.nested-project-summary {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.expand-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+}
+
+.expand-hint svg {
+    transition: transform 0.3s ease;
+}
+
+.experience-card.expanded .expand-hint svg {
+    transform: rotate(180deg);
 }
