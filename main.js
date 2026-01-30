@@ -1,7 +1,7 @@
 import './style.css'
 
 // Theme Logic
-const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+const toggleSwitch = document.getElementById('checkbox');
 const body = document.body;
 
 function switchTheme(e) {
