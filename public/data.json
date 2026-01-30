@@ -26,6 +26,13 @@
             "technologies": ["JavaScript", "Vite", "CSS3", "HTML5"],
             "link": "https://github.com/sankalpyerawar/sankalpyerawar",
             "linkText": "View Source"
+        },
+        {
+            "title": "AI-Assisted Development Handbook",
+            "description": "A best-practices reference for setting up projects to maximize AI coding tools like Google Antigravity, GitHub Copilot, and Claude.",
+            "technologies": ["AI", "Prompt Engineering", "Best Practices", "LLM"],
+            "link": "https://github.com/sankalpyerawar/ai-assisted-handbook",
+            "linkText": "View Handbook"
         }
     ],
     "skills": {
