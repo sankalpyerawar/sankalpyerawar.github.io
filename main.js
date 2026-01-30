@@ -187,9 +187,9 @@ function setupCollapsible(toggleId, contentId) {
   const content = document.getElementById(contentId);
 
   if (toggle && content) {
+    const chevron = toggle.querySelector('.chevron');
     toggle.addEventListener('click', () => {
       content.classList.toggle('open');
-      const chevron = toggle.querySelector('.chevron');
       if (chevron) chevron.classList.toggle('rotate-icon');
     });
   }
