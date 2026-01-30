@@ -27,6 +27,59 @@ body.light-mode {
     --color-tag-text: #444444;
 }
 
+/* Terminal Mode Override */
+body.terminal-mode {
+    --color-bg: #050505;
+    --color-text-main: #D1D5DB;
+    --color-text-muted: #9CA3AF;
+    --color-border: #2a2a2a;
+    --color-accent: #00FF88;
+    --color-tag-bg: #111111;
+    --color-tag-text: #00D1FF;
+    --color-terminal-cyan: #00D1FF;
+    --font-serif: 'Courier New', 'Fira Code', 'Roboto Mono', monospace;
+    --font-sans: 'Courier New', 'Fira Code', 'Roboto Mono', monospace;
+}
+
+body.terminal-mode a {
+    color: var(--color-terminal-cyan);
+    border-bottom-color: rgba(0, 209, 255, 0.3);
+}
+
+body.terminal-mode a:hover {
+    color: var(--color-terminal-cyan);
+    border-bottom-color: var(--color-terminal-cyan);
+    text-shadow: 0 0 8px rgba(0, 209, 255, 0.5);
+}
+
+body.terminal-mode h1,
+body.terminal-mode h2,
+body.terminal-mode h3,
+body.terminal-mode .job h3,
+body.terminal-mode .school h3 {
+    color: var(--color-accent);
+}
+
+body.terminal-mode .logo {
+    background: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+}
+
+body.terminal-mode .tag {
+    border: 1px solid rgba(0, 209, 255, 0.2);
+}
+
+body.terminal-mode #theme-toggle {
+    color: var(--color-terminal-cyan);
+    border-color: rgba(0, 209, 255, 0.3);
+}
+
+body.terminal-mode #theme-toggle:hover {
+    background: rgba(0, 209, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 209, 255, 0.2);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -76,54 +129,30 @@ a:hover {
     margin-bottom: 0;
 }
 
-.theme-switch {
-    display: inline-block;
-    height: 24px;
-    position: relative;
-    width: 48px;
-}
-
-.theme-switch input {
-    display: none;
-}
-
-.slider {
-    background-color: var(--color-border);
-    bottom: 0;
+#theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
     cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    background-color: var(--color-accent);
-    bottom: 3px;
-    content: "";
-    height: 18px;
-    left: 3px;
-    position: absolute;
-    transition: .4s;
-    width: 18px;
+    color: var(--color-text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
     border-radius: 50%;
-    z-index: 2;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
 }
 
-input:checked+.slider {
-    background-color: var(--color-border);
+#theme-toggle:hover {
+    background: var(--color-tag-bg);
+    color: var(--color-accent);
 }
 
-input:checked+.slider:before {
-    transform: translateX(24px);
-}
-
-.icon-sun,
-.icon-moon {
-    z-index: 1;
-    color: var(--color-text-muted);
+#theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
 }
 
 .logo {
