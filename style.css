@@ -456,15 +456,39 @@ body.light-mode .project-card:hover {
     margin: 0;
 }
 
-.project-link {
-    font-size: 0.85rem;
-    color: var(--color-accent);
-    border-bottom: none;
-    font-weight: 500;
+.project-links {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
 }
 
-.project-link:hover {
-    text-decoration: underline;
+.icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.icon-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+.icon-link.source-link svg {
+    fill: currentColor;
+}
+
+.icon-link.live-link svg {
+    fill: none;
+    stroke: currentColor;
+}
+
+.icon-link:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    border: none;
 }
 
 .project-description {

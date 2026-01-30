@@ -25,6 +25,7 @@
             "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dark/light mode, dynamic JSON content loading, and a clean UI.",
             "technologies": ["JavaScript", "Vite", "CSS3", "HTML5"],
             "link": "https://github.com/sankalpyerawar/sankalpyerawar",
+            "liveUrl": "https://sankalpyerawar.github.io",
             "linkText": "View Source"
         },
         {
