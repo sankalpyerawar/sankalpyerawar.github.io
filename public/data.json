@@ -7,6 +7,7 @@
         "name": "SANKALP YERAWAR",
         "initials": "SY",
         "subtitle": "Backend Development & Distributed Systems Architect",
+        "resumeUrl": "/resume.pdf",
         "summary": [
             "7+ years in backend development, distributed systems, and cloud architectures across automotive, healthcare, and manufacturing.",
             "Built real-time streaming, HIPAA-compliant apps, and automated supply chain systems. Expertise in microservices, high-scale data processing, and cloud-native applications. Designed large-scale pipelines with Kafka, Cassandra, PostgreSQL, and Redis.",
@@ -18,6 +19,23 @@
             "github": "https://github.com/sankalpyerawar"
         }
     },
+    "projects": [
+        {
+            "title": "Personal Portfolio Website",
+            "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dark/light mode, dynamic JSON content loading, and a clean UI.",
+            "technologies": ["JavaScript", "Vite", "CSS3", "HTML5"],
+            "link": "https://github.com/sankalpyerawar/sankalpyerawar",
+            "liveUrl": "https://sankalpyerawar.github.io",
+            "linkText": "View Source"
+        },
+        {
+            "title": "AI-Assisted Development Handbook",
+            "description": "A best-practices reference for setting up projects to maximize AI coding tools like Google Antigravity, GitHub Copilot, and Claude.",
+            "technologies": ["AI", "Prompt Engineering", "Best Practices", "LLM"],
+            "link": "https://github.com/sankalpyerawar/ai-assisted-handbook",
+            "linkText": "View Handbook"
+        }
+    ],
     "skills": {
         "Programming Languages": [
             "Kotlin",
