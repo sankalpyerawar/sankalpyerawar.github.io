@@ -42,7 +42,7 @@ function cycleTheme() {
 }
 
 // Initialize
-const savedTheme = localStorage.getItem('theme') || 'dark';
+const savedTheme = localStorage.getItem('theme') || 'terminal';
 applyTheme(savedTheme);
 
 if (themeToggle) {
