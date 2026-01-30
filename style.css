@@ -620,3 +620,147 @@ body.light-mode .project-card:hover {
         /* Extra spacing on desktop */
     }
 }
+/* --- Experience Timeline Refactor --- */
+
+.timeline-container {
+    position: relative;
+    padding-left: 2rem;
+    border-left: 2px solid var(--color-border);
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: calc(-2rem - 6px);
+    top: 1.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    z-index: 2;
+    box-shadow: 0 0 0 4px var(--color-bg); /* Spacing from line */
+}
+
+.experience-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer; /* Clickable for toggle */
+}
+
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--color-text-muted);
+}
+
+body.light-mode .experience-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.experience-header h3 {
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 0.25rem;
+}
+
+.experience-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.experience-company {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.experience-date {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+}
+
+.experience-summary {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--color-text-main);
+    line-height: 1.6;
+}
+
+/* Nested Projects */
+.nested-projects-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--color-border);
+    display: none;
+}
+
+.nested-projects-container.open {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.nested-project-card {
+    background-color: var(--color-tag-bg);
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nested-project-card:hover {
+    border-color: var(--color-border);
+}
+
+.nested-project-card h4 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 0.5rem;
+}
+
+.nested-project-summary {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.expand-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+}
+
+.expand-hint svg {
+    transition: transform 0.3s ease;
+}
+
+.experience-card.expanded .expand-hint svg {
+    transform: rotate(180deg);
+}

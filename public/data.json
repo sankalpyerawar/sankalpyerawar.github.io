@@ -97,41 +97,71 @@
             "title": "Solution Consultant",
             "company": "Sahaj Software, Pune",
             "date": "Oct 2022 - Present",
-            "details": [
-                "Working on a connected vehicle project for a vehicle manufacturer in Java. Managing real-time streaming data (Telemetry, CAN, event data) using Kafka and Kafka Streams.",
-                "Handling large-scale data storage with Cassandra, Redis, and PostgreSQL, ensuring high availability and performance.",
-                "Collaborating with clients to design and improve connected vehicle solutions, contributing to business decisions that enhance product development.",
-                "Developed an MES application using Kotlin and Spring Boot to optimize manufacturing workflows.",
-                "Built a replenishment application to automate supply chain processes and reduce manual inefficiencies in 15 days.",
-                "Managing service deployments on Kubernetes hosted on AWS, utilizing Jenkins, Vault, and Terraform for CI/CD and infrastructure automation.",
-                "Implemented monitoring and observability with Prometheus and Grafana to optimize system performance."
+            "summary": "Architecting and developing high-scale distributed systems for automotive and manufacturing clients. Specializing in real-time data streaming and cloud infrastructure.",
+            "technologies": ["Java", "Kafka", "Kafka Streams", "Cassandra", "Redis", "PostgreSQL", "Kotlin", "Spring Boot", "AWS", "Kubernetes", "Terraform", "Prometheus", "Grafana"],
+            "nestedProjects": [
+                {
+                    "title": "Connected Vehicle Platform",
+                    "summary": "Managed real-time streaming data (Telemetry, CAN) using Kafka and Kafka Streams. Handled large-scale storage with Cassandra and Redis."
+                },
+                {
+                    "title": "MES Application",
+                    "summary": "Developed a Manufacturing Execution System using Kotlin and Spring Boot to optimize workflows."
+                },
+                {
+                    "title": "Supply Chain Automation",
+                    "summary": "Built a replenishment application to automate supply chain processes, reducing manual inefficiencies."
+                },
+                {
+                    "title": "Infrastructure & DevOps",
+                    "summary": "Managed K8s deployments on AWS using Jenkins, Vault, and Terraform. Implemented observability with Prometheus and Grafana."
+                }
             ]
         },
         {
             "title": "Software Development Engineer - 2",
             "company": "Medly Pharmacy, Pune",
             "date": "Nov 2021 - Oct 2022",
-            "details": [
-                "Developed HIPAA-compliant cloud-based applications to streamline administrative services for healthcare entities.",
-                "Collaborated with cross-functional teams to design distributed systems using Serverless computing, AWS Lambda, and event-driven architecture.",
-                "Built REST APIs with a domain-driven design approach in Kotlin using the Micronaut framework. Utilized Kotest for testing and SonarCloud/Detekt for static code analysis.",
-                "Managed data storage and retrieval using Amazon RDS for PostgreSQL.",
-                "Developed dynamic browser applications using React.",
-                "Worked on addressing technical debt to enhance the performance and maintainability of existing codebases."
+            "summary": "Developed HIPAA-compliant cloud-based applications and distributed systems for the healthcare sector.",
+            "technologies": ["Kotlin", "Micronaut", "AWS Lambda", "Serverless", "PostgreSQL", "React", "TDD", "SonarCloud"],
+            "nestedProjects": [
+                {
+                    "title": "Healthcare Admin Services",
+                    "summary": "Streamlined administrative services for healthcare entities with HIPAA-compliant cloud applications."
+                },
+                {
+                    "title": "Distributed Systems Architecture",
+                    "summary": "Designed distributed systems using Serverless computing, AWS Lambda, and event-driven architecture."
+                },
+                {
+                    "title": "Micronaut REST APIs",
+                    "summary": "Built DDD-based REST APIs in Kotlin. Utilized Kotest for testing and SonarCloud for quality."
+                }
             ]
         },
         {
             "title": "Software Engineer",
             "company": "Siemens PLM Software, Pune",
             "date": "2018 - Nov 2021",
-            "details": [
-                "Designed and implemented a Command Prediction microservice in C# using advanced data structures and prediction algorithms.",
-                "Applied MVC architecture principles, including Dependency Injection, Singleton pattern, Repository pattern, and Factory pattern.",
-                "Developed a dashboard application using GraphQL and Python for enhanced data visualization.",
-                "Integrated multi-database support (Oracle, MSSQL, PostgreSQL).",
-                "Deployed microservices using Docker and Swarm.",
-                "Authored a white paper on Object-Based APIs using GraphQL and OData.",
-                "Prototyped a multi-API support framework using gRPC and Protocol Buffers."
+            "summary": "Designed and implemented microservices and data visualization tools for PLM software.",
+            "technologies": ["C#", "GraphQL", "Python", "Docker", "Swarm", "Oracle", "MSSQL", "gRPC"],
+            "nestedProjects": [
+                {
+                    "title": "Command Prediction Microservice",
+                    "summary": "Designed a prediction microservice in C# using advanced algorithms and data structures."
+                },
+                {
+                    "title": "Dashboard Application",
+                    "summary": "Developed a data visualization dashboard using GraphQL and Python."
+                },
+                {
+                    "title": "Multi-Database Integration",
+                    "summary": "Integrated support for Oracle, MSSQL, and PostgreSQL databases."
+                },
+                {
+                    "title": "Microservices Deployment",
+                    "summary": "Deployed microservices using Docker and Swarm."
+                }
             ]
         }
     ],

@@ -168,20 +168,60 @@ async function initPortfolio() {
     // Experience
     const experienceContainer = document.getElementById('experience-list');
     if (experienceContainer && data.experience) {
-      experienceContainer.innerHTML = data.experience.map(job => `
-        <article class="job">
-          <div class="job-header">
-            <h3>${job.title}</h3>
-            <div class="job-meta">
-              <span class="company">${job.company}</span>
-              <span class="date">${job.date}</span>
+      experienceContainer.innerHTML = `
+        <div class="timeline-container">
+          ${data.experience.map((job, index) => `
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="experience-card" data-index="${index}">
+                <div class="experience-header">
+                  <h3>${job.title}</h3>
+                  <div class="experience-meta">
+                    <span class="experience-company">${job.company}</span>
+                    <span class="experience-date">${job.date}</span>
+                  </div>
+                </div>
+
+                <p class="experience-summary">${job.summary}</p>
+
+                <div class="project-tech" style="margin-bottom: 1rem;">
+                    ${job.technologies ? job.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('') : ''}
+                </div>
+
+                ${job.nestedProjects && job.nestedProjects.length > 0 ? `
+                  <div class="expand-hint">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    View Projects
+                  </div>
+                  <div class="nested-projects-container">
+                    ${job.nestedProjects.map(proj => `
+                      <div class="nested-project-card">
+                        <h4>${proj.title}</h4>
+                        <p class="nested-project-summary">${proj.summary}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
             </div>
-          </div>
-          <ul class="job-details">
-            ${job.details.map(detail => `<li>${detail}</li>`).join('')}
-          </ul>
-        </article>
-      `).join('');
+          `).join('')}
+        </div>
+      `;
+
+      // Event Delegation for Experience Cards
+      experienceContainer.addEventListener('click', (e) => {
+        const card = e.target.closest('.experience-card');
+        if (card) {
+          const nestedContainer = card.querySelector('.nested-projects-container');
+          if (nestedContainer) {
+             // Don't toggle if clicking a link (if any)
+             if (e.target.tagName === 'A') return;
+
+             nestedContainer.classList.toggle('open');
+             card.classList.toggle('expanded');
+          }
+        }
+      });
     }
 
     // Education
