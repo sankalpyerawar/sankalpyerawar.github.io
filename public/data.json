@@ -9,9 +9,9 @@
         "subtitle": "Backend Development & Distributed Systems Architect",
         "resumeUrl": "/resume.pdf",
         "summary": [
-            "7+ years in backend development, distributed systems, and cloud architectures across automotive, healthcare, and manufacturing.",
-            "Built real-time streaming, HIPAA-compliant apps, and automated supply chain systems. Expertise in microservices, high-scale data processing, and cloud-native applications. Designed large-scale pipelines with Kafka, Cassandra, PostgreSQL, and Redis.",
-            "Collaborated with clients to drive business decisions and improve product design. Passionate about clean architecture, DDD, TDD, and system optimization."
+            "7+ years of experience as a backend-focused software engineer specializing in scalable distributed systems and microservices architecture.",
+            "Expertise in Kotlin, Java, and cloud-native patterns (AWS Lambda, Serverless). Proven track record in designing real-time data pipelines (Kafka) and high-performance storage solutions (Cassandra, PostgreSQL).",
+            "Passionate about clean code, Domain-Driven Design (DDD), and TDD. actively exploring AI-assisted development to deliver faster, cleaner solutions."
         ],
         "social": {
             "email": "mailto:sankalpyerawar@gmail.com",
@@ -23,7 +23,12 @@
         {
             "title": "Personal Portfolio Website",
             "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dark/light mode, dynamic JSON content loading, and a clean UI.",
-            "technologies": ["JavaScript", "Vite", "CSS3", "HTML5"],
+            "technologies": [
+                "Antigravity",
+                "AI-Assisted Development",
+                "Java",
+                "React"
+            ],
             "link": "https://github.com/sankalpyerawar/sankalpyerawar",
             "liveUrl": "https://sankalpyerawar.github.io",
             "linkText": "View Source"
@@ -31,14 +36,19 @@
         {
             "title": "AI-Assisted Development Handbook",
             "description": "A best-practices reference for setting up projects to maximize AI coding tools like Google Antigravity, GitHub Copilot, and Claude.",
-            "technologies": ["AI", "Prompt Engineering", "Best Practices", "LLM"],
+            "technologies": [
+                "AI",
+                "Prompt Engineering",
+                "Best Practices",
+                "LLM"
+            ],
             "link": "https://github.com/sankalpyerawar/ai-assisted-handbook",
             "linkText": "View Handbook"
         }
     ],
     "skills": {
         "Programming Languages": [
-            "Kotlin",
+            "Kotlin (Primary)",
             "Java",
             "Python",
             "C#"
@@ -46,59 +56,84 @@
         "Frameworks & Architectures": [
             "Spring Boot",
             "Micronaut",
+            "Serverless Patterns",
             "Event-Driven Architecture",
-            "Microservices",
             "Domain-Driven Design (DDD)"
         ],
-        "Data Streaming & Processing": [
-            "Kafka",
-            "Kafka Streams",
-            "Telemetry, CAN",
-            "Event Data Processing"
-        ],
-        "Databases & Storage": [
-            "PostgreSQL",
-            "Cassandra",
-            "Redis"
-        ],
         "Cloud & Infrastructure": [
-            "AWS",
+            "AWS (Lambda, Step Functions)",
+            "Cloud-Native Patterns",
             "Kubernetes",
             "Docker",
-            "Swarm",
-            "Terraform",
-            "Vault"
+            "Terraform"
         ],
-        "CI/CD & DevOps": [
-            "Jenkins",
+        "Data & Streaming": [
+            "PostgreSQL (RDS)",
+            "Cassandra",
+            "Redis",
+            "Kafka",
+            "Kafka Streams"
+        ],
+        "Engineering Practices": [
+            "TDD / Kotest",
+            "Testcontainers",
             "CI/CD Pipelines",
-            "IaC"
+            "SonarCloud / Detekt",
+            "Clean Code"
         ],
-        "Testing & Code Quality": [
-            "TDD",
-            "JUnit",
-            "MockK",
-            "Kotest",
-            "SonarCloud",
-            "Detekt"
-        ],
-        "API & Communication": [
-            "REST APIs",
-            "GraphQL",
-            "gRPC"
-        ],
-        "Monitoring & Observability": [
+        "Observability": [
             "Prometheus",
-            "Grafana"
+            "Grafana",
+            "Distributed Tracing"
+        ],
+        "Emerging Tech": [
+            "AI Coding Agents",
+            "LLM Integration",
+            "Platform Engineering"
         ]
     },
     "experience": [
         {
+            "title": "Technology Consultant",
+            "company": "Technogise PVd. Ltd.",
+            "date": "Oct 2025 - Present",
+            "summary": "Building scalable serverless ETL platforms and enabling teams with AI-assisted development practices. Focus on high-quality delivery through agile execution and robust backend architecture.",
+            "technologies": [
+                "Java",
+                "AWS Step Functions",
+                "AWS Lambda",
+                "S3",
+                "Antigravity",
+                "Claude",
+                "Agile"
+            ],
+            "nestedProjects": [
+                {
+                    "title": "Automated Per Diem ETL Platform",
+                    "summary": "Designed a serverless ETL platform using AWS Step Functions and Java Lambdas to automate per diem rate processing. Built a unified data model and validation framework, reducing manual errors and ensuring regulatory compliance."
+                }
+            ]
+        },
+        {
             "title": "Solution Consultant",
             "company": "Sahaj Software, Pune",
-            "date": "Oct 2022 - Present",
+            "date": "Oct 2022 - Oct 2025",
             "summary": "Architecting and developing high-scale distributed systems for automotive and manufacturing clients. Specializing in real-time data streaming and cloud infrastructure.",
-            "technologies": ["Java", "Kafka", "Kafka Streams", "Cassandra", "Redis", "PostgreSQL", "Kotlin", "Spring Boot", "AWS", "Kubernetes", "Terraform", "Prometheus", "Grafana"],
+            "technologies": [
+                "Java",
+                "Kafka",
+                "Kafka Streams",
+                "Cassandra",
+                "Redis",
+                "PostgreSQL",
+                "Kotlin",
+                "Spring Boot",
+                "AWS",
+                "Kubernetes",
+                "Terraform",
+                "Prometheus",
+                "Grafana"
+            ],
             "nestedProjects": [
                 {
                     "title": "Connected Vehicle Platform",
@@ -123,7 +158,16 @@
             "company": "Medly Pharmacy, Pune",
             "date": "Nov 2021 - Oct 2022",
             "summary": "Developed HIPAA-compliant cloud-based applications and distributed systems for the healthcare sector.",
-            "technologies": ["Kotlin", "Micronaut", "AWS Lambda", "Serverless", "PostgreSQL", "React", "TDD", "SonarCloud"],
+            "technologies": [
+                "Kotlin",
+                "Micronaut",
+                "AWS Lambda",
+                "Serverless",
+                "PostgreSQL",
+                "React",
+                "TDD",
+                "SonarCloud"
+            ],
             "nestedProjects": [
                 {
                     "title": "Healthcare Admin Services",
@@ -144,7 +188,16 @@
             "company": "Siemens PLM Software, Pune",
             "date": "2018 - Nov 2021",
             "summary": "Designed and implemented microservices and data visualization tools for PLM software.",
-            "technologies": ["C#", "GraphQL", "Python", "Docker", "Swarm", "Oracle", "MSSQL", "gRPC"],
+            "technologies": [
+                "C#",
+                "GraphQL",
+                "Python",
+                "Docker",
+                "Swarm",
+                "Oracle",
+                "MSSQL",
+                "gRPC"
+            ],
             "nestedProjects": [
                 {
                     "title": "Command Prediction Microservice",
