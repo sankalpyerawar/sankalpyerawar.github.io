@@ -1,53 +1,5 @@
-import './style.css'
-
-// Theme Logic
-const body = document.body;
-const themeToggle = document.getElementById('theme-toggle');
-
-const themeIcons = {
-  light: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/></svg>`,
-  dark: `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
-  terminal: `<svg viewBox="0 0 24 24"><polyline points="4 17 10 12 4 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-};
-
-const themes = ['light', 'dark', 'terminal'];
-
-function applyTheme(themeName) {
-  // Remove all theme classes first
-  body.classList.remove('light-mode', 'terminal-mode');
-
-  if (themeName === 'light') {
-    body.classList.add('light-mode');
-  } else if (themeName === 'terminal') {
-    body.classList.add('terminal-mode');
-  }
-
-  localStorage.setItem('theme', themeName);
-
-  // Update toggle icon
-  if (themeToggle) {
-    themeToggle.innerHTML = themeIcons[themeName] || themeIcons.dark;
-  }
-}
-
-function cycleTheme() {
-  const currentTheme = localStorage.getItem('theme') || 'dark';
-  // Ensure we have a valid index, default to 1 (dark) if not found
-  let currentIndex = themes.indexOf(currentTheme);
-  if (currentIndex === -1) currentIndex = 1;
-
-  const nextIndex = (currentIndex + 1) % themes.length;
-  const nextTheme = themes[nextIndex];
-  applyTheme(nextTheme);
-}
-
-// Initialize
-const savedTheme = localStorage.getItem('theme') || 'terminal';
-applyTheme(savedTheme);
-
-if (themeToggle) {
-  themeToggle.addEventListener('click', cycleTheme);
-}
+import './style.css';
+import { initGame } from './game.js';
 
 // Social Icons (Logos)
 const socialIcons = {
@@ -117,7 +69,7 @@ async function initPortfolio() {
            <svg class="icon-download" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;">
              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
            </svg>
-           Resume
+           RESUME
         </a>
       `;
     }
@@ -126,15 +78,13 @@ async function initPortfolio() {
     const skillsContainer = document.getElementById('skills-list');
     if (skillsContainer && data.skills) {
       if (Array.isArray(data.skills)) {
-        // Fallback for flat array (old format)
         skillsContainer.innerHTML = data.skills
           .map(skill => `<span class="tag">${skill}</span>`)
           .join('');
       } else {
-        // Categorized Object
         skillsContainer.innerHTML = Object.entries(data.skills)
           .map(([category, items]) => `
-            <div class="skill-category" style="margin-bottom: 0.75rem;">
+            <div class="skill-category">
               <h3 class="skill-category-title">${category}</h3>
               <div class="skill-tags">
                 ${items.map(skill => `<span class="tag">${skill}</span>`).join('')}
@@ -191,7 +141,7 @@ async function initPortfolio() {
                 ${job.nestedProjects && job.nestedProjects.length > 0 ? `
                   <div class="expand-hint">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-                    View Projects
+                    VIEW PROJECTS
                   </div>
                   <div class="nested-projects-container">
                     ${job.nestedProjects.map(proj => `
@@ -208,13 +158,12 @@ async function initPortfolio() {
         </div>
       `;
 
-      // Event Delegation for Experience Cards
+      // Event Delegation
       experienceContainer.addEventListener('click', (e) => {
         const card = e.target.closest('.experience-card');
         if (card) {
           const nestedContainer = card.querySelector('.nested-projects-container');
           if (nestedContainer) {
-             // Don't toggle if clicking a link (if any)
              if (e.target.tagName === 'A') return;
 
              nestedContainer.classList.toggle('open');
@@ -228,39 +177,97 @@ async function initPortfolio() {
     const educationContainer = document.getElementById('education-list');
     if (educationContainer && data.education) {
       educationContainer.innerHTML = data.education.map(school => `
-        <div class="school">
-            <h3>${school.degree}</h3>
-            <p>${school.university} (${school.date})</p>
+        <div class="school" style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.1rem;">${school.degree}</h3>
+            <p style="color: var(--color-text-muted);">${school.university} // ${school.date}</p>
         </div>
       `).join('');
     }
 
-    // Reveal layout after load
+    // Initialize Game
+    initGame();
+
+    // System Status Clock
+    const timeEl = document.getElementById('sys-time');
+    if (timeEl) {
+        setInterval(() => {
+            const now = new Date();
+            timeEl.textContent = now.toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
+    }
+
+    // Terminal Logic
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalOutput = document.getElementById('terminal-output');
+
+    if (terminalInput && terminalOutput) {
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim().toLowerCase();
+                const now = new Date().toLocaleTimeString('en-US', { hour12: false });
+
+                let response = '';
+
+                if (command === 'help') {
+                    response = 'Available commands: help, clear, whoami, date, status, exit';
+                } else if (command === 'clear') {
+                    terminalOutput.innerHTML = '';
+                    terminalInput.value = '';
+                    return;
+                } else if (command === 'whoami') {
+                    response = 'guest@portfolio-net';
+                } else if (command === 'date') {
+                    response = new Date().toString();
+                } else if (command === 'status') {
+                    response = 'SYSTEM OPTIMAL. NO THREATS DETECTED.';
+                } else if (command === 'exit') {
+                    response = 'Bye.';
+                    window.close(); // Probably won't work in most browsers, but it fits the theme
+                } else if (command === '') {
+                    response = '';
+                } else {
+                    response = `Command not found: ${command}`;
+                }
+
+                if (response) {
+                    const line = document.createElement('div');
+                    line.textContent = `[${now}] $ ${command}\n> ${response}`;
+                    line.style.marginBottom = '0.5rem';
+                    terminalOutput.appendChild(line);
+                    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                }
+
+                terminalInput.value = '';
+            }
+        });
+    }
+
+    // Reveal layout
     document.getElementById('layout').style.opacity = '1';
 
   } catch (err) {
     console.error('Error loading portfolio data:', err);
-    document.body.innerHTML = '<p style="text-align:center; padding: 2rem;">Error loading portfolio data. Please check console.</p>';
+    document.body.innerHTML = '<p style="color: #00FF41; text-align:center; padding: 2rem; font-family: monospace;">SYSTEM ERROR: FAILED TO LOAD DATA MODULE.</p>';
   }
 }
 
+// Call initialization
 initPortfolio();
 
-// Mobile Collapsible Sections
+// Mobile Collapsible Sections (Optional: disable for desktop in CSS)
 function setupCollapsible(toggleId, contentId) {
   const toggle = document.getElementById(toggleId);
   const content = document.getElementById(contentId);
 
   if (toggle && content) {
-    const chevron = toggle.querySelector('.chevron');
     toggle.addEventListener('click', () => {
+      // Only toggle if display is not block (mobile)
+      // Actually CSS handles strict display block on desktop, but toggling class is fine
       content.classList.toggle('open');
-      if (chevron) chevron.classList.toggle('rotate-icon');
     });
   }
 }
 
-// Initialize Toggles
 setupCollapsible('skills-toggle', 'skills-list');
 setupCollapsible('education-toggle', 'education-list');
 setupCollapsible('summary-toggle', 'profile-summary');
