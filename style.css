@@ -7,14 +7,36 @@
     --color-text-muted: #008F11; /* Darker Green */
     --color-border: #00FF41;
     --color-accent: #00FF41;
-    --color-highlight: #D1D5DB; /* Soft white for readability on some text if needed, or keep green */
-    --color-card-bg: #050505;
+    --color-highlight: #ffffff; /* Was #D1D5DB but mapped to #fff in usage originally */
+
+    /* Backgrounds with Transparency for Dark Mode */
+    --bg-sidebar: rgba(0, 0, 0, 0.9);
+    --bg-card: rgba(0, 20, 0, 0.3);
+    --bg-card-hover: rgba(0, 20, 0, 0.6);
+    --bg-widget: rgba(0, 20, 0, 0.5);
 
     --width-sidebar: 320px;
     --gap-layout: 3rem;
     --max-width: 1400px;
 
     --glow-shadow: 0 0 8px var(--color-accent);
+}
+
+[data-theme="light"] {
+    --color-bg: #e0e0e0;
+    --color-text-main: #004d00;
+    --color-text-muted: #006600;
+    --color-border: #004d00;
+    --color-accent: #006600;
+    --color-highlight: #000000;
+
+    /* Opaque Backgrounds for Light Mode */
+    --bg-sidebar: #dcdcdc;
+    --bg-card: #f0f0f0;
+    --bg-card-hover: #ffffff;
+    --bg-widget: #dcdcdc;
+
+    --glow-shadow: 0 0 4px rgba(0, 77, 0, 0.3);
 }
 
 * {
@@ -36,6 +58,7 @@ body {
     background-image: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
     background-size: 20px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Scrollbar Styling */
@@ -45,11 +68,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #000;
+    background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #003300;
+    background: var(--color-text-muted);
     border: 1px solid var(--color-accent);
 }
 
@@ -74,7 +97,7 @@ a {
 }
 
 a:hover {
-    color: #fff;
+    color: var(--color-highlight);
     text-shadow: 0 0 8px var(--color-accent);
     border-bottom-color: var(--color-accent);
 }
@@ -89,7 +112,7 @@ a:hover {
 
 /* Sidebar */
 .sidebar {
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: var(--bg-sidebar);
     border-right: 1px solid var(--color-border);
     padding: 2rem;
     display: flex;
@@ -101,6 +124,38 @@ a:hover {
     position: relative;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme Toggle Button */
+#theme-toggle {
+    background: transparent;
+    border: 1px solid var(--color-text-muted);
+    color: var(--color-text-main);
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto; /* Push to bottom if space allows, or use existing layout flow */
+    transition: all 0.2s ease;
+    align-self: flex-start; /* Align left */
+}
+
+#theme-toggle:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 8px var(--color-accent);
+    transform: scale(1.1);
+}
+
+#theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
 }
 
 /* Profile Header */
@@ -122,7 +177,7 @@ a:hover {
     font-weight: 900;
     color: var(--color-accent);
     box-shadow: var(--glow-shadow);
-    background: #000;
+    background: var(--color-bg);
 }
 
 h1#profile-name {
@@ -224,14 +279,14 @@ h1#profile-name {
     border: 1px solid var(--color-text-muted);
     padding: 1rem;
     font-size: 0.85rem;
-    background: rgba(0, 20, 0, 0.5);
+    background: var(--bg-widget);
 }
 
 #sys-time {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: #fff;
+    color: var(--color-highlight);
     text-align: center;
     font-family: 'Courier New', monospace; /* Force blocky look */
 }
@@ -261,7 +316,7 @@ h1#profile-name {
     min-height: 20px;
     margin-bottom: 0.5rem;
     font-size: 0.8rem;
-    color: #fff;
+    color: var(--color-highlight);
     white-space: pre-wrap;
     max-height: 100px;
     overflow-y: auto;
@@ -336,7 +391,7 @@ h1#profile-name {
 .game-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-highlight); /* Use variable now for consistent theming */
     margin-bottom: 1rem;
     text-shadow: 0 0 10px var(--color-accent);
     text-align: center;
@@ -366,12 +421,12 @@ h2 {
 #profile-summary p {
     margin-bottom: 1rem;
     font-size: 1.1rem;
-    color: #ddd;
+    color: var(--color-text-main);
 }
 
 /* Experience & Projects Cards */
 .experience-card, .project-card {
-    background: rgba(0, 20, 0, 0.3);
+    background: var(--bg-card);
     border: 1px solid var(--color-border);
     padding: 1.5rem;
     margin-bottom: 2rem;
@@ -383,7 +438,7 @@ h2 {
 .experience-card:hover, .project-card:hover {
     box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
     transform: translateY(-2px);
-    background: rgba(0, 20, 0, 0.6);
+    background: var(--bg-card-hover);
 }
 
 .experience-header, .project-header {
@@ -392,7 +447,7 @@ h2 {
 
 .experience-header h3, .project-title {
     font-size: 1.3rem;
-    color: #fff;
+    color: var(--color-highlight);
     margin-bottom: 0.5rem;
 }
 
@@ -424,7 +479,7 @@ h2 {
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
     color: var(--color-text-muted);
-    background: #001100;
+    background: var(--color-bg);
 }
 
 /* Skills */
@@ -467,7 +522,7 @@ h2 {
     top: 1.5rem;
     width: 1rem;
     height: 1rem;
-    background: #000;
+    background: var(--color-bg);
     border: 2px solid var(--color-accent);
     border-radius: 50%;
     box-shadow: 0 0 10px var(--color-accent);
