@@ -48,7 +48,13 @@ export function initGame() {
     let nextObstacleTimer = 0;
 
     // Input Handling
-    function handleJump() {
+    let isJumping = false;
+
+    function startJump(e) {
+        if (e && e.type !== 'keydown') {
+             if(e.cancelable) e.preventDefault();
+        }
+
         if (!isPlaying && !gameOver) {
             startGame();
             return;
@@ -61,28 +67,54 @@ export function initGame() {
         if (player.grounded) {
             player.vy = player.jumpStrength;
             player.grounded = false;
+            isJumping = true;
         }
     }
 
+    function endJump(e) {
+         if (e && e.type !== 'keyup') {
+             if(e.cancelable) e.preventDefault();
+        }
+
+        if (isJumping) {
+            isJumping = false;
+            if (player.vy < -6) {
+                player.vy = -6;
+            }
+        }
+    }
+
+    // Keyboard
     window.addEventListener('keydown', (e) => {
         if (e.code === 'Space' || e.code === 'ArrowUp') {
             e.preventDefault(); // Prevent scrolling
-            handleJump();
+            startJump(e);
         }
     });
 
-    canvas.addEventListener('click', handleJump);
-    canvas.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        handleJump();
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'Space' || e.code === 'ArrowUp') {
+            e.preventDefault();
+            endJump(e);
+        }
     });
 
-    // Add listeners to overlay for starting/restarting
-    overlay.addEventListener('click', handleJump);
-    overlay.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        handleJump();
-    });
+    // Mouse / Touch
+    // Canvas
+    canvas.addEventListener('mousedown', startJump);
+    canvas.addEventListener('mouseup', endJump);
+    canvas.addEventListener('mouseleave', endJump);
+
+    canvas.addEventListener('touchstart', startJump, { passive: false });
+    canvas.addEventListener('touchend', endJump);
+
+    // Overlay
+    overlay.addEventListener('mousedown', startJump);
+    overlay.addEventListener('mouseup', endJump);
+    overlay.addEventListener('mouseleave', endJump);
+
+    overlay.addEventListener('touchstart', startJump, { passive: false });
+    overlay.addEventListener('touchend', endJump);
 
 
     function startGame() {
