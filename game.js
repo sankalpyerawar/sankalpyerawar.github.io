@@ -77,6 +77,13 @@ export function initGame() {
         handleJump();
     });
 
+    // Add listeners to overlay for starting/restarting
+    overlay.addEventListener('click', handleJump);
+    overlay.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleJump();
+    });
+
 
     function startGame() {
         if (isPlaying) return;
@@ -95,7 +102,7 @@ export function initGame() {
         player.vy = 0;
         overlay.classList.remove('hidden');
         overlay.querySelector('.game-title').textContent = "CODE QUEST: ESCAPE THE VOID";
-        overlay.querySelector('.game-start-msg').textContent = "PRESS SPACE TO START";
+        overlay.querySelector('.game-start-msg').textContent = "PRESS SPACE OR TAP TO START";
         draw();
     }
 
@@ -153,7 +160,7 @@ export function initGame() {
                 isPlaying = false;
                 overlay.classList.remove('hidden');
                 overlay.querySelector('.game-title').textContent = "SYSTEM FAILURE";
-                overlay.querySelector('.game-start-msg').textContent = `SCORE: ${score} // PRESS SPACE TO REBOOT`;
+                overlay.querySelector('.game-start-msg').textContent = `SCORE: ${score} // PRESS SPACE OR TAP TO REBOOT`;
                 cancelAnimationFrame(animationId);
                 return;
             }
