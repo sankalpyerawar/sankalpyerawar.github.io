@@ -10,10 +10,8 @@
 
 <body>
   <div id="layout" style="opacity: 0; transition: opacity 0.5s ease;">
-    <!-- Left Sidebar / Header (Sticky on Desktop) -->
+    <!-- Left Sidebar (Fixed) -->
     <aside class="sidebar">
-      <!-- Theme Toggle -->
-
 
       <header class="profile-header">
         <div class="profile-intro">
@@ -22,88 +20,109 @@
         </div>
         <p class="subtitle" id="profile-subtitle"></p>
 
-        <div class="social-actions"
-          style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div class="social-actions">
           <nav class="social-links" id="profile-socials">
             <!-- Dynamic Social Links -->
           </nav>
-
-          <div class="theme-switch-wrapper">
-            <button id="theme-toggle" aria-label="Toggle Theme"></button>
-          </div>
         </div>
 
-        <div id="resume-container" style="margin-bottom: 2.5rem; margin-top: -1.5rem;">
+        <div id="resume-container">
              <!-- Dynamic Resume Button -->
         </div>
       </header>
 
-      <section class="section education-section" style="margin-bottom: 2rem;" id="education-section">
-        <h2 id="education-toggle"
-          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
-          Education
-          <span class="chevron rotate-icon" style="transition: transform 0.3s ease;">▼</span>
-        </h2>
-        <div id="education-list" class="collapsible-content open">
-          <!-- Dynamic Education -->
-        </div>
-      </section>
+      <!-- Navigation Menu -->
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#summary-section">SUMMARY</a></li>
+          <li><a href="#experience-section">EXPERIENCE</a></li>
+          <li><a href="#skills-section">SKILLS</a></li>
+          <li><a href="#projects-section">PROJECTS</a></li>
+          <li><a href="#game-container">GAME</a></li>
+        </ul>
+      </nav>
 
-      <section class="section skills-section" id="skills-section">
-        <h2 id="skills-toggle"
-          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
-          Skills
-          <span class="chevron" style="transition: transform 0.3s ease;">▼</span>
-        </h2>
-        <div class="skills-tags collapsible-content" id="skills-list">
-          <!-- Dynamic Skills -->
+      <!-- System Status Widget -->
+      <div class="system-status-widget">
+        <div id="sys-time">--:--:--</div>
+        <div class="status-learning">
+          <span class="status-label">CURRENTLY LEARNING:</span>
+          <span class="status-value">AI-Assisted Development</span>
         </div>
-      </section>
+      </div>
 
+      <!-- Terminal Prompt -->
+      <div class="terminal-widget">
+        <div id="terminal-output"></div>
+        <div class="input-line">
+          <span class="prompt-char">&gt;_</span>
+          <input type="text" id="terminal-input" placeholder="type 'help'" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Hidden Theme Toggle to preserve JS compatibility if needed, or we can remove usage in main.js later -->
+      <button id="theme-toggle" style="display: none;"></button>
 
     </aside>
 
+    <!-- Main Content (Scrollable) -->
     <main class="content">
-      <!-- Theme Switch (Top Right) -->
 
+      <!-- Game Container -->
+      <section id="game-wrapper">
+        <div id="game-container">
+          <canvas id="game-canvas"></canvas>
+          <div id="game-overlay">
+            <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
+            <div class="game-start-msg">PRESS SPACE TO START</div>
+          </div>
+        </div>
+      </section>
 
-      <div class="summary-section" style="margin-bottom: 3rem;">
-        <h2 id="summary-toggle"
-          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-          Summary
-          <span class="chevron rotate-icon" style="transition: transform 0.3s ease;">▼</span>
-        </h2>
+      <!-- Summary -->
+      <div class="section summary-section" id="summary-section">
+        <h2 id="summary-toggle">SUMMARY</h2>
         <div id="profile-summary" class="collapsible-content open">
           <!-- Dynamic Summary -->
         </div>
       </div>
 
-      <section class="section experience-section" style="margin-bottom: 3rem;">
-        <h2 id="experience-toggle"
-          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-          Experience
-          <span class="chevron rotate-icon" style="transition: transform 0.3s ease;">▼</span>
-        </h2>
+      <!-- Experience -->
+      <section class="section experience-section" id="experience-section">
+        <h2 id="experience-toggle">EXPERIENCE</h2>
         <div id="experience-list" class="collapsible-content open">
           <!-- Dynamic Experience -->
         </div>
       </section>
 
-      <section class="section projects-section" style="margin-bottom: 3rem;" id="projects-section">
-        <h2 id="projects-toggle"
-          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-          Projects
-          <span class="chevron rotate-icon" style="transition: transform 0.3s ease;">▼</span>
-        </h2>
+      <!-- Skills (Moved to Main) -->
+      <section class="section skills-section" id="skills-section">
+        <h2 id="skills-toggle">SKILLS</h2>
+        <div class="skills-tags collapsible-content open" id="skills-list">
+          <!-- Dynamic Skills -->
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section class="section projects-section" id="projects-section">
+        <h2 id="projects-toggle">PROJECTS</h2>
         <div id="projects-list" class="collapsible-content open">
           <!-- Dynamic Projects -->
         </div>
       </section>
-    </main>
 
-    <footer class="footer">
-      <p>&copy; <span id="year"></span> <span id="footer-name"></span></p>
-    </footer>
+      <!-- Education (Moved to Main, after Projects) -->
+       <section class="section education-section" id="education-section">
+        <h2 id="education-toggle">EDUCATION</h2>
+        <div id="education-list" class="collapsible-content open">
+          <!-- Dynamic Education -->
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>&copy; <span id="year"></span> <span id="footer-name"></span></p>
+      </footer>
+    </main>
   </div>
   <script type="module" src="/main.js"></script>
 </body>
