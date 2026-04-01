@@ -208,17 +208,17 @@ export function initGame() {
 
     function draw() {
         // Clear
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = '#060e20';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Draw Grid Background (Optional effect)
-        ctx.strokeStyle = 'rgba(0, 255, 65, 0.1)';
+        ctx.strokeStyle = 'rgba(123, 208, 255, 0.1)';
         ctx.lineWidth = 1;
 
         // Draw Ground
-        ctx.fillStyle = '#050505';
+        ctx.fillStyle = '#06122d';
         ctx.fillRect(0, canvas.height - groundHeight, canvas.width, groundHeight);
-        ctx.strokeStyle = '#00FF41';
+        ctx.strokeStyle = '#38BDF8';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(0, canvas.height - groundHeight);
@@ -226,14 +226,14 @@ export function initGame() {
         ctx.stroke();
 
         // Draw Player (Cyberpunk Character)
-        ctx.fillStyle = '#00FF41';
+        ctx.fillStyle = '#38BDF8';
         ctx.shadowBlur = 10;
-        ctx.shadowColor = '#00FF41';
+        ctx.shadowColor = '#38BDF8';
         ctx.fillRect(player.x, player.y, player.width, player.height);
         ctx.shadowBlur = 0;
 
         // Character Details
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = '#060e20';
         // Visor
         ctx.fillRect(player.x + 25, player.y + 10, 15, 5);
 
@@ -241,21 +241,21 @@ export function initGame() {
         ctx.font = 'bold 20px "Courier New", monospace';
         for (let ob of obstacles) {
             // Box
-            ctx.strokeStyle = '#FF0055'; // Red/Pink for danger
+            ctx.strokeStyle = '#ee7d77'; // Red/Pink for danger
             ctx.shadowBlur = 5;
-            ctx.shadowColor = '#FF0055';
+            ctx.shadowColor = '#ee7d77';
             ctx.strokeRect(ob.x, ob.y, ob.width, ob.height);
             ctx.shadowBlur = 0;
 
             // Text
-            ctx.fillStyle = '#FF0055';
+            ctx.fillStyle = '#ee7d77';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(ob.text, ob.x + ob.width/2, ob.y + ob.height/2);
         }
 
         // Draw Score
-        ctx.fillStyle = '#00FF41';
+        ctx.fillStyle = '#38BDF8';
         ctx.font = '20px "Courier New", monospace';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';

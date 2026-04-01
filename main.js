@@ -3,10 +3,10 @@ import { initGame } from './game.js';
 
 // Social Icons (Logos)
 const socialIcons = {
-  email: `<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
-  linkedin: `<svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>`,
-  github: `<svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`,
-  external: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`
+  email: `<span class="material-symbols-outlined text-sky-400">mail</span>`,
+  linkedin: `<span class="material-symbols-outlined text-sky-400">badge</span>`,
+  github: `<span class="material-symbols-outlined text-sky-400">code</span>`,
+  external: `<span class="material-symbols-outlined text-slate-600 group-hover:text-primary transition-colors">arrow_outward</span>`
 };
 
 const themeIcons = {
@@ -34,51 +34,94 @@ async function initPortfolio() {
 
     // Profile & Header
     const name = data.profile.name;
-    const splitName = name.replace(' ', '<br>');
-    const nameEl = document.getElementById('profile-name');
-    if (nameEl) nameEl.innerHTML = splitName;
+    const splitName = name.replace(' ', ' <br/> <span class="text-sky-400">');
+    const heroEl = document.getElementById('hero-section');
+    if (heroEl) {
+        heroEl.innerHTML = `
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-[10px] mono-data text-primary uppercase font-bold tracking-widest">Architectural Registry</span>
+            </div>
+            <h2 class="text-6xl md:text-7xl font-black text-on-surface font-headline leading-none tracking-tighter mb-4 max-w-4xl uppercase">
+                ${splitName}</span>
+            </h2>
+            <p class="text-xl text-on-surface-variant max-w-2xl font-body leading-relaxed mb-10">
+                ${data.profile.subtitle}
+            </p>
+            <div class="flex items-center gap-4">
+                <a href="#skills-section" class="px-8 py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold rounded-lg flex items-center gap-3 transition-transform hover:-translate-y-0.5 active:scale-95">
+                    <span class="material-symbols-outlined" data-icon="explore">explore</span>
+                    Explore Stack
+                </a>
+                <a href="${data.profile.resumeUrl || '#'}" target="_blank" class="px-8 py-4 bg-surface-container-high text-primary font-bold rounded-lg border border-outline-variant/10 hover:bg-surface-container-highest transition-all flex items-center gap-3">
+                    <span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+                    Read Docs (Resume)
+                </a>
+            </div>
+        `;
+    }
 
-    // Sidebar
-    setText('sidebar-name', name);
-    setText('profile-initials-sidebar', data.profile.initials);
+    const readmeEl = document.getElementById('hero-readme-section');
+    if (readmeEl) {
+        const summaryLines = data.profile.summary.map((line, index) => `
+            <div class="flex items-start gap-4 mb-4">
+                <span class="text-primary opacity-50">${(index + 2).toString().padStart(2, '0')}</span>
+                <p>${line}</p>
+            </div>
+        `).join('');
 
+        readmeEl.innerHTML = `
+            <div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl">
+                <div class="bg-[#05183c] px-6 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-slate-400 text-sm" data-icon="description">description</span>
+                        <span class="text-xs mono-data font-bold text-slate-300">README.md</span>
+                    </div>
+                    <div class="flex gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    </div>
+                </div>
+                <div class="p-6 md:p-10 mono-data text-sm text-on-surface-variant leading-relaxed max-w-5xl">
+                    <div class="flex items-start gap-4 mb-8">
+                        <span class="text-primary opacity-50">01</span>
+                        <p><span class="text-primary"># Introduction</span></p>
+                    </div>
+                    ${summaryLines}
+                </div>
+            </div>
+        `;
+    }
+
+    // Sidebar & Footer
     const resumeBtn = document.getElementById('resume-sidebar-btn');
     if (resumeBtn && data.profile.resumeUrl) {
        resumeBtn.href = data.profile.resumeUrl;
     }
 
-    setText('profile-subtitle', data.profile.subtitle);
     setText('year', new Date().getFullYear());
 
-    // Profile Summary (Array)
-    const summaryContainer = document.getElementById('profile-summary');
-    if (summaryContainer) {
-      summaryContainer.innerHTML = data.profile.summary
-        .map(p => `<p>${p}</p>`)
-        .join('');
-    }
-
-    // Social Links
-    const socialContainer = document.getElementById('profile-socials');
+    // Social Links / Contact Nodes
     const footerSocialContainer = document.getElementById('footer-socials');
-
     if (data.profile.social) {
-      const socialHtml = Object.entries(data.profile.social)
-        .map(([key, url]) => {
-          const icon = socialIcons[key];
-          if (!icon) return ''; // Skip if not found
-          const label = key.charAt(0).toUpperCase() + key.slice(1);
-          return `<a href="${url}" class="w-10 h-10 border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:text-primary-container hover:border-primary-container/50 transition-all bg-surface-container-high" aria-label="${label}" target="${key === 'email' ? '_self' : '_blank'}" rel="noopener noreferrer">${icon}</a>`;
-        })
-        .join('');
-
-      if (socialContainer) socialContainer.innerHTML = socialHtml;
-
       const footerSocialHtml = Object.entries(data.profile.social)
         .map(([key, url]) => {
-          const icon = socialIcons[key];
-          if (!icon) return '';
-          return `<a href="${url}" class="w-8 h-8 text-primary-container hover:text-white transition-colors flex items-center justify-center" aria-label="${key}" target="_blank" rel="noopener noreferrer">${icon}</a>`;
+          const icon = socialIcons[key] || socialIcons.external;
+          const label = key.charAt(0).toUpperCase() + key.slice(1);
+          const desc = key === 'email' ? 'Direct SMTP Access' : key === 'github' ? 'Source Repositories' : 'Professional Network';
+          return `
+            <a href="${url}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 bg-surface-container-low rounded-md group hover:bg-surface-container-highest transition-all duration-300">
+                <div class="flex items-center gap-4">
+                    ${icon}
+                    <div>
+                        <p class="font-headline text-sm font-bold text-on-surface">${label}</p>
+                        <p class="font-label text-[10px] text-slate-500 uppercase tracking-tighter">${desc}</p>
+                    </div>
+                </div>
+                ${socialIcons.external}
+            </a>
+          `;
         })
         .join('');
 
@@ -96,31 +139,31 @@ async function initPortfolio() {
     if (skillsContainer && data.skills) {
       let html = '';
       if (!Array.isArray(data.skills)) {
-         let maxSkillPercentage = 98; // fake percentage drop for aesthetics
          html = Object.entries(data.skills)
-          .map(([category, items]) => {
-            const currentPercent = maxSkillPercentage;
-            maxSkillPercentage = Math.max(70, maxSkillPercentage - 5);
+          .map(([category, items], index) => {
+            const isLarge = index === 0;
+            const colSpan = isLarge ? 'col-span-12 lg:col-span-6 lg:row-span-2' : 'col-span-12 lg:col-span-6';
+            const icon = index === 0 ? 'terminal' : index === 1 ? 'cloud' : index === 2 ? 'database' : 'schema';
 
             return `
-            <div class="space-y-4 bg-surface-container-low p-6 md:p-8 border border-outline-variant/15 flex flex-col justify-between hover:bg-surface-container transition-colors">
-              <div>
-                 <h4 class="font-headline text-xs md:text-sm font-bold text-primary-container mb-4 uppercase tracking-[0.2em]">${category}</h4>
-                 <div class="space-y-2">
-                    ${items.map(skill => `<div class="text-[10px] md:text-xs text-on-surface-variant font-body uppercase border-b border-outline-variant/10 pb-1">${skill}</div>`).join('')}
-                 </div>
-              </div>
-              <div class="mt-8 space-y-2">
-                 <div class="flex justify-between font-headline text-[10px] uppercase tracking-widest text-on-surface">
-                    <span>Proficiency</span>
-                    <span>${currentPercent}%</span>
-                 </div>
-                 <div class="h-[2px] bg-surface-container-high w-full">
-                    <div class="h-full bg-primary-container" style="width: ${currentPercent}%"></div>
-                 </div>
-              </div>
+            <div class="${colSpan} bg-surface-container-low p-6 md:p-8 rounded-xl relative overflow-hidden group">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="space-y-1">
+                        <p class="text-xs font-label text-sky-400 uppercase tracking-widest">Category</p>
+                        <h4 class="text-2xl font-bold font-headline text-on-surface">${category}</h4>
+                    </div>
+                    <span class="material-symbols-outlined text-3xl text-on-surface-variant/20">${icon}</span>
+                </div>
+                <div class="space-y-3 mt-8">
+                    ${items.map(skill => `
+                        <div class="flex justify-between items-center py-2 border-b border-outline-variant/5">
+                            <span class="font-label text-xs uppercase text-on-surface-variant group-hover:text-sky-200 transition-colors">${skill}</span>
+                            <span class="material-symbols-outlined text-xs text-sky-400 opacity-50">check</span>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
-          `;
+            `;
           })
           .join('');
       }
@@ -130,65 +173,79 @@ async function initPortfolio() {
     // Projects (Blueprints)
     const projectsContainer = document.getElementById('projects-list');
     if (projectsContainer && data.projects) {
-      projectsContainer.innerHTML = data.projects.map((project, index) => `
-        <div class="bg-surface-container-low p-6 md:p-10 border border-outline-variant/15 hover:bg-surface-container transition-colors group flex flex-col h-full">
-            <div class="flex justify-between items-start mb-6 md:mb-8">
+      projectsContainer.innerHTML = data.projects.map((project, index) => {
+          const colSpan = index === 0 ? 'col-span-1 md:col-span-12 lg:col-span-8' : 'col-span-1 md:col-span-6 lg:col-span-4';
+
+          return `
+            <div class="${colSpan} bg-surface-container-low rounded-xl p-8 flex flex-col justify-between border border-transparent hover:border-outline-variant/20 transition-all duration-300 group">
                 <div>
-                    <span class="font-headline text-[10px] text-primary-container uppercase tracking-widest">P_ID: 00${index + 1}</span>
-                    <h3 class="font-headline text-2xl md:text-3xl font-bold uppercase mt-2 group-hover:text-primary-container transition-colors leading-none">${project.title}</h3>
+                    <div class="flex gap-2 mb-4">
+                        <span class="px-2 py-0.5 bg-primary-container text-on-primary-container rounded-full text-[10px] font-label font-bold tracking-widest uppercase">P_ID: 0${index + 1}</span>
+                    </div>
+                    <h3 class="text-2xl font-bold font-headline mb-4 group-hover:text-sky-400 transition-colors">${project.title}</h3>
+                    <p class="text-on-surface-variant text-sm font-body leading-relaxed mb-6">
+                        ${project.description}
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        ${project.technologies.map(tech => `<span class="text-[11px] font-label px-2 py-1 bg-surface-container text-sky-400 uppercase">${tech}</span>`).join('')}
+                    </div>
                 </div>
-                ${project.link ? `<a class="material-symbols-outlined text-on-surface-variant hover:text-primary-container transition-colors flex-shrink-0" href="${project.link}" target="_blank" rel="noopener noreferrer">open_in_new</a>` : ''}
-            </div>
-            <p class="text-on-surface-variant mb-6 md:mb-10 text-sm leading-relaxed flex-grow">
-                ${project.description}
-            </p>
-            <div class="flex flex-wrap gap-2 mb-6 md:mb-10">
-                ${project.technologies.map(tech => `<span class="px-2 py-1 bg-surface-container-high text-[10px] font-headline uppercase text-on-surface-variant border border-outline-variant/20">${tech}</span>`).join('')}
-            </div>
-            <div class="pt-4 md:pt-6 border-t border-outline-variant/15 flex justify-between items-center mt-auto">
-                <span class="font-headline text-[8px] md:text-[10px] uppercase tracking-widest text-on-surface-variant">Status: ACTIVE</span>
-                <div class="flex gap-4">
-                    ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="material-symbols-outlined text-lg text-primary-container hover:opacity-80">play_circle</a>` : ''}
-                    ${project.link ? `<a href="${project.link}" target="_blank" rel="noopener noreferrer" class="material-symbols-outlined text-lg hover:text-primary-container">code</a>` : ''}
+                <div class="flex gap-4 mt-auto pt-6 border-t border-outline-variant/10">
+                    ${project.link ? `
+                    <a class="flex items-center gap-2 text-xs font-label uppercase tracking-widest text-primary hover:underline" href="${project.link}" target="_blank" rel="noopener noreferrer">
+                        <span class="material-symbols-outlined text-sm" data-icon="code">code</span> ${project.linkText || 'View Repo'}
+                    </a>` : ''}
+                    ${project.liveUrl ? `
+                    <a class="flex items-center gap-2 text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">
+                        <span class="material-symbols-outlined text-sm" data-icon="play_circle">play_circle</span> Live Demo
+                    </a>` : ''}
                 </div>
             </div>
-        </div>
-      `).join('');
+          `;
+      }).join('');
     }
 
     // Experience
     const experienceContainer = document.getElementById('experience-list');
     if (experienceContainer && data.experience) {
       experienceContainer.innerHTML = data.experience.map((job, index) => {
-        // fake metrics for aesthetic
-        const metricValue = index === 0 ? '99.9%' : index === 1 ? '400+' : index === 2 ? '2TB' : 'SUB-MS';
-        const metricLabel = index === 0 ? 'UPTIME' : index === 1 ? 'SERVICES' : index === 2 ? 'DATA/DAY' : 'LATENCY';
-
         return `
-        <div class="grid grid-cols-1 lg:grid-cols-12 border-t border-outline-variant/20 py-8 lg:py-10 hover:bg-surface-container-low transition-colors px-0 lg:px-6 gap-6 lg:gap-0 group">
-            <div class="lg:col-span-3">
-                <div class="font-headline text-base lg:text-lg font-bold text-on-surface">${job.date}</div>
-                <div class="font-headline text-[10px] text-primary-container uppercase tracking-widest mt-1">Status: Active_Node</div>
+        <div class="relative pl-8 md:pl-20 group">
+            <div class="absolute left-[-5px] md:left-0 top-1 w-6 h-6 md:w-16 md:h-16 flex items-center justify-center">
+                <div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-background border-4 border-primary z-10 transition-transform group-hover:scale-125 duration-300"></div>
+                <div class="hidden md:block absolute inset-0 bg-primary/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
-            <div class="lg:col-span-5 pr-0 lg:pr-8">
-                <h4 class="font-headline text-lg lg:text-xl font-bold uppercase mb-2 lg:mb-4 group-hover:text-primary-container transition-colors">${job.title} @ ${job.company}</h4>
-                <p class="text-sm text-on-surface-variant leading-relaxed mb-4">${job.summary}</p>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8 items-start">
+                <div class="lg:col-span-4 space-y-1 md:space-y-2">
+                    <span class="text-xs md:text-sm font-label font-bold text-sky-400 tracking-wider">${job.date}</span>
+                    <h3 class="text-xl md:text-2xl font-bold font-headline text-on-surface leading-tight">${job.title}</h3>
+                    <p class="text-on-surface-variant font-label text-[10px] md:text-sm uppercase tracking-widest">${job.company}</p>
+                </div>
+                <div class="lg:col-span-8">
+                    <div class="bg-surface-container-low p-6 md:p-8 rounded-xl border border-transparent hover:bg-surface-container transition-all duration-300 shadow-xl">
+                        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                            ${job.summary}
+                        </p>
+                        ${job.nestedProjects && job.nestedProjects.length > 0 ? `
+                        <ul class="space-y-4 text-on-surface-variant">
+                            ${job.nestedProjects.map(proj => `
+                            <li class="flex gap-3 md:gap-4">
+                                <span class="text-primary mt-1 select-none">/</span>
+                                <p class="text-xs md:text-sm leading-relaxed">
+                                    <strong class="text-sky-300 font-label tracking-wide uppercase text-[10px] block mb-1">${proj.title}</strong>
+                                    ${proj.summary}
+                                </p>
+                            </li>
+                            `).join('')}
+                        </ul>
+                        ` : ''}
 
-                ${job.nestedProjects && job.nestedProjects.length > 0 ? `
-                <ul class="space-y-3 text-xs lg:text-sm text-on-surface-variant leading-relaxed mt-4">
-                    ${job.nestedProjects.slice(0, 2).map(proj => `
-                    <li class="flex gap-3 items-start">
-                        <span class="text-primary-container mt-1">&gt;&gt;</span>
-                        <span><strong class="text-on-surface">${proj.title}:</strong> ${proj.summary}</span>
-                    </li>
-                    `).join('')}
-                </ul>
-                ` : ''}
-            </div>
-            <div class="lg:col-span-4 flex justify-start lg:justify-end items-start gap-4 mt-4 lg:mt-0">
-                <div class="text-left lg:text-right">
-                    <div class="font-headline text-2xl lg:text-3xl font-black text-on-surface">${metricValue}</div>
-                    <div class="font-headline text-[10px] text-on-surface-variant uppercase tracking-widest">${metricLabel}</div>
+                        ${job.technologies && job.technologies.length > 0 ? `
+                        <div class="mt-8 pt-6 border-t border-outline-variant/10 flex flex-wrap gap-2">
+                            ${job.technologies.map(tech => `<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-label text-sky-300 uppercase">${tech}</span>`).join('')}
+                        </div>
+                        ` : ''}
+                    </div>
                 </div>
             </div>
         </div>
@@ -221,7 +278,7 @@ async function initPortfolio() {
 
   } catch (err) {
     console.error('Error loading portfolio data:', err);
-    document.body.innerHTML = '<p style="color: #00FF41; text-align:center; padding: 2rem; font-family: monospace;">SYSTEM ERROR: FAILED TO LOAD DATA MODULE.</p>';
+    document.body.innerHTML = '<p style="color: #7bd0ff; text-align:center; padding: 2rem; font-family: monospace;">SYSTEM ERROR: FAILED TO LOAD DATA MODULE.</p>';
   }
 }
 

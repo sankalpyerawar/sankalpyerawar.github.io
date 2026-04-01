@@ -4,21 +4,21 @@
 
 @layer base {
   body {
-    @apply bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container;
+    @apply bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container;
   }
 }
 
 @layer utilities {
-  .blueprint-grid {
-    background-image: linear-gradient(to right, rgba(59, 75, 55, 0.05) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(59, 75, 55, 0.05) 1px, transparent 1px);
-    background-size: 24px 24px;
+  .mono-data {
+    font-family: 'Space Grotesk', monospace;
   }
 
-  .blueprint-grid-radial {
-    background-image: radial-gradient(circle, #3b4b37 1px, transparent 1px);
-    background-size: 24px 24px;
-    opacity: 0.05;
+  .pixel-block {
+    image-rendering: pixelated;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -28,18 +28,19 @@
   height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #131313;
+  background: #06122d;
 }
 ::-webkit-scrollbar-thumb {
-  background: #353534;
+  background: #2b4680;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00FF41;
+  background: #7bd0ff;
 }
 
 /* Material Symbols Adjustments */
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
 }
 
 /* Game Styles - adapted to Tailwind utility classes but kept here for specific canvas targeting */
@@ -48,7 +49,7 @@
 }
 
 #game-container {
-  @apply w-full h-[300px] bg-black border-2 border-[#00FF41] shadow-[0_0_15px_rgba(0,255,65,0.3)] relative overflow-hidden;
+  @apply w-full h-[300px] bg-[#060e20] border-2 border-[#7bd0ff] shadow-[0_0_15px_rgba(123,208,255,0.3)] relative overflow-hidden;
   image-rendering: pixelated;
 }
 
@@ -57,7 +58,7 @@
 }
 
 #game-overlay {
-  @apply absolute inset-0 flex flex-col items-center justify-center bg-black/70 z-10 transition-opacity duration-300;
+  @apply absolute inset-0 flex flex-col items-center justify-center bg-[#060e20]/70 z-10 transition-opacity duration-300;
 }
 
 #game-overlay.hidden {
@@ -66,15 +67,15 @@
 
 .game-title {
   @apply text-2xl font-bold text-white mb-4 text-center font-headline;
-  text-shadow: 0 0 10px #00FF41;
+  text-shadow: 0 0 10px #7bd0ff;
 }
 
 .game-start-msg {
-  @apply text-base text-[#00FF41] font-body animate-pulse;
+  @apply text-base text-[#7bd0ff] font-body animate-pulse;
 }
 
 @keyframes blinkText {
-  0%, 100% { opacity: 1; text-shadow: 0 0 5px #00FF41; }
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px #7bd0ff; }
   50% { opacity: 0.7; text-shadow: none; }
 }
 

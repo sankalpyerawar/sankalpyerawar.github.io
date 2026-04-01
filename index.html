@@ -3,231 +3,272 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SANKALP YERAWAR // SYSTEM ARCHITECT</title>
+    <title>SANKALP YERAWAR | System Architect</title>
     <meta id="meta-desc" name="description" content="" />
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
     <!-- Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 </head>
-<body class="blueprint-grid min-h-screen">
+<body class="overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
 
     <div id="layout" class="opacity-0 transition-opacity duration-500 ease-in-out">
-        <!-- Top App Bar Shell -->
-        <header class="fixed top-0 right-0 left-0 lg:left-64 bg-[#131313] z-40 flex justify-between items-center w-full lg:w-[calc(100%-16rem)] px-6 lg:px-10 py-4 lg:py-5 border-b border-[#3b4b37]/15">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-[#00FF41] lg:hidden" data-icon="terminal">terminal</span>
-                <div class="text-lg lg:text-xl font-bold tracking-tighter text-[#00FF41] font-headline">SYS_ARCHITECT_V1.0</div>
-            </div>
-            <div class="flex items-center gap-8">
-                <div class="hidden md:flex gap-6">
-                    <span class="font-headline uppercase tracking-tighter text-[10px] lg:text-xs text-[#00FF41]">ENCRYPTION: AES-256</span>
-                    <span class="font-headline uppercase tracking-tighter text-[10px] lg:text-xs text-[#00FF41]">STATUS: NOMINAL</span>
+        <!-- SideNavBar -->
+        <aside class="fixed left-0 h-full w-64 border-r-0 bg-[#06122d] dark:bg-[#06122d] hidden lg:flex flex-col py-8 px-4 z-50">
+            <div class="mb-12 px-2">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded bg-surface-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-sky-400" data-icon="terminal">terminal</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tighter text-sky-400 dark:text-sky-400">ARCH-OS</h1>
+                        <p class="text-[10px] font-medium text-slate-500 uppercase tracking-widest">v3.0.0-stable</p>
+                    </div>
                 </div>
-                <div class="flex gap-4">
-                    <span class="material-symbols-outlined text-[#00FF41] cursor-pointer hover:bg-[#2a2a2a] p-1 transition-colors">settings_input_component</span>
-                    <span class="material-symbols-outlined text-[#00FF41] cursor-pointer hover:bg-[#2a2a2a] p-1 transition-colors">terminal</span>
+            </div>
+
+            <nav class="flex-1 space-y-1">
+                <a href="#hero-section" class="flex items-center gap-3 px-4 py-3 rounded text-sky-400 font-bold bg-[#05183c] border-r-2 border-sky-400 transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="home">home</span>
+                    <span class="font-label text-sm tracking-wide">Home</span>
+                </a>
+                <a href="#skills-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="layers">layers</span>
+                    <span class="font-label text-sm tracking-wide">Stack</span>
+                </a>
+                <a href="#projects-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+                    <span class="font-label text-sm tracking-wide">Projects</span>
+                </a>
+                <a href="#experience-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="history">history</span>
+                    <span class="font-label text-sm tracking-wide">History</span>
+                </a>
+                <a href="#game-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="science">science</span>
+                    <span class="font-label text-sm tracking-wide">Lab</span>
+                </a>
+                <a href="#contact-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="hub">hub</span>
+                    <span class="font-label text-sm tracking-wide">Connect</span>
+                </a>
+            </nav>
+
+            <div class="mt-auto px-2">
+                <a id="resume-sidebar-btn" href="#" target="_blank" class="block text-center w-full py-3 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold rounded-md active:scale-95 transition-all duration-200 ease-out text-sm tracking-tighter">
+                    DEPLOY_BUILD
+                </a>
+            </div>
+        </aside>
+
+        <!-- TopAppBar -->
+        <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-16rem)] h-16 bg-[#060e20]/70 backdrop-blur-xl flex items-center justify-between px-6 lg:px-8 z-40">
+            <div class="flex items-center gap-4">
+                <span class="text-lg font-black text-sky-400 font-headline tracking-tighter uppercase">SYS_PORTFOLIO</span>
+                <div class="hidden lg:block h-4 w-[1px] bg-outline-variant/30"></div>
+                <div class="hidden lg:flex items-center gap-2 text-[10px] mono-data text-slate-400">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    CORE_SYSTEM_READY
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="relative group hidden md:block">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
+                    <input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 text-xs mono-data focus:ring-1 focus:ring-sky-500 w-48 transition-all" placeholder="QUERY_SYSTEM..." type="text"/>
+                </div>
+                <div class="text-[10px] mono-data text-slate-500 font-bold uppercase tracking-widest">
+                    <span id="sys-time">--:--:--</span>
                 </div>
             </div>
         </header>
 
-        <!-- Sidebar Navigation Shell -->
-        <aside class="fixed left-0 top-0 h-full w-64 bg-[#1c1b1b] hidden lg:flex flex-col border-r border-[#3b4b37]/15 z-50 shadow-[0_0_48px_rgba(185,204,178,0.04)]">
-            <div class="p-6">
-                <div class="text-lg font-black text-[#00FF41] font-headline tracking-tighter uppercase mb-1">ARCHITECT_CORE</div>
-                <div class="text-[10px] text-[#b9ccb2] font-headline tracking-[0.2em] uppercase opacity-60">v4.2.0-stable</div>
-            </div>
-
-            <nav class="flex-1 px-4 space-y-2 mt-8">
-                <a href="#hero-section" class="flex items-center gap-4 px-4 py-3 bg-[#353534] text-[#00FF41] border-l-2 border-[#00FF41] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
-                    <span>Root</span>
-                </a>
-                <a href="#projects-section" class="flex items-center gap-4 px-4 py-3 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
-                    <span class="material-symbols-outlined">account_tree</span>
-                    <span>Projects</span>
-                </a>
-                <a href="#experience-section" class="flex items-center gap-4 px-4 py-3 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
-                    <span class="material-symbols-outlined">receipt_long</span>
-                    <span>Experience</span>
-                </a>
-                <a href="#game-section" class="flex items-center gap-4 px-4 py-3 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
-                    <span class="material-symbols-outlined">sports_esports</span>
-                    <span>Logs</span>
-                </a>
-            </nav>
-
-            <div class="p-6 border-t border-[#3b4b37]/15">
-                <div class="flex items-center gap-3 mb-6">
-                    <div id="profile-initials-sidebar" class="w-10 h-10 border border-[#3b4b37]/30 flex items-center justify-center text-[#00FF41] font-headline font-bold text-lg bg-[#131313]">SY</div>
-                    <div>
-                        <div class="text-[10px] text-[#00FF41] font-headline uppercase tracking-widest">Operator</div>
-                        <div id="sidebar-name" class="text-xs font-bold text-on-surface font-headline uppercase">Sankalp Y.</div>
-                    </div>
-                </div>
-                <a id="resume-sidebar-btn" href="#" target="_blank" class="block text-center w-full bg-[#353534] hover:bg-[#2a2a2a] text-[#00FF41] py-3 text-[10px] font-headline tracking-[0.3em] uppercase border border-[#00FF41]/20 transition-all">
-                    DOWNLOAD_SPEC
-                </a>
-            </div>
-
-            <div class="px-4 pb-8 space-y-2">
-                <div class="flex items-center gap-4 px-4 py-2 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-[10px] tracking-widest cursor-pointer">
-                    <span class="material-symbols-outlined text-sm">memory</span>
-                    <span>System: <span id="sys-time" class="text-[#00FF41] ml-1">--:--:--</span></span>
-                </div>
-                <div class="flex items-center gap-4 px-4 py-2 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-[10px] tracking-widest cursor-pointer">
-                    <span class="material-symbols-outlined text-sm">lan</span>
-                    <span>Network</span>
-                </div>
-            </div>
-        </aside>
-
         <!-- Main Content Canvas -->
-        <main class="lg:ml-64 pt-24 px-6 md:px-10 pb-20 min-h-screen relative overflow-hidden" id="main-content">
-            <div class="blueprint-grid-radial absolute inset-0 pointer-events-none"></div>
+        <main class="lg:ml-64 pt-20 px-6 lg:px-12 pb-24 min-h-screen bg-surface" id="main-content">
+            <!-- Hero Section -->
+            <section id="hero-section" class="py-10 flex flex-col items-start max-w-6xl">
+                <!-- Dynamic Hero Content Injected Here -->
+            </section>
 
-            <!-- Hero Section: Identity Profile -->
-            <section id="hero-section" class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-24 relative z-10 pt-10">
-                <div class="md:col-span-8 flex flex-col justify-end">
-                    <div class="inline-flex items-center gap-3 px-3 py-1 bg-surface-container-high border border-outline-variant/20 mb-6 w-fit">
-                        <span class="w-2 h-2 bg-primary-container animate-pulse"></span>
-                        <span class="font-headline text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Identity Profile: Active</span>
-                    </div>
-                    <h1 id="profile-name" class="font-headline text-5xl md:text-7xl font-black text-on-surface leading-[0.9] tracking-tighter uppercase mb-6">
-                        <!-- Dynamic Name -->
-                    </h1>
-                    <p id="profile-subtitle" class="font-body text-xl md:text-2xl text-primary-container mb-4 font-semibold uppercase tracking-wide"></p>
-                    <div id="profile-summary" class="font-body text-lg text-on-surface-variant max-w-xl leading-relaxed space-y-4">
-                        <!-- Dynamic Summary -->
-                    </div>
-                    <div id="profile-socials" class="flex gap-4 mt-8">
-                       <!-- Dynamic Socials -->
-                    </div>
-                </div>
-                <div class="md:col-span-4 hidden md:block">
-                    <div class="relative group">
-                        <div class="absolute -inset-4 border border-outline-variant/10 group-hover:border-primary-container/20 transition-all duration-500"></div>
-                        <div class="w-full aspect-[3/4] bg-surface-container-low border border-[#3b4b37]/30 flex flex-col items-center justify-center filter grayscale contrast-125 brightness-75 transition-all group-hover:grayscale-0">
-                           <div class="text-6xl text-[#00FF41] opacity-20 font-headline font-black rotate-90 tracking-widest">ARCHITECT</div>
-                        </div>
-                        <div class="absolute bottom-0 right-0 p-4 bg-surface-container-highest border-l border-t border-outline-variant/30 font-headline text-[10px] tracking-widest text-primary-container">
-                            CORE_GEN_v2
-                        </div>
-                    </div>
-                </div>
+            <!-- Technical README Section -->
+            <section id="hero-readme-section" class="mb-20">
+                <!-- Dynamic README Content Injected Here -->
             </section>
 
             <!-- Technical Stack Specialization -->
-            <section id="skills-section" class="mb-24 relative z-10">
-                <div class="flex justify-between items-end mb-12 border-b border-outline-variant/10 pb-6">
-                    <div>
-                        <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Stack_Specialization</h2>
-                        <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">Proficiency_Data_Analysis</p>
-                    </div>
-                    <span id="skills-updated" class="font-headline text-[10px] md:text-xs text-primary-container uppercase hidden md:block">Updated: 2024</span>
+            <section id="skills-section" class="mb-24">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="w-1 h-6 bg-sky-400"></div>
+                    <h3 class="text-xl font-bold font-headline uppercase tracking-tight text-on-surface">Technical Stack & Proficiencies</h3>
                 </div>
-                <div id="skills-list" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div id="skills-list" class="grid grid-cols-12 gap-6 md:gap-8">
                    <!-- Dynamic Skills injected here -->
                 </div>
             </section>
 
-            <!-- Project Grid: Technical Blueprints -->
-            <section id="projects-section" class="mb-24 relative z-10">
-                <div class="flex items-end justify-between mb-12 border-b border-outline-variant/10 pb-6">
-                   <div>
-                       <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Project_Blueprints</h2>
-                       <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">Deployed_Architectures</p>
-                   </div>
+            <!-- Project Grid -->
+            <section id="projects-section" class="mb-24">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="w-1 h-6 bg-sky-400"></div>
+                    <h3 class="text-xl font-bold font-headline uppercase tracking-tight text-on-surface">Project Repository</h3>
                 </div>
-                <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="projects-list" class="grid grid-cols-1 md:grid-cols-12 gap-6">
                     <!-- Dynamic Projects injected here -->
                 </div>
             </section>
 
-            <!-- Experience Timeline: Quantified Achievements -->
-            <section id="experience-section" class="mb-24 relative z-10">
-                <div class="flex justify-between items-end mb-12 border-b border-outline-variant/10 pb-6">
-                    <div>
-                         <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Experience_Timeline</h2>
-                         <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">System_Uptime_Logs</p>
+            <!-- Experience Timeline -->
+            <section id="experience-section" class="mb-24">
+                <div class="max-w-4xl mb-12">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container text-sky-400 rounded-full mb-6">
+                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                        <span class="text-[10px] font-label font-bold tracking-widest uppercase">System Trace: active</span>
                     </div>
+                    <h2 class="text-5xl lg:text-6xl font-black font-headline tracking-tighter mb-4 text-on-surface">Professional Timeline</h2>
+                    <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
+                        A chronologically indexed execution log of architectural decisions, engineering leadership, and systems evolution.
+                    </p>
                 </div>
-                <div id="experience-list" class="space-y-0">
-                   <!-- Dynamic Experience injected here -->
+                <div class="relative max-w-6xl">
+                    <div class="absolute left-[31px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary/40 via-outline-variant/20 to-transparent hidden lg:block"></div>
+                    <div id="experience-list" class="space-y-12 lg:space-y-20">
+                       <!-- Dynamic Experience injected here -->
+                    </div>
                 </div>
             </section>
 
              <!-- Code Quest Mini Game -->
-            <section id="game-section" class="mb-24 relative z-10">
-                 <div class="flex justify-between items-end mb-8 border-b border-outline-variant/10 pb-6">
-                    <div>
-                        <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Diagnostic_Module</h2>
-                        <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">Interactive_Execution_Env</p>
-                    </div>
-                </div>
-                <div id="game-wrapper">
-                    <div id="game-container">
-                        <canvas id="game-canvas"></canvas>
-                        <div id="game-overlay">
-                            <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
-                            <div class="game-start-msg">PRESS SPACE OR TAP TO START</div>
+            <section id="game-section" class="mb-24">
+                <div class="bg-surface-container-low rounded-xl overflow-hidden relative border-l-4 border-sky-400">
+                    <div class="grid grid-cols-1 md:grid-cols-12">
+                        <div class="md:col-span-7 p-8 lg:p-10 flex flex-col justify-center">
+                            <div class="flex items-center space-x-3 mb-6">
+                                <span class="material-symbols-outlined text-sky-400" style="font-variation-settings: 'FILL' 1;">terminal</span>
+                                <span class="font-label text-sm text-sky-400 font-bold tracking-[0.2em] uppercase">Core_System_Experiment_01</span>
+                            </div>
+                            <h2 class="text-3xl lg:text-4xl font-black text-on-surface mb-6 tracking-tight">Code Quest: Logic Benchmark</h2>
+                            <p class="text-on-surface-variant text-base mb-8 leading-relaxed">
+                                A high-precision testing utility designed to measure algorithmic efficiency through interactive logic puzzles. This module calculates Big-O complexity in real-time as users solve structural bottlenecks.
+                            </p>
+                            <div class="grid grid-cols-3 gap-4 lg:gap-6 mb-8">
+                                <div>
+                                    <div class="text-[10px] font-label text-slate-500 uppercase tracking-widest mb-1">Status</div>
+                                    <div class="flex items-center text-sm lg:text-xl font-bold font-label text-primary">
+                                        <span class="w-2 h-2 rounded-full bg-primary mr-2"></span>STABLE
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Final CTA: Collaboration -->
-            <section id="contact-section" class="mt-40 mb-10 relative z-10">
-                <div class="bg-primary-container p-10 md:p-16 flex flex-col md:flex-row justify-between items-center text-on-primary-container">
-                    <div class="mb-8 md:mb-0 text-center md:text-left">
-                        <h2 class="font-headline text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none mb-4">Open for <br/> Collaboration.</h2>
-                        <p class="font-headline text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.4em] opacity-70">Seeking complex architectural challenges</p>
-                    </div>
-                    <div class="flex flex-col gap-4 w-full md:w-auto">
-                        <a id="contact-email" href="#" class="bg-on-primary-container text-primary-container px-10 py-5 font-headline font-bold uppercase tracking-widest hover:bg-black transition-all border border-transparent hover:border-primary-container/20 text-center block">
-                            INITIATE_CONTACT
-                        </a>
-                        <div class="flex justify-between font-headline text-[8px] md:text-[10px] uppercase tracking-widest font-medium opacity-60">
-                            <span>availability: High</span>
-                            <span>timezone: IST</span>
-                        </div>
-                    </div>
-                </div>
-                <footer class="mt-20 flex flex-col md:flex-row justify-between items-start md:items-end border-t border-outline-variant/15 pt-10 gap-6">
-                    <div>
-                        <div class="font-headline text-lg font-black text-primary-container">ARCHITECT_PORTFOLIO_V4.2.0</div>
-                        <div class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant mt-2">Built with systematic precision. &copy; <span id="year"></span></div>
-                    </div>
-                    <div class="flex gap-10">
-                        <div class="text-left md:text-right">
-                            <div class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">Network_Nodes</div>
-                            <div class="flex gap-4" id="footer-socials">
-                               <!-- footer socials optional -->
+                        <div class="md:col-span-5 bg-surface-container flex flex-col items-center justify-center p-6 lg:p-12 overflow-hidden h-64 lg:h-auto">
+                            <div id="game-wrapper" class="w-full h-full relative">
+                                <div id="game-container" class="w-full h-full">
+                                    <canvas id="game-canvas"></canvas>
+                                    <div id="game-overlay">
+                                        <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
+                                        <div class="game-start-msg text-center text-xs lg:text-base">PRESS SPACE OR TAP TO START</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </footer>
+                </div>
             </section>
 
+            <!-- Final CTA / Contact -->
+            <section id="contact-section" class="mb-10">
+                <div class="mb-12">
+                    <h2 class="text-5xl lg:text-6xl font-black font-headline tracking-tighter text-on-surface mb-2">Connect &amp; Inquiries</h2>
+                    <p class="font-label text-on-surface-variant max-w-2xl leading-relaxed">
+                        Establish a secure communication channel for architectural consultation, backend engineering opportunities, or technical collaboration. High-priority inquiries are monitored 24/7.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-12 lg:col-span-7 bg-surface-container-low p-8 lg:p-10 rounded-xl">
+                        <div class="mb-8">
+                            <h3 class="font-headline text-xl font-bold mb-1">Transmission Channel</h3>
+                            <p class="font-label text-xs text-on-surface-variant uppercase tracking-widest">Direct Message Interface</p>
+                        </div>
+                        <form class="space-y-6">
+                            <div class="space-y-2">
+                                <label class="font-label text-[10px] uppercase tracking-widest text-slate-500">Payload</label>
+                                <textarea class="w-full bg-surface-container border-none text-sm font-label p-4 rounded-md focus:bg-surface-container-highest transition-colors focus:ring-0 border-b-2 border-transparent focus:border-primary resize-none text-on-surface" placeholder="Ready for a new project..." rows="5"></textarea>
+                            </div>
+                            <div class="pt-2">
+                                <a id="contact-email" href="#" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-primary-dim text-on-primary font-bold rounded-md hover:opacity-95 transition-all group">
+                                    <span class="font-headline uppercase tracking-widest text-xs">Execute Email Client</span>
+                                    <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">send</span>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-span-12 lg:col-span-5 space-y-6">
+                        <div class="bg-surface-container p-8 rounded-xl">
+                            <h3 class="font-headline text-lg font-bold mb-6">Network Nodes</h3>
+                            <div id="footer-socials" class="space-y-4">
+                                <!-- Dynamic footer socials injected here -->
+                            </div>
+                        </div>
+
+                        <div class="bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="font-headline text-lg font-bold mb-4">Uptime &amp; Availability</h3>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-label text-[10px] uppercase tracking-widest text-slate-500">Status</span>
+                                        <span class="flex items-center gap-2 text-[10px] font-bold text-primary bg-primary-container px-3 py-1 rounded-full uppercase">Operational</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-label text-[10px] uppercase tracking-widest text-slate-500">Timezone</span>
+                                        <span class="font-label text-xs text-on-surface">IST</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-8 -right-8 opacity-10">
+                                <span class="material-symbols-outlined text-9xl">hub</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Mobile Navigation -->
-        <nav class="lg:hidden fixed bottom-0 left-0 w-full bg-surface-container-low border-t border-outline-variant/20 h-16 flex justify-around items-center z-50">
-            <a href="#hero-section" class="flex flex-col items-center text-[#00FF41]">
-                <span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
-                <span class="text-[8px] font-label mt-1">ROOT</span>
+        <nav class="lg:hidden fixed bottom-0 left-0 w-full bg-[#060e20] border-t border-outline-variant/20 h-16 flex justify-around items-center z-50">
+            <a href="#hero-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
+                <span class="material-symbols-outlined text-xl" data-icon="home">home</span>
+                <span class="text-[8px] font-label mt-1">HOME</span>
             </a>
-            <a href="#projects-section" class="flex flex-col items-center text-[#b9ccb2]">
-                <span class="material-symbols-outlined" data-icon="terminal">terminal</span>
-                <span class="text-[8px] font-label mt-1">PROJECTS</span>
+            <a href="#projects-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
+                <span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+                <span class="text-[8px] font-label mt-1">STACK</span>
             </a>
-            <a href="#experience-section" class="flex flex-col items-center text-[#b9ccb2]">
-                <span class="material-symbols-outlined" data-icon="history">history</span>
+            <a href="#experience-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
+                <span class="material-symbols-outlined text-xl" data-icon="history">history</span>
                 <span class="text-[8px] font-label mt-1">LOGS</span>
             </a>
+            <a href="#contact-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
+                <span class="material-symbols-outlined text-xl" data-icon="hub">hub</span>
+                <span class="text-[8px] font-label mt-1">CONNECT</span>
+            </a>
         </nav>
+
+        <!-- Desktop Footer -->
+        <footer class="hidden lg:flex fixed bottom-0 right-0 w-[calc(100%-16rem)] py-2 bg-[#060e20] justify-between items-center px-8 text-[10px] uppercase tracking-widest text-slate-500 z-40 border-t border-outline-variant/5">
+            <div class="flex items-center gap-6">
+                <span class="font-label text-slate-500">&copy; <span id="year"></span> ARCH_COMPILER</span>
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary-dim"></span>
+                    <span class="font-label hover:text-sky-400 cursor-pointer transition-colors underline decoration-sky-500/30">Uptime: 99.9%</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6 font-label">
+                <a href="https://github.com/sankalpyerawar" class="hover:text-sky-400 transition-colors">Source</a>
+                <a href="#" class="hover:text-sky-400 transition-colors">Logs</a>
+            </div>
+        </footer>
 
     </div>
 
