@@ -35,7 +35,7 @@ async function initPortfolio() {
     // Profile & Header
     const name = data.profile.name;
     const splitName = name.replace(' ', ' <br/> <span class="text-sky-400">');
-    const heroEl = document.getElementById('hero-section');
+    const heroEl = document.getElementById('hero-content');
     if (heroEl) {
         heroEl.innerHTML = `
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full mb-8">
@@ -48,16 +48,6 @@ async function initPortfolio() {
             <p class="text-xl text-on-surface-variant max-w-2xl font-body leading-relaxed mb-10">
                 ${data.profile.subtitle}
             </p>
-            <div class="flex items-center gap-4">
-                <a href="#skills-section" class="px-8 py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold rounded-lg flex items-center gap-3 transition-transform hover:-translate-y-0.5 active:scale-95">
-                    <span class="material-symbols-outlined" data-icon="explore">explore</span>
-                    Explore Stack
-                </a>
-                <a href="${data.profile.resumeUrl || '#'}" target="_blank" class="px-8 py-4 bg-surface-container-high text-primary font-bold rounded-lg border border-outline-variant/10 hover:bg-surface-container-highest transition-all flex items-center gap-3">
-                    <span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
-                    Read Docs (Resume)
-                </a>
-            </div>
         `;
     }
 

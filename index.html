@@ -22,10 +22,6 @@
                     <div class="w-10 h-10 rounded bg-surface-container flex items-center justify-center">
                         <span class="material-symbols-outlined text-sky-400" data-icon="terminal">terminal</span>
                     </div>
-                    <div>
-                        <h1 class="text-xl font-bold tracking-tighter text-sky-400 dark:text-sky-400">ARCH-OS</h1>
-                        <p class="text-[10px] font-medium text-slate-500 uppercase tracking-widest">v3.0.0-stable</p>
-                    </div>
                 </div>
             </div>
 
@@ -34,21 +30,17 @@
                     <span class="material-symbols-outlined" data-icon="home">home</span>
                     <span class="font-label text-sm tracking-wide">Home</span>
                 </a>
-                <a href="#skills-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
-                    <span class="material-symbols-outlined" data-icon="layers">layers</span>
-                    <span class="font-label text-sm tracking-wide">Stack</span>
+                <a href="#experience-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="history">history</span>
+                    <span class="font-label text-sm tracking-wide">Experience</span>
                 </a>
                 <a href="#projects-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
                     <span class="material-symbols-outlined" data-icon="terminal">terminal</span>
                     <span class="font-label text-sm tracking-wide">Projects</span>
                 </a>
-                <a href="#experience-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
-                    <span class="material-symbols-outlined" data-icon="history">history</span>
-                    <span class="font-label text-sm tracking-wide">History</span>
-                </a>
-                <a href="#game-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
-                    <span class="material-symbols-outlined" data-icon="science">science</span>
-                    <span class="font-label text-sm tracking-wide">Lab</span>
+                <a href="#skills-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
+                    <span class="material-symbols-outlined" data-icon="layers">layers</span>
+                    <span class="font-label text-sm tracking-wide">Stack</span>
                 </a>
                 <a href="#contact-section" class="flex items-center gap-3 px-4 py-3 rounded text-slate-400 font-medium hover:text-sky-200 hover:bg-[#05183c] transition-colors duration-150">
                     <span class="material-symbols-outlined" data-icon="hub">hub</span>
@@ -58,7 +50,7 @@
 
             <div class="mt-auto px-2">
                 <a id="resume-sidebar-btn" href="#" target="_blank" class="block text-center w-full py-3 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold rounded-md active:scale-95 transition-all duration-200 ease-out text-sm tracking-tighter">
-                    DEPLOY_BUILD
+                    Resume
                 </a>
             </div>
         </aside>
@@ -74,10 +66,6 @@
                 </div>
             </div>
             <div class="flex items-center gap-6">
-                <div class="relative group hidden md:block">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" data-icon="search">search</span>
-                    <input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 text-xs mono-data focus:ring-1 focus:ring-sky-500 w-48 transition-all" placeholder="QUERY_SYSTEM..." type="text"/>
-                </div>
                 <div class="text-[10px] mono-data text-slate-500 font-bold uppercase tracking-widest">
                     <span id="sys-time">--:--:--</span>
                 </div>
@@ -87,35 +75,29 @@
         <!-- Main Content Canvas -->
         <main class="lg:ml-64 pt-20 px-6 lg:px-12 pb-24 min-h-screen bg-surface" id="main-content">
             <!-- Hero Section -->
-            <section id="hero-section" class="py-10 flex flex-col items-start max-w-6xl">
+            <section id="hero-section" class="py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl">
                 <!-- Dynamic Hero Content Injected Here -->
+                <div id="hero-content" class="col-span-1 lg:col-span-7 order-1 flex flex-col items-start">
+                    <!-- Dynamic Hero Content Injected Here -->
+                </div>
+
+                <!-- Game Container -->
+                <div class="col-span-1 lg:col-span-5 order-2 flex flex-col items-center justify-center w-full bg-surface-container rounded-xl overflow-hidden h-64 lg:h-80 border-l-4 border-sky-400">
+                    <div id="game-wrapper" class="w-full h-full relative">
+                        <div id="game-container" class="w-full h-full">
+                            <canvas id="game-canvas"></canvas>
+                            <div id="game-overlay">
+                                <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
+                                <div class="game-start-msg text-center text-xs lg:text-base">PRESS SPACE OR TAP TO START</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Technical README Section -->
             <section id="hero-readme-section" class="mb-20">
                 <!-- Dynamic README Content Injected Here -->
-            </section>
-
-            <!-- Technical Stack Specialization -->
-            <section id="skills-section" class="mb-24">
-                <div class="flex items-center gap-2 mb-8">
-                    <div class="w-1 h-6 bg-sky-400"></div>
-                    <h3 class="text-xl font-bold font-headline uppercase tracking-tight text-on-surface">Technical Stack & Proficiencies</h3>
-                </div>
-                <div id="skills-list" class="grid grid-cols-12 gap-6 md:gap-8">
-                   <!-- Dynamic Skills injected here -->
-                </div>
-            </section>
-
-            <!-- Project Grid -->
-            <section id="projects-section" class="mb-24">
-                <div class="flex items-center gap-2 mb-8">
-                    <div class="w-1 h-6 bg-sky-400"></div>
-                    <h3 class="text-xl font-bold font-headline uppercase tracking-tight text-on-surface">Project Repository</h3>
-                </div>
-                <div id="projects-list" class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    <!-- Dynamic Projects injected here -->
-                </div>
             </section>
 
             <!-- Experience Timeline -->
@@ -138,40 +120,25 @@
                 </div>
             </section>
 
-             <!-- Code Quest Mini Game -->
-            <section id="game-section" class="mb-24">
-                <div class="bg-surface-container-low rounded-xl overflow-hidden relative border-l-4 border-sky-400">
-                    <div class="grid grid-cols-1 md:grid-cols-12">
-                        <div class="md:col-span-7 p-8 lg:p-10 flex flex-col justify-center">
-                            <div class="flex items-center space-x-3 mb-6">
-                                <span class="material-symbols-outlined text-sky-400" style="font-variation-settings: 'FILL' 1;">terminal</span>
-                                <span class="font-label text-sm text-sky-400 font-bold tracking-[0.2em] uppercase">Core_System_Experiment_01</span>
-                            </div>
-                            <h2 class="text-3xl lg:text-4xl font-black text-on-surface mb-6 tracking-tight">Code Quest: Logic Benchmark</h2>
-                            <p class="text-on-surface-variant text-base mb-8 leading-relaxed">
-                                A high-precision testing utility designed to measure algorithmic efficiency through interactive logic puzzles. This module calculates Big-O complexity in real-time as users solve structural bottlenecks.
-                            </p>
-                            <div class="grid grid-cols-3 gap-4 lg:gap-6 mb-8">
-                                <div>
-                                    <div class="text-[10px] font-label text-slate-500 uppercase tracking-widest mb-1">Status</div>
-                                    <div class="flex items-center text-sm lg:text-xl font-bold font-label text-primary">
-                                        <span class="w-2 h-2 rounded-full bg-primary mr-2"></span>STABLE
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="md:col-span-5 bg-surface-container flex flex-col items-center justify-center p-6 lg:p-12 overflow-hidden h-64 lg:h-auto">
-                            <div id="game-wrapper" class="w-full h-full relative">
-                                <div id="game-container" class="w-full h-full">
-                                    <canvas id="game-canvas"></canvas>
-                                    <div id="game-overlay">
-                                        <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
-                                        <div class="game-start-msg text-center text-xs lg:text-base">PRESS SPACE OR TAP TO START</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Project Grid -->
+            <section id="projects-section" class="mb-24">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="w-1 h-6 bg-sky-400"></div>
+                    <h3 class="text-xl font-bold font-headline uppercase tracking-tight text-on-surface">Project Repository</h3>
+                </div>
+                <div id="projects-list" class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <!-- Dynamic Projects injected here -->
+                </div>
+            </section>
+
+            <!-- Technical Stack Specialization -->
+            <section id="skills-section" class="mb-24">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="w-1 h-6 bg-sky-400"></div>
+                    <h3 class="text-xl font-bold font-headline uppercase tracking-tight text-on-surface">Technical Stack & Proficiencies</h3>
+                </div>
+                <div id="skills-list" class="grid grid-cols-12 gap-6 md:gap-8">
+                   <!-- Dynamic Skills injected here -->
                 </div>
             </section>
 
@@ -179,9 +146,6 @@
             <section id="contact-section" class="mb-10">
                 <div class="mb-12">
                     <h2 class="text-5xl lg:text-6xl font-black font-headline tracking-tighter text-on-surface mb-2">Connect &amp; Inquiries</h2>
-                    <p class="font-label text-on-surface-variant max-w-2xl leading-relaxed">
-                        Establish a secure communication channel for architectural consultation, backend engineering opportunities, or technical collaboration. High-priority inquiries are monitored 24/7.
-                    </p>
                 </div>
 
                 <div class="grid grid-cols-12 gap-6">
@@ -241,13 +205,17 @@
                 <span class="material-symbols-outlined text-xl" data-icon="home">home</span>
                 <span class="text-[8px] font-label mt-1">HOME</span>
             </a>
-            <a href="#projects-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
-                <span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
-                <span class="text-[8px] font-label mt-1">STACK</span>
-            </a>
             <a href="#experience-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
                 <span class="material-symbols-outlined text-xl" data-icon="history">history</span>
-                <span class="text-[8px] font-label mt-1">LOGS</span>
+                <span class="text-[8px] font-label mt-1">EXPERIENCE</span>
+            </a>
+            <a href="#projects-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
+                <span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+                <span class="text-[8px] font-label mt-1">PROJECTS</span>
+            </a>
+            <a href="#skills-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
+                <span class="material-symbols-outlined text-xl" data-icon="layers">layers</span>
+                <span class="text-[8px] font-label mt-1">STACK</span>
             </a>
             <a href="#contact-section" class="flex flex-col items-center text-slate-500 hover:text-sky-400">
                 <span class="material-symbols-outlined text-xl" data-icon="hub">hub</span>
