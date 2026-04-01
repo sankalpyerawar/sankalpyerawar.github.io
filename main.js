@@ -246,15 +246,6 @@ async function initPortfolio() {
     // Initialize Game
     initGame();
 
-    // System Status Clock
-    const timeEl = document.getElementById('sys-time');
-    if (timeEl) {
-        setInterval(() => {
-            const now = new Date();
-            timeEl.textContent = now.toLocaleTimeString('en-US', { hour12: false });
-        }, 1000);
-    }
-
     // Force Dark Theme
     document.documentElement.classList.add('dark');
     document.documentElement.setAttribute('data-theme', 'dark');
