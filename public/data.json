@@ -50,6 +50,16 @@
         }
     ],
     "skills": {
+        "AI-Assisted Development": [
+            "Context Engineering",
+            "Github Copilot",
+            "Claude Code",
+            "Kiro",
+            "Antigravity",
+            "Custom Skills & Agents",
+            "Prompt & Commands",
+            "MCP"
+        ],
         "Programming Languages": [
             "Kotlin (Primary)",
             "Java",
