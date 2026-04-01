@@ -42,10 +42,10 @@ async function initPortfolio() {
                 <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                 <span class="text-[10px] mono-data text-primary uppercase font-bold tracking-widest">Architectural Registry</span>
             </div>
-            <h2 class="text-6xl md:text-7xl font-black text-on-surface font-headline leading-none tracking-tighter mb-4 max-w-4xl uppercase">
+            <h2 class="text-7xl md:text-8xl font-black text-on-surface font-headline leading-none tracking-tighter mb-4 max-w-4xl uppercase text-center">
                 ${splitName}</span>
             </h2>
-            <p class="text-xl text-on-surface-variant max-w-2xl font-body leading-relaxed mb-10">
+            <p class="text-2xl text-on-surface-variant max-w-2xl font-body leading-relaxed text-center">
                 ${data.profile.subtitle}
             </p>
         `;
