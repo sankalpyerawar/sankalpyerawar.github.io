@@ -45,7 +45,7 @@
 
 /* Game Styles - adapted to Tailwind utility classes but kept here for specific canvas targeting */
 #game-wrapper {
-  @apply mb-12 w-full max-w-4xl mx-auto;
+  @apply w-full;
 }
 
 #game-container {
