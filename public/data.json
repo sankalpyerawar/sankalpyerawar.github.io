@@ -1,17 +1,19 @@
 {
     "meta": {
-        "title": "Sankalp Yerawar | Backend Engineer",
+        "title": "Sankalp Yerawar | Software Engineer",
         "description": "Portfolio of Sankalp Yerawar - Senior Backend Engineer specializing in distributed systems, cloud architectures, and data streaming."
     },
     "profile": {
         "name": "SANKALP YERAWAR",
         "initials": "SY",
-        "subtitle": "Backend Development & Distributed Systems Architect",
+        "subtitle": "Software Engineer",
         "resumeUrl": "/resume.pdf",
         "summary": [
-            "7+ years of experience as a backend-focused software engineer specializing in scalable distributed systems and microservices architecture.",
-            "Expertise in Kotlin, Java, and cloud-native patterns (AWS Lambda, Serverless). Proven track record in designing real-time data pipelines (Kafka) and high-performance storage solutions (Cassandra, PostgreSQL).",
-            "Passionate about clean code, Domain-Driven Design (DDD), and TDD. actively exploring AI-assisted development to deliver faster, cleaner solutions."
+            "7+ years building scalable backend systems and event-driven microservices across automotive, healthcare, and manufacturing",
+            "Proficient in Kotlin, Java, and C# with hands-on expertise in Kafka, Cassandra, PostgreSQL, and AWS",
+            "Practitioner of Clean Architecture, DDD, and TDD — focused on reliability and maintainability",
+            "Actively using AI-assisted development (Kiro, Copilot) via custom agents, context engineering, and prompt design to accelerate delivery",
+            "Collaborative team player in Agile environments, bridging technical and non-technical stakeholders to drive business outcomes"
         ],
         "social": {
             "email": "mailto:sankalpyerawar@gmail.com",
@@ -22,12 +24,13 @@
     "projects": [
         {
             "title": "Personal Portfolio Website",
-            "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dark/light mode, dynamic JSON content loading, and a clean UI.",
+            "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dynamic JSON content loading and a clean UI. Redesigned using Google Stitch for UI design and migrated to Tailwind CSS, with Google Jules assisting in development.",
             "technologies": [
-                "Antigravity",
-                "AI-Assisted Development",
-                "Java",
-                "React"
+                "Vite",
+                "Tailwind CSS",
+                "Google Stitch",
+                "Google Jules",
+                "AI-Assisted Development"
             ],
             "link": "https://github.com/sankalpyerawar/sankalpyerawar",
             "liveUrl": "https://sankalpyerawar.github.io",
@@ -105,12 +108,17 @@
                 "S3",
                 "Antigravity",
                 "Claude",
-                "Agile"
+                "Kiro",
+                "Context Engineering"
             ],
             "nestedProjects": [
                 {
                     "title": "Automated Per Diem ETL Platform",
                     "summary": "Designed a serverless ETL platform using AWS Step Functions and Java Lambdas to automate per diem rate processing. Built a unified data model and validation framework, reducing manual errors and ensuring regulatory compliance."
+                },
+                {
+                    "title": "On-Demand Learning Platform",
+                    "summary": "Built a full-stack internal learning platform using Spring Boot, React/TypeScript, and PostgreSQL in a monorepo setup. Leveraged Kiro and Antigravity as primary AI coding tools — applying context engineering, custom skills, and reusable prompts to streamline development. Designed structured workflows and custom agents tailored for planning, story creation, implementation, and review across the stack."
                 }
             ]
         },
