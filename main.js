@@ -131,8 +131,7 @@ async function initPortfolio() {
       if (!Array.isArray(data.skills)) {
          html = Object.entries(data.skills)
           .map(([category, items], index) => {
-            const isLarge = index === 0;
-            const colSpan = isLarge ? 'col-span-12 lg:col-span-6 lg:row-span-2' : 'col-span-12 lg:col-span-6';
+            const colSpan = 'col-span-12 md:col-span-6 lg:col-span-4';
             const icon = index === 0 ? 'terminal' : index === 1 ? 'cloud' : index === 2 ? 'database' : 'schema';
 
             return `
@@ -249,6 +248,71 @@ async function initPortfolio() {
     // Force Dark Theme
     document.documentElement.classList.add('dark');
     document.documentElement.setAttribute('data-theme', 'dark');
+
+    // Intersection Observer for Navigation Highlighting
+    const sections = [
+        'hero-section',
+        'experience-section',
+        'projects-section',
+        'skills-section',
+        'contact-section'
+    ];
+
+    const navLinks = document.querySelectorAll('nav a');
+    const mobileNavLinks = document.querySelectorAll('nav.lg\\:hidden a');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-50% 0px -50% 0px', // Trigger when section is in the middle 50% of the viewport
+        threshold: 0
+    };
+
+    const updateActiveNav = (id) => {
+        // Desktop Navigation
+        const desktopNavContainer = document.querySelector('aside nav');
+        if (desktopNavContainer) {
+            const links = desktopNavContainer.querySelectorAll('a');
+            links.forEach(link => {
+                if (link.getAttribute('href') === `#${id}`) {
+                    // Make Active
+                    link.classList.remove('text-slate-400', 'hover:text-sky-200', 'hover:bg-[#05183c]');
+                    link.classList.add('text-sky-400', 'font-bold', 'bg-[#05183c]', 'border-r-2', 'border-sky-400');
+                } else {
+                    // Make Inactive
+                    link.classList.remove('text-sky-400', 'font-bold', 'bg-[#05183c]', 'border-r-2', 'border-sky-400');
+                    link.classList.add('text-slate-400', 'font-medium', 'hover:text-sky-200', 'hover:bg-[#05183c]');
+                }
+            });
+        }
+
+        // Mobile Navigation
+        const mobileNavContainer = document.querySelector('nav.lg\\:hidden');
+        if (mobileNavContainer) {
+             const links = mobileNavContainer.querySelectorAll('a');
+             links.forEach(link => {
+                if (link.getAttribute('href') === `#${id}`) {
+                    link.classList.remove('text-slate-500', 'hover:text-sky-400');
+                    link.classList.add('text-sky-400');
+                } else {
+                    link.classList.remove('text-sky-400');
+                    link.classList.add('text-slate-500', 'hover:text-sky-400');
+                }
+             });
+        }
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                updateActiveNav(entry.target.id);
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+    });
 
     // Reveal layout
     const layout = document.getElementById('layout');
