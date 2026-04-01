@@ -1,602 +1,83 @@
-:root {
-    --font-mono: 'Courier New', 'Fira Code', 'Roboto Mono', monospace;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-    /* Cyberpunk Theme Colors */
-    --color-bg: #000000;
-    --color-text-main: #00FF41; /* Matrix Green */
-    --color-text-muted: #008F11; /* Darker Green */
-    --color-border: #00FF41;
-    --color-accent: #00FF41;
-    --color-highlight: #ffffff; /* Was #D1D5DB but mapped to #fff in usage originally */
-
-    /* Backgrounds with Transparency for Dark Mode */
-    --bg-sidebar: rgba(0, 0, 0, 0.9);
-    --bg-card: rgba(0, 20, 0, 0.3);
-    --bg-card-hover: rgba(0, 20, 0, 0.6);
-    --bg-widget: rgba(0, 20, 0, 0.5);
-
-    --width-sidebar: 320px;
-    --gap-layout: 3rem;
-    --max-width: 1400px;
-
-    --glow-shadow: 0 0 8px var(--color-accent);
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container;
+  }
 }
 
-[data-theme="light"] {
-    --color-bg: #e0e0e0;
-    --color-text-main: #004d00;
-    --color-text-muted: #006600;
-    --color-border: #004d00;
-    --color-accent: #006600;
-    --color-highlight: #000000;
+@layer utilities {
+  .blueprint-grid {
+    background-image: linear-gradient(to right, rgba(59, 75, 55, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(59, 75, 55, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
 
-    /* Opaque Backgrounds for Light Mode */
-    --bg-sidebar: #dcdcdc;
-    --bg-card: #f0f0f0;
-    --bg-card-hover: #ffffff;
-    --bg-widget: #dcdcdc;
-
-    --glow-shadow: 0 0 4px rgba(0, 77, 0, 0.3);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: var(--font-mono);
-    background-color: var(--color-bg);
-    color: var(--color-text-main);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    background-image: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  .blueprint-grid-radial {
+    background-image: radial-gradient(circle, #3b4b37 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.05;
+  }
 }
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 4px;
+  height: 4px;
 }
-
 ::-webkit-scrollbar-track {
-    background: var(--color-bg);
+  background: #131313;
 }
-
 ::-webkit-scrollbar-thumb {
-    background: var(--color-text-muted);
-    border: 1px solid var(--color-accent);
+  background: #353534;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-accent);
+  background: #00FF41;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-accent);
-    text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+/* Material Symbols Adjustments */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
 }
 
-a {
-    color: var(--color-text-main);
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border-bottom: 1px dashed transparent;
-}
-
-a:hover {
-    color: var(--color-highlight);
-    text-shadow: 0 0 8px var(--color-accent);
-    border-bottom-color: var(--color-accent);
-}
-
-/* Layout */
-#layout {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 0;
-    min-height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-    background-color: var(--bg-sidebar);
-    border-right: 1px solid var(--color-border);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    z-index: 100;
-    /* Mobile defaults */
-    width: 100%;
-    position: relative;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Theme Toggle Button */
-#theme-toggle {
-    background: transparent;
-    border: 1px solid var(--color-text-muted);
-    color: var(--color-text-main);
-    padding: 0.5rem;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: auto; /* Push to bottom if space allows, or use existing layout flow */
-    transition: all 0.2s ease;
-    align-self: flex-start; /* Align left */
-}
-
-#theme-toggle:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    box-shadow: 0 0 8px var(--color-accent);
-    transform: scale(1.1);
-}
-
-#theme-toggle svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-}
-
-/* Profile Header */
-.profile-intro {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.logo {
-    width: 60px;
-    height: 60px;
-    border: 2px solid var(--color-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--color-accent);
-    box-shadow: var(--glow-shadow);
-    background: var(--color-bg);
-}
-
-h1#profile-name {
-    font-size: 1.8rem;
-    line-height: 1.1;
-    margin: 0;
-}
-
-.subtitle {
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
-
-/* Social Actions */
-.social-links {
-    display: flex;
-    gap: 1rem;
-}
-
-.social-icon-link {
-    color: var(--color-text-main);
-    border: 1px solid var(--color-text-muted);
-    padding: 0.4rem;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.social-icon-link svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-}
-
-.social-icon-link:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 8px var(--color-accent);
-    background: rgba(0, 255, 65, 0.1);
-}
-
-#resume-container {
-    margin-top: 1rem;
-}
-
-.resume-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 0.8rem;
-    border: 1px solid var(--color-accent);
-    color: var(--color-bg);
-    background: var(--color-accent);
-    font-weight: 700;
-    text-transform: uppercase;
-    transition: all 0.2s;
-    cursor: pointer;
-}
-
-.resume-button:hover {
-    background: transparent;
-    color: var(--color-accent);
-    box-shadow: var(--glow-shadow);
-}
-
-.icon-download {
-    display: none;
-}
-
-/* Main Navigation */
-.main-nav ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.main-nav a {
-    display: block;
-    padding: 0.5rem 1rem;
-    border-left: 2px solid transparent;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 0.1em;
-    color: var(--color-text-muted);
-}
-
-.main-nav a:hover {
-    border-left-color: var(--color-accent);
-    color: var(--color-accent);
-    background: linear-gradient(90deg, rgba(0,255,65,0.1), transparent);
-    padding-left: 1.5rem;
-}
-
-/* System Status Widget */
-.system-status-widget {
-    border: 1px solid var(--color-text-muted);
-    padding: 1rem;
-    font-size: 0.85rem;
-    background: var(--bg-widget);
-}
-
-#sys-time {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--color-highlight);
-    text-align: center;
-    font-family: 'Courier New', monospace; /* Force blocky look */
-}
-
-.status-label {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--color-text-muted);
-    margin-bottom: 0.2rem;
-}
-
-.status-value {
-    color: var(--color-accent);
-    font-weight: 600;
-    animation: blinkText 2s infinite;
-}
-
-/* Terminal Prompt */
-.terminal-widget {
-    margin-top: auto; /* Push to bottom if sidebar is flex column */
-    font-size: 0.9rem;
-    border-top: 1px dashed var(--color-text-muted);
-    padding-top: 1rem;
-}
-
-#terminal-output {
-    min-height: 20px;
-    margin-bottom: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--color-highlight);
-    white-space: pre-wrap;
-    max-height: 100px;
-    overflow-y: auto;
-}
-
-.input-line {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.prompt-char {
-    color: var(--color-accent);
-    font-weight: 700;
-}
-
-#terminal-input {
-    background: transparent;
-    border: none;
-    color: var(--color-accent);
-    font-family: var(--font-mono);
-    width: 100%;
-    outline: none;
-}
-
-/* Main Content Area */
-.content {
-    padding: 2rem;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-/* Game Container */
+/* Game Styles - adapted to Tailwind utility classes but kept here for specific canvas targeting */
 #game-wrapper {
-    margin-bottom: 3rem;
+  @apply mb-12 w-full max-w-4xl mx-auto;
 }
 
 #game-container {
-    width: 100%;
-    height: 300px;
-    background: #000;
-    border: 2px solid var(--color-accent);
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
-    position: relative;
-    overflow: hidden;
-    image-rendering: pixelated;
+  @apply w-full h-[300px] bg-black border-2 border-[#00FF41] shadow-[0_0_15px_rgba(0,255,65,0.3)] relative overflow-hidden;
+  image-rendering: pixelated;
 }
 
 #game-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
+  @apply w-full h-full block;
 }
 
 #game-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.7);
-    z-index: 10;
-    transition: opacity 0.3s;
+  @apply absolute inset-0 flex flex-col items-center justify-center bg-black/70 z-10 transition-opacity duration-300;
 }
 
 #game-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
+  @apply opacity-0 pointer-events-none;
 }
 
 .game-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-highlight); /* Use variable now for consistent theming */
-    margin-bottom: 1rem;
-    text-shadow: 0 0 10px var(--color-accent);
-    text-align: center;
+  @apply text-2xl font-bold text-white mb-4 text-center font-headline;
+  text-shadow: 0 0 10px #00FF41;
 }
 
 .game-start-msg {
-    font-size: 1rem;
-    animation: blink 1s infinite;
-}
-
-/* Sections */
-.section {
-    margin-bottom: 4rem;
-}
-
-h2 {
-    font-size: 1.5rem;
-    border-bottom: 1px solid var(--color-text-muted);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Summary */
-#profile-summary p {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    color: var(--color-text-main);
-}
-
-/* Experience & Projects Cards */
-.experience-card, .project-card {
-    background: var(--bg-card);
-    border: 1px solid var(--color-border);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.experience-card:hover, .project-card:hover {
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
-    transform: translateY(-2px);
-    background: var(--bg-card-hover);
-}
-
-.experience-header, .project-header {
-    margin-bottom: 1rem;
-}
-
-.experience-header h3, .project-title {
-    font-size: 1.3rem;
-    color: var(--color-highlight);
-    margin-bottom: 0.5rem;
-}
-
-.experience-meta {
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.experience-company {
-    font-weight: 700;
-    color: var(--color-accent);
-}
-
-.project-links {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.tech-tag {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--color-text-muted);
-    border-radius: 12px;
-    font-size: 0.75rem;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-text-muted);
-    background: var(--color-bg);
-}
-
-/* Skills */
-.skill-category {
-    margin-bottom: 1.5rem;
-}
-
-.skill-category-title {
-    color: var(--color-text-muted);
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.tag {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    background: transparent;
-    border: 1px solid var(--color-accent);
-    color: var(--color-accent);
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
-}
-
-/* Timeline specific overrides */
-.timeline-container {
-    border-left: 2px solid var(--color-text-muted);
-    padding-left: 2rem;
-    position: relative;
-}
-
-.timeline-item {
-    position: relative;
-}
-
-.timeline-marker {
-    position: absolute;
-    left: -2.6rem;
-    top: 1.5rem;
-    width: 1rem;
-    height: 1rem;
-    background: var(--color-bg);
-    border: 2px solid var(--color-accent);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--color-accent);
-}
-
-/* Animations */
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+  @apply text-base text-[#00FF41] font-body animate-pulse;
 }
 
 @keyframes blinkText {
-    0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--color-accent); }
-    50% { opacity: 0.7; text-shadow: none; }
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px #00FF41; }
+  50% { opacity: 0.7; text-shadow: none; }
 }
 
-/* Responsive Grid for Desktop */
-@media (min-width: 1024px) {
-    #layout {
-        display: grid;
-        grid-template-columns: var(--width-sidebar) 1fr;
-        gap: 0;
-    }
-
-    .sidebar {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        width: auto; /* reset */
-        border-bottom: none;
-        border-right: 1px solid var(--color-border);
-        overflow-y: auto;
-    }
-
-    .content {
-        padding: 3rem 4rem;
-        max-width: 1100px;
-    }
-
-    /* Hide toggles on desktop if they exist in HTML */
-    .chevron { display: none; }
-
-    /* Ensure content is always visible */
-    .collapsible-content { display: block !important; }
-}
-
-/* Mobile Tweaks */
-@media (max-width: 1023px) {
-    .sidebar {
-        padding: 1.5rem;
-    }
-
-    .profile-intro {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    h1#profile-name {
-        text-align: center;
-    }
-
-    .social-actions {
-        justify-content: center;
-    }
-
-    .main-nav {
-        display: none; /* Hide nav on mobile to save space, or style differently */
-    }
-
-    .terminal-widget {
-        display: none; /* Hide terminal on mobile */
-    }
-
-    .system-status-widget {
-        display: none;
-    }
+.animate-blink-text {
+  animation: blinkText 2s infinite;
 }

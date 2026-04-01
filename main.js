@@ -32,16 +32,22 @@ async function initPortfolio() {
     const metaDesc = document.getElementById('meta-desc');
     if (metaDesc) metaDesc.content = data.meta.description;
 
-    // Profile
-    // Split name for two-line display side-by-side with logo
+    // Profile & Header
     const name = data.profile.name;
     const splitName = name.replace(' ', '<br>');
     const nameEl = document.getElementById('profile-name');
     if (nameEl) nameEl.innerHTML = splitName;
 
-    setText('profile-initials', data.profile.initials);
+    // Sidebar
+    setText('sidebar-name', name);
+    setText('profile-initials-sidebar', data.profile.initials);
+
+    const resumeBtn = document.getElementById('resume-sidebar-btn');
+    if (resumeBtn && data.profile.resumeUrl) {
+       resumeBtn.href = data.profile.resumeUrl;
+    }
+
     setText('profile-subtitle', data.profile.subtitle);
-    setText('footer-name', data.profile.name);
     setText('year', new Date().getFullYear());
 
     // Profile Summary (Array)
@@ -54,68 +60,98 @@ async function initPortfolio() {
 
     // Social Links
     const socialContainer = document.getElementById('profile-socials');
-    if (socialContainer && data.profile.social) {
+    const footerSocialContainer = document.getElementById('footer-socials');
+
+    if (data.profile.social) {
       const socialHtml = Object.entries(data.profile.social)
         .map(([key, url]) => {
           const icon = socialIcons[key];
           if (!icon) return ''; // Skip if not found
           const label = key.charAt(0).toUpperCase() + key.slice(1);
-          return `<a href="${url}" class="social-icon-link" aria-label="${label}" data-tooltip="${label}" target="${key === 'email' ? '_self' : '_blank'}" rel="noopener noreferrer">${icon}</a>`;
+          return `<a href="${url}" class="w-10 h-10 border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:text-primary-container hover:border-primary-container/50 transition-all bg-surface-container-high" aria-label="${label}" target="${key === 'email' ? '_self' : '_blank'}" rel="noopener noreferrer">${icon}</a>`;
         })
         .join('');
-      socialContainer.innerHTML = socialHtml;
+
+      if (socialContainer) socialContainer.innerHTML = socialHtml;
+
+      const footerSocialHtml = Object.entries(data.profile.social)
+        .map(([key, url]) => {
+          const icon = socialIcons[key];
+          if (!icon) return '';
+          return `<a href="${url}" class="w-8 h-8 text-primary-container hover:text-white transition-colors flex items-center justify-center" aria-label="${key}" target="_blank" rel="noopener noreferrer">${icon}</a>`;
+        })
+        .join('');
+
+      if (footerSocialContainer) footerSocialContainer.innerHTML = footerSocialHtml;
     }
 
-    // Resume Button
-    const resumeContainer = document.getElementById('resume-container');
-    if (resumeContainer && data.profile.resumeUrl) {
-      resumeContainer.innerHTML = `
-        <a href="${data.profile.resumeUrl}" class="resume-button" target="_blank" rel="noopener noreferrer">
-           <svg class="icon-download" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;">
-             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-           </svg>
-           RESUME
-        </a>
-      `;
+    // Contact CTA
+    const contactEmailBtn = document.getElementById('contact-email');
+    if(contactEmailBtn && data.profile.social && data.profile.social.email) {
+        contactEmailBtn.href = data.profile.social.email;
     }
 
     // Skills (Categorized)
     const skillsContainer = document.getElementById('skills-list');
     if (skillsContainer && data.skills) {
-      if (Array.isArray(data.skills)) {
-        skillsContainer.innerHTML = data.skills
-          .map(skill => `<span class="tag">${skill}</span>`)
-          .join('');
-      } else {
-        skillsContainer.innerHTML = Object.entries(data.skills)
-          .map(([category, items]) => `
-            <div class="skill-category">
-              <h3 class="skill-category-title">${category}</h3>
-              <div class="skill-tags">
-                ${items.map(skill => `<span class="tag">${skill}</span>`).join('')}
+      let html = '';
+      if (!Array.isArray(data.skills)) {
+         let maxSkillPercentage = 98; // fake percentage drop for aesthetics
+         html = Object.entries(data.skills)
+          .map(([category, items]) => {
+            const currentPercent = maxSkillPercentage;
+            maxSkillPercentage = Math.max(70, maxSkillPercentage - 5);
+
+            return `
+            <div class="space-y-4 bg-surface-container-low p-6 md:p-8 border border-outline-variant/15 flex flex-col justify-between hover:bg-surface-container transition-colors">
+              <div>
+                 <h4 class="font-headline text-xs md:text-sm font-bold text-primary-container mb-4 uppercase tracking-[0.2em]">${category}</h4>
+                 <div class="space-y-2">
+                    ${items.map(skill => `<div class="text-[10px] md:text-xs text-on-surface-variant font-body uppercase border-b border-outline-variant/10 pb-1">${skill}</div>`).join('')}
+                 </div>
+              </div>
+              <div class="mt-8 space-y-2">
+                 <div class="flex justify-between font-headline text-[10px] uppercase tracking-widest text-on-surface">
+                    <span>Proficiency</span>
+                    <span>${currentPercent}%</span>
+                 </div>
+                 <div class="h-[2px] bg-surface-container-high w-full">
+                    <div class="h-full bg-primary-container" style="width: ${currentPercent}%"></div>
+                 </div>
               </div>
             </div>
-          `)
+          `;
+          })
           .join('');
       }
+      skillsContainer.innerHTML = html;
     }
 
-    // Projects
+    // Projects (Blueprints)
     const projectsContainer = document.getElementById('projects-list');
     if (projectsContainer && data.projects) {
-      projectsContainer.innerHTML = data.projects.map(project => `
-        <div class="project-card">
-          <div class="project-header">
-             <h3 class="project-title">${project.title}</h3>
-             <div class="project-links">
-               ${project.link ? `<a href="${project.link}" target="_blank" rel="noopener noreferrer" class="icon-link source-link" aria-label="View Source">${socialIcons.github}</a>` : ''}
-               ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="icon-link live-link" aria-label="View Live Project">${socialIcons.external}</a>` : ''}
-             </div>
-          </div>
-          <p class="project-description">${project.description}</p>
-          <div class="project-tech">
-            ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-          </div>
+      projectsContainer.innerHTML = data.projects.map((project, index) => `
+        <div class="bg-surface-container-low p-6 md:p-10 border border-outline-variant/15 hover:bg-surface-container transition-colors group flex flex-col h-full">
+            <div class="flex justify-between items-start mb-6 md:mb-8">
+                <div>
+                    <span class="font-headline text-[10px] text-primary-container uppercase tracking-widest">P_ID: 00${index + 1}</span>
+                    <h3 class="font-headline text-2xl md:text-3xl font-bold uppercase mt-2 group-hover:text-primary-container transition-colors leading-none">${project.title}</h3>
+                </div>
+                ${project.link ? `<a class="material-symbols-outlined text-on-surface-variant hover:text-primary-container transition-colors flex-shrink-0" href="${project.link}" target="_blank" rel="noopener noreferrer">open_in_new</a>` : ''}
+            </div>
+            <p class="text-on-surface-variant mb-6 md:mb-10 text-sm leading-relaxed flex-grow">
+                ${project.description}
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6 md:mb-10">
+                ${project.technologies.map(tech => `<span class="px-2 py-1 bg-surface-container-high text-[10px] font-headline uppercase text-on-surface-variant border border-outline-variant/20">${tech}</span>`).join('')}
+            </div>
+            <div class="pt-4 md:pt-6 border-t border-outline-variant/15 flex justify-between items-center mt-auto">
+                <span class="font-headline text-[8px] md:text-[10px] uppercase tracking-widest text-on-surface-variant">Status: ACTIVE</span>
+                <div class="flex gap-4">
+                    ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="material-symbols-outlined text-lg text-primary-container hover:opacity-80">play_circle</a>` : ''}
+                    ${project.link ? `<a href="${project.link}" target="_blank" rel="noopener noreferrer" class="material-symbols-outlined text-lg hover:text-primary-container">code</a>` : ''}
+                </div>
+            </div>
         </div>
       `).join('');
     }
@@ -123,70 +159,41 @@ async function initPortfolio() {
     // Experience
     const experienceContainer = document.getElementById('experience-list');
     if (experienceContainer && data.experience) {
-      experienceContainer.innerHTML = `
-        <div class="timeline-container">
-          ${data.experience.map((job, index) => `
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="experience-card" data-index="${index}">
-                <div class="experience-header">
-                  <h3>${job.title}</h3>
-                  <div class="experience-meta">
-                    <span class="experience-company">${job.company}</span>
-                    <span class="experience-date">${job.date}</span>
-                  </div>
-                </div>
+      experienceContainer.innerHTML = data.experience.map((job, index) => {
+        // fake metrics for aesthetic
+        const metricValue = index === 0 ? '99.9%' : index === 1 ? '400+' : index === 2 ? '2TB' : 'SUB-MS';
+        const metricLabel = index === 0 ? 'UPTIME' : index === 1 ? 'SERVICES' : index === 2 ? 'DATA/DAY' : 'LATENCY';
 
-                <p class="experience-summary">${job.summary}</p>
-
-                <div class="project-tech" style="margin-bottom: 1rem;">
-                    ${job.technologies ? job.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('') : ''}
-                </div>
+        return `
+        <div class="grid grid-cols-1 lg:grid-cols-12 border-t border-outline-variant/20 py-8 lg:py-10 hover:bg-surface-container-low transition-colors px-0 lg:px-6 gap-6 lg:gap-0 group">
+            <div class="lg:col-span-3">
+                <div class="font-headline text-base lg:text-lg font-bold text-on-surface">${job.date}</div>
+                <div class="font-headline text-[10px] text-primary-container uppercase tracking-widest mt-1">Status: Active_Node</div>
+            </div>
+            <div class="lg:col-span-5 pr-0 lg:pr-8">
+                <h4 class="font-headline text-lg lg:text-xl font-bold uppercase mb-2 lg:mb-4 group-hover:text-primary-container transition-colors">${job.title} @ ${job.company}</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed mb-4">${job.summary}</p>
 
                 ${job.nestedProjects && job.nestedProjects.length > 0 ? `
-                  <div class="expand-hint">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-                    VIEW PROJECTS
-                  </div>
-                  <div class="nested-projects-container">
-                    ${job.nestedProjects.map(proj => `
-                      <div class="nested-project-card">
-                        <h4>${proj.title}</h4>
-                        <p class="nested-project-summary">${proj.summary}</p>
-                      </div>
+                <ul class="space-y-3 text-xs lg:text-sm text-on-surface-variant leading-relaxed mt-4">
+                    ${job.nestedProjects.slice(0, 2).map(proj => `
+                    <li class="flex gap-3 items-start">
+                        <span class="text-primary-container mt-1">&gt;&gt;</span>
+                        <span><strong class="text-on-surface">${proj.title}:</strong> ${proj.summary}</span>
+                    </li>
                     `).join('')}
-                  </div>
+                </ul>
                 ` : ''}
-              </div>
             </div>
-          `).join('')}
+            <div class="lg:col-span-4 flex justify-start lg:justify-end items-start gap-4 mt-4 lg:mt-0">
+                <div class="text-left lg:text-right">
+                    <div class="font-headline text-2xl lg:text-3xl font-black text-on-surface">${metricValue}</div>
+                    <div class="font-headline text-[10px] text-on-surface-variant uppercase tracking-widest">${metricLabel}</div>
+                </div>
+            </div>
         </div>
       `;
-
-      // Event Delegation
-      experienceContainer.addEventListener('click', (e) => {
-        const card = e.target.closest('.experience-card');
-        if (card) {
-          const nestedContainer = card.querySelector('.nested-projects-container');
-          if (nestedContainer) {
-             if (e.target.tagName === 'A') return;
-
-             nestedContainer.classList.toggle('open');
-             card.classList.toggle('expanded');
-          }
-        }
-      });
-    }
-
-    // Education
-    const educationContainer = document.getElementById('education-list');
-    if (educationContainer && data.education) {
-      educationContainer.innerHTML = data.education.map(school => `
-        <div class="school" style="margin-bottom: 1.5rem;">
-            <h3 style="font-size: 1.1rem;">${school.degree}</h3>
-            <p style="color: var(--color-text-muted);">${school.university} // ${school.date}</p>
-        </div>
-      `).join('');
+      }).join('');
     }
 
     // Initialize Game
@@ -201,78 +208,16 @@ async function initPortfolio() {
         }, 1000);
     }
 
-    // Terminal Logic
-    const terminalInput = document.getElementById('terminal-input');
-    const terminalOutput = document.getElementById('terminal-output');
-
-    if (terminalInput && terminalOutput) {
-        terminalInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const command = terminalInput.value.trim().toLowerCase();
-                const now = new Date().toLocaleTimeString('en-US', { hour12: false });
-
-                let response = '';
-
-                if (command === 'help') {
-                    response = 'Available commands: help, clear, whoami, date, status, exit';
-                } else if (command === 'clear') {
-                    terminalOutput.innerHTML = '';
-                    terminalInput.value = '';
-                    return;
-                } else if (command === 'whoami') {
-                    response = 'guest@portfolio-net';
-                } else if (command === 'date') {
-                    response = new Date().toString();
-                } else if (command === 'status') {
-                    response = 'SYSTEM OPTIMAL. NO THREATS DETECTED.';
-                } else if (command === 'exit') {
-                    response = 'Bye.';
-                    window.close(); // Probably won't work in most browsers, but it fits the theme
-                } else if (command === '') {
-                    response = '';
-                } else {
-                    response = `Command not found: ${command}`;
-                }
-
-                if (response) {
-                    const line = document.createElement('div');
-                    line.textContent = `[${now}] $ ${command}\n> ${response}`;
-                    line.style.marginBottom = '0.5rem';
-                    terminalOutput.appendChild(line);
-                    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-                }
-
-                terminalInput.value = '';
-            }
-        });
-    }
-
-    // Theme Logic
-    const themeToggle = document.getElementById('theme-toggle');
-    const storedTheme = localStorage.getItem('theme') || 'dark';
-
-    const applyTheme = (theme) => {
-      document.documentElement.setAttribute('data-theme', theme);
-      if (themeToggle) {
-        // If current is dark, show Sun (switch to light). If light, show Moon (switch to dark).
-        themeToggle.innerHTML = theme === 'dark' ? themeIcons.light : themeIcons.dark;
-        themeToggle.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`);
-      }
-    };
-
-    applyTheme(storedTheme);
-
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-      });
-    }
+    // Force Dark Theme
+    document.documentElement.classList.add('dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
 
     // Reveal layout
-    document.getElementById('layout').style.opacity = '1';
+    const layout = document.getElementById('layout');
+    if (layout) {
+      layout.classList.remove('opacity-0');
+      layout.classList.add('opacity-100');
+    }
 
   } catch (err) {
     console.error('Error loading portfolio data:', err);
@@ -282,23 +227,3 @@ async function initPortfolio() {
 
 // Call initialization
 initPortfolio();
-
-// Mobile Collapsible Sections (Optional: disable for desktop in CSS)
-function setupCollapsible(toggleId, contentId) {
-  const toggle = document.getElementById(toggleId);
-  const content = document.getElementById(contentId);
-
-  if (toggle && content) {
-    toggle.addEventListener('click', () => {
-      // Only toggle if display is not block (mobile)
-      // Actually CSS handles strict display block on desktop, but toggling class is fine
-      content.classList.toggle('open');
-    });
-  }
-}
-
-setupCollapsible('skills-toggle', 'skills-list');
-setupCollapsible('education-toggle', 'education-list');
-setupCollapsible('summary-toggle', 'profile-summary');
-setupCollapsible('projects-toggle', 'projects-list');
-setupCollapsible('experience-toggle', 'experience-list');
