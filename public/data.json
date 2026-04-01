@@ -31,9 +31,7 @@
             ],
             "link": "https://github.com/sankalpyerawar/sankalpyerawar",
             "liveUrl": "https://sankalpyerawar.github.io",
-            "linkText": "View Source",
-            "gridSize": "large",
-            "icon": "hub"
+            "linkText": "View Source"
         },
         {
             "title": "AI-Assisted Development Handbook",
@@ -45,9 +43,7 @@
                 "LLM"
             ],
             "link": "https://github.com/sankalpyerawar/ai-assisted-handbook",
-            "linkText": "View Handbook",
-            "gridSize": "medium",
-            "icon": "monitoring"
+            "linkText": "View Handbook"
         }
     ],
     "skills": {
@@ -116,9 +112,7 @@
                     "title": "Automated Per Diem ETL Platform",
                     "summary": "Designed a serverless ETL platform using AWS Step Functions and Java Lambdas to automate per diem rate processing. Built a unified data model and validation framework, reducing manual errors and ensuring regulatory compliance."
                 }
-            ],
-            "metricValue": "99.9%",
-            "metricLabel": "UPTIME_RECORD"
+            ]
         },
         {
             "title": "Solution Consultant",
@@ -157,9 +151,7 @@
                     "title": "Infrastructure & DevOps",
                     "summary": "Managed K8s deployments on AWS using Jenkins, Vault, and Terraform. Implemented observability with Prometheus and Grafana."
                 }
-            ],
-            "metricValue": "2TB",
-            "metricLabel": "DATA/DAY"
+            ]
         },
         {
             "title": "Software Development Engineer - 2",
@@ -189,9 +181,7 @@
                     "title": "Micronaut REST APIs",
                     "summary": "Built DDD-based REST APIs in Kotlin. Utilized Kotest for testing and SonarCloud for quality."
                 }
-            ],
-            "metricValue": "HIPAA",
-            "metricLabel": "COMPLIANCE"
+            ]
         },
         {
             "title": "Software Engineer",
@@ -225,9 +215,7 @@
                     "title": "Microservices Deployment",
                     "summary": "Deployed microservices using Docker and Swarm."
                 }
-            ],
-            "metricValue": "SUB-MS",
-            "metricLabel": "LATENCY"
+            ]
         }
     ],
     "education": [
