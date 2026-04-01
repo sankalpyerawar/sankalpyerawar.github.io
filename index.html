@@ -1,132 +1,236 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loading...</title>
-  <meta id="meta-desc" name="description" content="" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SANKALP YERAWAR // SYSTEM ARCHITECT</title>
+    <meta id="meta-desc" name="description" content="" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 </head>
+<body class="blueprint-grid min-h-screen">
 
-<body>
-  <div id="layout" style="opacity: 0; transition: opacity 0.5s ease;">
-    <!-- Left Sidebar (Fixed) -->
-    <aside class="sidebar">
+    <div id="layout" class="opacity-0 transition-opacity duration-500 ease-in-out">
+        <!-- Top App Bar Shell -->
+        <header class="fixed top-0 right-0 left-0 lg:left-64 bg-[#131313] z-40 flex justify-between items-center w-full lg:w-[calc(100%-16rem)] px-6 lg:px-10 py-4 lg:py-5 border-b border-[#3b4b37]/15">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-[#00FF41] lg:hidden" data-icon="terminal">terminal</span>
+                <div class="text-lg lg:text-xl font-bold tracking-tighter text-[#00FF41] font-headline">SYS_ARCHITECT_V1.0</div>
+            </div>
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex gap-6">
+                    <span class="font-headline uppercase tracking-tighter text-[10px] lg:text-xs text-[#00FF41]">ENCRYPTION: AES-256</span>
+                    <span class="font-headline uppercase tracking-tighter text-[10px] lg:text-xs text-[#00FF41]">STATUS: NOMINAL</span>
+                </div>
+                <div class="flex gap-4">
+                    <span class="material-symbols-outlined text-[#00FF41] cursor-pointer hover:bg-[#2a2a2a] p-1 transition-colors">settings_input_component</span>
+                    <span class="material-symbols-outlined text-[#00FF41] cursor-pointer hover:bg-[#2a2a2a] p-1 transition-colors">terminal</span>
+                </div>
+            </div>
+        </header>
 
-      <header class="profile-header">
-        <div class="profile-intro">
-          <div class="logo" id="profile-initials"></div>
-          <h1 id="profile-name"></h1>
-        </div>
-        <p class="subtitle" id="profile-subtitle"></p>
+        <!-- Sidebar Navigation Shell -->
+        <aside class="fixed left-0 top-0 h-full w-64 bg-[#1c1b1b] hidden lg:flex flex-col border-r border-[#3b4b37]/15 z-50 shadow-[0_0_48px_rgba(185,204,178,0.04)]">
+            <div class="p-6">
+                <div class="text-lg font-black text-[#00FF41] font-headline tracking-tighter uppercase mb-1">ARCHITECT_CORE</div>
+                <div class="text-[10px] text-[#b9ccb2] font-headline tracking-[0.2em] uppercase opacity-60">v4.2.0-stable</div>
+            </div>
 
-        <div class="social-actions">
-          <nav class="social-links" id="profile-socials">
-            <!-- Dynamic Social Links -->
-          </nav>
-        </div>
+            <nav class="flex-1 px-4 space-y-2 mt-8">
+                <a href="#hero-section" class="flex items-center gap-4 px-4 py-3 bg-[#353534] text-[#00FF41] border-l-2 border-[#00FF41] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+                    <span>Root</span>
+                </a>
+                <a href="#projects-section" class="flex items-center gap-4 px-4 py-3 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
+                    <span class="material-symbols-outlined">account_tree</span>
+                    <span>Projects</span>
+                </a>
+                <a href="#experience-section" class="flex items-center gap-4 px-4 py-3 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span>Experience</span>
+                </a>
+                <a href="#game-section" class="flex items-center gap-4 px-4 py-3 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-sm tracking-widest transition-all duration-150 ease-in-out">
+                    <span class="material-symbols-outlined">sports_esports</span>
+                    <span>Logs</span>
+                </a>
+            </nav>
 
-        <div id="resume-container">
-             <!-- Dynamic Resume Button -->
-        </div>
-      </header>
+            <div class="p-6 border-t border-[#3b4b37]/15">
+                <div class="flex items-center gap-3 mb-6">
+                    <div id="profile-initials-sidebar" class="w-10 h-10 border border-[#3b4b37]/30 flex items-center justify-center text-[#00FF41] font-headline font-bold text-lg bg-[#131313]">SY</div>
+                    <div>
+                        <div class="text-[10px] text-[#00FF41] font-headline uppercase tracking-widest">Operator</div>
+                        <div id="sidebar-name" class="text-xs font-bold text-on-surface font-headline uppercase">Sankalp Y.</div>
+                    </div>
+                </div>
+                <a id="resume-sidebar-btn" href="#" target="_blank" class="block text-center w-full bg-[#353534] hover:bg-[#2a2a2a] text-[#00FF41] py-3 text-[10px] font-headline tracking-[0.3em] uppercase border border-[#00FF41]/20 transition-all">
+                    DOWNLOAD_SPEC
+                </a>
+            </div>
 
-      <!-- Navigation Menu -->
-      <nav class="main-nav">
-        <ul>
-          <li><a href="#summary-section">SUMMARY</a></li>
-          <li><a href="#experience-section">EXPERIENCE</a></li>
-          <li><a href="#skills-section">SKILLS</a></li>
-          <li><a href="#projects-section">PROJECTS</a></li>
-          <li><a href="#game-container">GAME</a></li>
-        </ul>
-      </nav>
+            <div class="px-4 pb-8 space-y-2">
+                <div class="flex items-center gap-4 px-4 py-2 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-[10px] tracking-widest cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">memory</span>
+                    <span>System: <span id="sys-time" class="text-[#00FF41] ml-1">--:--:--</span></span>
+                </div>
+                <div class="flex items-center gap-4 px-4 py-2 text-[#b9ccb2] hover:bg-[#2a2a2a] font-headline uppercase text-[10px] tracking-widest cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">lan</span>
+                    <span>Network</span>
+                </div>
+            </div>
+        </aside>
 
-      <!-- System Status Widget -->
-      <div class="system-status-widget">
-        <div id="sys-time">--:--:--</div>
-        <div class="status-learning">
-          <span class="status-label">CURRENTLY LEARNING:</span>
-          <span class="status-value">AI-Assisted Development</span>
-        </div>
-      </div>
+        <!-- Main Content Canvas -->
+        <main class="lg:ml-64 pt-24 px-6 md:px-10 pb-20 min-h-screen relative overflow-hidden" id="main-content">
+            <div class="blueprint-grid-radial absolute inset-0 pointer-events-none"></div>
 
-      <!-- Terminal Prompt -->
-      <div class="terminal-widget">
-        <div id="terminal-output"></div>
-        <div class="input-line">
-          <span class="prompt-char">&gt;_</span>
-          <input type="text" id="terminal-input" placeholder="type 'help'" autocomplete="off">
-        </div>
-      </div>
+            <!-- Hero Section: Identity Profile -->
+            <section id="hero-section" class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-24 relative z-10 pt-10">
+                <div class="md:col-span-8 flex flex-col justify-end">
+                    <div class="inline-flex items-center gap-3 px-3 py-1 bg-surface-container-high border border-outline-variant/20 mb-6 w-fit">
+                        <span class="w-2 h-2 bg-primary-container animate-pulse"></span>
+                        <span class="font-headline text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Identity Profile: Active</span>
+                    </div>
+                    <h1 id="profile-name" class="font-headline text-5xl md:text-7xl font-black text-on-surface leading-[0.9] tracking-tighter uppercase mb-6">
+                        <!-- Dynamic Name -->
+                    </h1>
+                    <p id="profile-subtitle" class="font-body text-xl md:text-2xl text-primary-container mb-4 font-semibold uppercase tracking-wide"></p>
+                    <div id="profile-summary" class="font-body text-lg text-on-surface-variant max-w-xl leading-relaxed space-y-4">
+                        <!-- Dynamic Summary -->
+                    </div>
+                    <div id="profile-socials" class="flex gap-4 mt-8">
+                       <!-- Dynamic Socials -->
+                    </div>
+                </div>
+                <div class="md:col-span-4 hidden md:block">
+                    <div class="relative group">
+                        <div class="absolute -inset-4 border border-outline-variant/10 group-hover:border-primary-container/20 transition-all duration-500"></div>
+                        <div class="w-full aspect-[3/4] bg-surface-container-low border border-[#3b4b37]/30 flex flex-col items-center justify-center filter grayscale contrast-125 brightness-75 transition-all group-hover:grayscale-0">
+                           <div class="text-6xl text-[#00FF41] opacity-20 font-headline font-black rotate-90 tracking-widest">ARCHITECT</div>
+                        </div>
+                        <div class="absolute bottom-0 right-0 p-4 bg-surface-container-highest border-l border-t border-outline-variant/30 font-headline text-[10px] tracking-widest text-primary-container">
+                            CORE_GEN_v2
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-      <!-- Theme Toggle -->
-      <button id="theme-toggle" aria-label="Toggle Theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-      </button>
+            <!-- Technical Stack Specialization -->
+            <section id="skills-section" class="mb-24 relative z-10">
+                <div class="flex justify-between items-end mb-12 border-b border-outline-variant/10 pb-6">
+                    <div>
+                        <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Stack_Specialization</h2>
+                        <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">Proficiency_Data_Analysis</p>
+                    </div>
+                    <span id="skills-updated" class="font-headline text-[10px] md:text-xs text-primary-container uppercase hidden md:block">Updated: 2024</span>
+                </div>
+                <div id="skills-list" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                   <!-- Dynamic Skills injected here -->
+                </div>
+            </section>
 
-    </aside>
+            <!-- Project Grid: Technical Blueprints -->
+            <section id="projects-section" class="mb-24 relative z-10">
+                <div class="flex items-end justify-between mb-12 border-b border-outline-variant/10 pb-6">
+                   <div>
+                       <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Project_Blueprints</h2>
+                       <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">Deployed_Architectures</p>
+                   </div>
+                </div>
+                <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic Projects injected here -->
+                </div>
+            </section>
 
-    <!-- Main Content (Scrollable) -->
-    <main class="content">
+            <!-- Experience Timeline: Quantified Achievements -->
+            <section id="experience-section" class="mb-24 relative z-10">
+                <div class="flex justify-between items-end mb-12 border-b border-outline-variant/10 pb-6">
+                    <div>
+                         <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Experience_Timeline</h2>
+                         <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">System_Uptime_Logs</p>
+                    </div>
+                </div>
+                <div id="experience-list" class="space-y-0">
+                   <!-- Dynamic Experience injected here -->
+                </div>
+            </section>
 
-      <!-- Game Container -->
-      <section id="game-wrapper">
-        <div id="game-container">
-          <canvas id="game-canvas"></canvas>
-          <div id="game-overlay">
-            <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
-            <div class="game-start-msg">PRESS SPACE OR TAP TO START</div>
-          </div>
-        </div>
-      </section>
+             <!-- Code Quest Mini Game -->
+            <section id="game-section" class="mb-24 relative z-10">
+                 <div class="flex justify-between items-end mb-8 border-b border-outline-variant/10 pb-6">
+                    <div>
+                        <h2 class="font-headline text-3xl md:text-4xl font-bold text-on-surface uppercase tracking-tighter">Diagnostic_Module</h2>
+                        <p class="font-headline text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">Interactive_Execution_Env</p>
+                    </div>
+                </div>
+                <div id="game-wrapper">
+                    <div id="game-container">
+                        <canvas id="game-canvas"></canvas>
+                        <div id="game-overlay">
+                            <div class="game-title">CODE QUEST: ESCAPE THE VOID</div>
+                            <div class="game-start-msg">PRESS SPACE OR TAP TO START</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-      <!-- Summary -->
-      <div class="section summary-section" id="summary-section">
-        <h2 id="summary-toggle">SUMMARY</h2>
-        <div id="profile-summary" class="collapsible-content open">
-          <!-- Dynamic Summary -->
-        </div>
-      </div>
+            <!-- Final CTA: Collaboration -->
+            <section id="contact-section" class="mt-40 mb-10 relative z-10">
+                <div class="bg-primary-container p-10 md:p-16 flex flex-col md:flex-row justify-between items-center text-on-primary-container">
+                    <div class="mb-8 md:mb-0 text-center md:text-left">
+                        <h2 class="font-headline text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none mb-4">Open for <br/> Collaboration.</h2>
+                        <p class="font-headline text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.4em] opacity-70">Seeking complex architectural challenges</p>
+                    </div>
+                    <div class="flex flex-col gap-4 w-full md:w-auto">
+                        <a id="contact-email" href="#" class="bg-on-primary-container text-primary-container px-10 py-5 font-headline font-bold uppercase tracking-widest hover:bg-black transition-all border border-transparent hover:border-primary-container/20 text-center block">
+                            INITIATE_CONTACT
+                        </a>
+                        <div class="flex justify-between font-headline text-[8px] md:text-[10px] uppercase tracking-widest font-medium opacity-60">
+                            <span>availability: High</span>
+                            <span>timezone: IST</span>
+                        </div>
+                    </div>
+                </div>
+                <footer class="mt-20 flex flex-col md:flex-row justify-between items-start md:items-end border-t border-outline-variant/15 pt-10 gap-6">
+                    <div>
+                        <div class="font-headline text-lg font-black text-primary-container">ARCHITECT_PORTFOLIO_V4.2.0</div>
+                        <div class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant mt-2">Built with systematic precision. &copy; <span id="year"></span></div>
+                    </div>
+                    <div class="flex gap-10">
+                        <div class="text-left md:text-right">
+                            <div class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">Network_Nodes</div>
+                            <div class="flex gap-4" id="footer-socials">
+                               <!-- footer socials optional -->
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </section>
 
-      <!-- Experience -->
-      <section class="section experience-section" id="experience-section">
-        <h2 id="experience-toggle">EXPERIENCE</h2>
-        <div id="experience-list" class="collapsible-content open">
-          <!-- Dynamic Experience -->
-        </div>
-      </section>
+        </main>
 
-      <!-- Skills (Moved to Main) -->
-      <section class="section skills-section" id="skills-section">
-        <h2 id="skills-toggle">SKILLS</h2>
-        <div class="skills-tags collapsible-content open" id="skills-list">
-          <!-- Dynamic Skills -->
-        </div>
-      </section>
+        <!-- Mobile Navigation -->
+        <nav class="lg:hidden fixed bottom-0 left-0 w-full bg-surface-container-low border-t border-outline-variant/20 h-16 flex justify-around items-center z-50">
+            <a href="#hero-section" class="flex flex-col items-center text-[#00FF41]">
+                <span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                <span class="text-[8px] font-label mt-1">ROOT</span>
+            </a>
+            <a href="#projects-section" class="flex flex-col items-center text-[#b9ccb2]">
+                <span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+                <span class="text-[8px] font-label mt-1">PROJECTS</span>
+            </a>
+            <a href="#experience-section" class="flex flex-col items-center text-[#b9ccb2]">
+                <span class="material-symbols-outlined" data-icon="history">history</span>
+                <span class="text-[8px] font-label mt-1">LOGS</span>
+            </a>
+        </nav>
 
-      <!-- Projects -->
-      <section class="section projects-section" id="projects-section">
-        <h2 id="projects-toggle">PROJECTS</h2>
-        <div id="projects-list" class="collapsible-content open">
-          <!-- Dynamic Projects -->
-        </div>
-      </section>
+    </div>
 
-      <!-- Education (Moved to Main, after Projects) -->
-       <section class="section education-section" id="education-section">
-        <h2 id="education-toggle">EDUCATION</h2>
-        <div id="education-list" class="collapsible-content open">
-          <!-- Dynamic Education -->
-        </div>
-      </section>
-
-      <footer class="footer">
-        <p>&copy; <span id="year"></span> <span id="footer-name"></span></p>
-      </footer>
-    </main>
-  </div>
-  <script type="module" src="/main.js"></script>
+    <script type="module" src="/main.js"></script>
 </body>
-
 </html>
