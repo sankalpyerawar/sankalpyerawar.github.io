@@ -54,7 +54,10 @@
                 "v": "Senior / Staff backend and AI platform roles"
             }
         ],
-        "sketch": "./portrait-sketch.png"
+        "portrait": {
+            "light": "./portrait-engraving-light.png",
+            "dark": "./portrait-engraving-dark.png"
+        }
     },
     "projects": [
         {

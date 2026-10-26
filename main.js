@@ -71,12 +71,15 @@ function renderAbout(d) {
   $('role').textContent = [p.role, p.location].filter(Boolean).join(' · ');
   $('bio').innerHTML = (p.bio || []).map((para) => `<p>${esc(para)}</p>`).join('');
   if (p.tagline) $('tagline').textContent = p.tagline; else $('tagline').parentElement.hidden = true;
-  if (p.sketch) {
-    // Ink sketch drawn as a mask, so it takes the theme's ink colour (ink on paper, phosphor green on the terminal).
+  if (p.portrait || p.sketch) {
+    // Portrait drawn as a mask in the theme's ink colour: one image for paper, one for the terminal.
+    const light = p.portrait?.light || p.sketch;
+    const dark = p.portrait?.dark || light;
     const frame = document.createElement('div');
     frame.className = 'sketch-frame';
-    frame.innerHTML = `<div class="sketch" role="img" aria-label="Ink sketch of ${esc(p.name)}"></div>`;
-    frame.firstElementChild.style.setProperty('--sketch', `url("${p.sketch}")`);
+    frame.innerHTML = `<div class="sketch" role="img" aria-label="Engraved portrait of ${esc(p.name)}"></div>`;
+    frame.firstElementChild.style.setProperty('--sketch', `url("${light}")`);
+    frame.firstElementChild.style.setProperty('--sketch-dark', `url("${dark}")`);
     $('portrait').querySelector('.monogram').replaceWith(frame);
   } else if (p.photo) {
     $('portrait').querySelector('.monogram').outerHTML = `<img src="${esc(p.photo)}" alt="Photo of ${esc(p.name)}" width="320" height="320">`;

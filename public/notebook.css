@@ -230,13 +230,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   table.plain { font-size: 14px; }
 }
 
-/* ---------- Ink-sketch portrait ---------- */
-.sketch-frame { width: 100%; max-width: 220px; aspect-ratio: 1; border: 1px solid var(--ink); background-color: var(--card);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 12px 12px;
-  overflow: hidden; }
+/* ---------- Engraved portrait (CSS mask in the theme's ink colour) ---------- */
+.sketch-frame { width: 100%; max-width: 220px; aspect-ratio: 1; border: 1px solid var(--ink); background: var(--card); overflow: hidden; }
 .sketch { width: 100%; height: 100%; background: var(--ink);
-  -webkit-mask: var(--sketch) center bottom / 100% auto no-repeat; mask: var(--sketch) center bottom / 100% auto no-repeat;
-  filter: drop-shadow(var(--sketch-glow, 0 0 0 transparent)); }
-:root[data-theme="dark"] .sketch { --sketch-glow: 0 0 6px rgba(184, 245, 160, .45); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sketch { --sketch-glow: 0 0 6px rgba(184, 245, 160, .45); } }
+  -webkit-mask-image: var(--sketch); mask-image: var(--sketch);
+  -webkit-mask-size: cover; mask-size: cover; -webkit-mask-position: center bottom; mask-position: center bottom; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+:root[data-theme="dark"] .sketch { -webkit-mask-image: var(--sketch-dark, var(--sketch)); mask-image: var(--sketch-dark, var(--sketch)); filter: drop-shadow(0 0 4px rgba(184, 245, 160, .4)); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sketch { -webkit-mask-image: var(--sketch-dark, var(--sketch)); mask-image: var(--sketch-dark, var(--sketch)); filter: drop-shadow(0 0 4px rgba(184, 245, 160, .4)); } }
 @media (max-width: 640px) { .sketch-frame { max-width: 104px; } .portrait { grid-template-columns: 104px auto; } }
