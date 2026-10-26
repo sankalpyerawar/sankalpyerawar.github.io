@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio App | Sankalp Yerawar</title>
+<meta name="description" content="Case study: a local-first Android app for an interior design studio, with SQLite on each device and Google Drive as the sync layer. No backend.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Studio App: a backend engineer builds an app with no backend">
+<meta property="og:description" content="Local-first Android app for an interior design studio. SQLite on every device, Google Drive as the shared sync layer.">
+<meta property="og:url" content="https://sankalpyerawar.github.io/projects/studio-app/">
+<meta name="theme-color" content="#f7f6f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0d0a" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600&family=Kalam:wght@400&family=VT323&display=swap">
+<link rel="stylesheet" href="../../notebook.css">
+<script>
+  (function () {
+    try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="doc-meta">
+      <a class="crumb" href="../../">← DOC-001 / projects</a>
+      <span>DOC-002</span>
+      <span>Studio App</span>
+      <span>Rev. 2026-10-26</span>
+      <span class="grow"></span>
+      <span class="toggle" role="group" aria-label="Colour theme">
+        <button type="button" data-set-theme="light">Paper</button>
+        <button type="button" data-set-theme="dark">Terminal</button>
+      </span>
+    </div>
+    <h1 class="title">A backend engineer builds an app with <span class="mark">no backend.</span></h1>
+    <p class="lede">An interior design studio was running every project on WhatsApp: owners' task lists, site schedules, contractor numbers, shop addresses, bills. I'm building a small Android app that pulls all of that into one place, keeps working offline, and syncs through the studio's own Google Drive.</p>
+    <p class="byline"><span class="stamp">In development</span> <span class="muted mono" style="margin-left:10px">Android first · iPhone later</span></p>
+  </header>
+
+  <main>
+    <section class="sec">
+      <h2><span class="num">§1</span> Problem</h2>
+      <div class="prose"><p>A studio runs many projects at once. Each one has a homeowner, a task list, important dates, and a rotating cast of contractors and shops. On WhatsApp all of that is spread across chats, and finding "which tile shop did we use last time, and what did we pay" means scrolling.</p></div>
+      <dl class="boxes">
+        <div><dt>Projects</dt><dd>Task lists for the owner and the team, daily schedule and key dates.</dd></div>
+        <div><dt>Vendor library</dt><dd>Contractors and shops with address, map location and contact, with history across projects.</dd></div>
+        <div><dt>Bills</dt><dd>A bill uploaded to a project is linked to a vendor and shows on that vendor's page.</dd></div>
+        <div><dt>Team devices</dt><dd>Each device signs in with its own Gmail. The studio's Drive folder is shared to them.</dd></div>
+      </dl>
+    </section>
+
+    <section class="sec">
+      <h2><span class="num">§2</span> Decision record: no backend</h2>
+      <dl class="boxes three">
+        <div><dt>Context</dt><dd>A handful of users, small mostly per-project data, frequent site visits with poor signal, and a studio that already has a large Google Drive.</dd></div>
+        <div><dt>Decision</dt><dd>SQLite on each device as the source of truth, with Google Drive as the shared sync layer. No server.</dd></div>
+        <div><dt>Status</dt><dd><span class="stamp">Accepted</span></dd></div>
+      </dl>
+      <div class="scroll-x" style="margin-top:16px">
+        <table class="plain">
+          <thead><tr><th>Option</th><th>Assessment</th></tr></thead>
+          <tbody>
+            <tr><td>Hosted backend (Supabase, Mongo)</td><td>Running cost and ops for very few users. Studio data would live on a third party's server.</td></tr>
+            <tr><td><strong>SQLite + Google Drive sync</strong></td><td>Works fully offline. Data stays on the phones and in the studio's own Drive. Nothing for me to run.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:14px">The cost: Drive is a file store, not a database. Sync, ordering and conflicts move into the client. <span class="hand">that's the fun part</span></p>
+    </section>
+
+    <section class="sec">
+      <h2><span class="num">§3</span> Architecture</h2>
+      <svg class="diagram" viewBox="0 0 640 170" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
+        <g fill="none" class="d-ink" stroke-width="1.5">
+          <rect x="24" y="40" width="150" height="90" rx="10"/><rect x="466" y="40" width="150" height="90" rx="10"/>
+          <rect x="245" y="50" width="150" height="70"/>
+        </g>
+        <path d="M178 85 H241 M399 85 H462" class="d-pen" stroke-width="1.5" fill="none"/>
+        <g class="d-mono d-ink-f" text-anchor="middle">
+          <text x="99" y="80">Phone A</text><text x="99" y="102" class="d-mut-f">SQLite</text>
+          <text x="541" y="80">Phone B</text><text x="541" y="102" class="d-mut-f">SQLite</text>
+          <text x="320" y="82">Google Drive</text><text x="320" y="102" class="d-mut-f">shared folder</text>
+        </g>
+        <text x="320" y="154" class="d-hand d-pen-f" text-anchor="middle">no server in the middle!</text>
+      </svg>
+      <ul class="prose" style="margin-top:16px;padding-left:20px">
+        <li><strong>Local first.</strong> Every read and write hits SQLite on the phone, so the app is instant and works with no signal on site.</li>
+        <li><strong>Drive as the sync layer.</strong> Changes are pushed to and pulled from a shared studio folder. Photos, drawings and bills live there too.</li>
+        <li><strong>Private and shared.</strong> Two folders: one shared with the team, one private to the owner.</li>
+        <li><strong>Least access.</strong> The app only touches its own folders, and no server ever sees the data. <a href="../../studio-app/privacy.html">Privacy policy</a>.</li>
+      </ul>
+    </section>
+
+    <section class="sec">
+      <h2><span class="num">§4</span> Open problems</h2>
+      <p class="prose">These make it more than a CRUD app. I'll fill in how each one is solved as I build it.</p>
+      <dl class="boxes">
+        <div><dt>Concurrent edits</dt><dd>Two people edit the same task offline. What wins, and how do you avoid silently losing a change?</dd></div>
+        <div><dt>Ordering without a server</dt><dd>No central clock or sequence, and device clocks drift. Ordering has to come from the data.</dd></div>
+        <div><dt>Partial sync</dt><dd>A sync dies halfway on a weak connection. Every step must be safe to retry.</dd></div>
+        <div><dt>New device</dt><dd>A new phone signs in with its own Gmail and rebuilds its local database from Drive.</dd></div>
+      </dl>
+    </section>
+
+    <section class="sec">
+      <h2><span class="num">§5</span> Spec</h2>
+<pre class="spec">platform    Android (iPhone later)
+storage     SQLite, on device
+sync        Google Drive API, shared folder
+auth        Google sign-in, one Gmail per device
+backend     none
+built with  Claude Code: plan and data model first, small reviewed steps</pre>
+    </section>
+
+    <section class="sec">
+      <h2><span class="num">§6</span> Screens</h2>
+      <div class="shots">
+        <div class="shot">Projects list<br>(screenshot coming)</div>
+        <div class="shot">Project tasks<br>(screenshot coming)</div>
+        <div class="shot">Vendor page with bills<br>(screenshot coming)</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <a href="../../">← back to DOC-001</a>
+    <span>questions: <span class="mono" style="user-select:all">sankalpyerawar@gmail.com</span></span>
+  </footer>
+</div>
+<script>
+  (function () {
+    var q = window.matchMedia('(prefers-color-scheme: dark)');
+    function current() { return document.documentElement.dataset.theme || (q.matches ? 'dark' : 'light'); }
+    function sync() {
+      document.querySelectorAll('[data-set-theme]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === current())); });
+    }
+    document.querySelectorAll('[data-set-theme]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.documentElement.dataset.theme = b.dataset.setTheme;
+        try { localStorage.setItem('theme', b.dataset.setTheme); } catch (e) {}
+        sync();
+      });
+    });
+    if (q.addEventListener) q.addEventListener('change', sync);
+    sync();
+  })();
+</script>
+</body>
+</html>
