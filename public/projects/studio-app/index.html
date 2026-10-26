@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Studio App | Sankalp Yerawar</title>
 <meta name="description" content="Case study: a local-first Android app for an interior design studio, with SQLite on each device and Google Drive as the sync layer. No backend.">
 <meta property="og:type" content="article">
@@ -73,7 +73,7 @@
 
     <section class="sec">
       <h2><span class="num">§3</span> Architecture</h2>
-      <svg class="diagram" viewBox="0 0 640 170" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
+      <svg class="diagram wide" viewBox="0 0 640 170" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
         <g fill="none" class="d-ink" stroke-width="1.5">
           <rect x="24" y="40" width="150" height="90" rx="10"/><rect x="466" y="40" width="150" height="90" rx="10"/>
           <rect x="245" y="50" width="150" height="70"/>
@@ -85,6 +85,20 @@
           <text x="320" y="82">Google Drive</text><text x="320" y="102" class="d-mut-f">shared folder</text>
         </g>
         <text x="320" y="154" class="d-hand d-pen-f" text-anchor="middle">no server in the middle!</text>
+      </svg>
+      <svg class="diagram tall" viewBox="0 0 300 330" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
+        <g fill="none" class="d-ink" stroke-width="1.5">
+          <rect x="70" y="14" width="160" height="70" rx="10"/><rect x="70" y="246" width="160" height="70" rx="10"/>
+          <rect x="70" y="132" width="160" height="66"/>
+        </g>
+        <path d="M150 88 V128 M150 202 V242" class="d-pen" stroke-width="1.5" fill="none"/>
+        <g class="d-mono d-ink-f" text-anchor="middle" font-size="15">
+          <text x="150" y="45">Phone A</text><text x="150" y="67" class="d-mut-f">SQLite</text>
+          <text x="150" y="162">Google Drive</text><text x="150" y="184" class="d-mut-f">shared folder</text>
+          <text x="150" y="277">Phone B</text><text x="150" y="299" class="d-mut-f">SQLite</text>
+        </g>
+        <text x="250" y="102" class="d-hand d-pen-f" text-anchor="middle" font-size="16">no server</text>
+        <text x="250" y="120" class="d-hand d-pen-f" text-anchor="middle" font-size="16">here!</text>
       </svg>
       <ul class="prose" style="margin-top:16px;padding-left:20px">
         <li><strong>Local first.</strong> Every read and write hits SQLite on the phone, so the app is instant and works with no signal on site.</li>

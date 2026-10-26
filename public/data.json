@@ -4,7 +4,7 @@
         "description": "Sankalp Yerawar - senior backend engineer (Kotlin, Kafka, Postgres, AWS) building distributed systems and growing into AI engineering. What I'm working on now, projects and experience."
     },
     "profile": {
-        "name": "SANKALP YERAWAR",
+        "name": "Sankalp Yerawar",
         "initials": "SY",
         "subtitle": "Senior Backend Engineer · Distributed Systems · AI Engineering",
         "resumeUrl": "/resume.pdf",
@@ -21,11 +21,43 @@
             "github": "https://github.com/sankalpyerawar",
             "medium": "https://medium.com/@sankalpyerawar"
         },
-        "headline": "I design backend systems that",
-        "headlineMark": "survive migrations.",
-        "lede": "Senior backend engineer, 8+ years in Kotlin, Java, Kafka, Postgres and AWS. I work on event-driven services, ETL platforms and large data migrations, and I'm growing into AI engineering.",
-        "note": "currently: evals, RAG and agent design",
-        "location": "Pune, India"
+        "location": "Pune, India",
+        "role": "Senior Backend Engineer",
+        "bio": [
+            "I'm a backend engineer in Pune with 8+ years of building systems that have to keep working while everything around them changes: event-driven services, ETL platforms, and large data migrations, mostly in Kotlin and Java on Kafka, Postgres and AWS.",
+            "These days I'm going deeper into AI engineering, and I build side projects with AI coding agents. Outside work I'm a beginner photographer with a Nikon D5300, I play cricket, and I want to travel the world."
+        ],
+        "tagline": "I design backend systems that survive migrations.",
+        "facts": [
+            {
+                "k": "Based in",
+                "v": "Pune, India (IST)"
+            },
+            {
+                "k": "Experience",
+                "v": "8+ years · Siemens, Medly, Sahaj, Technogise"
+            },
+            {
+                "k": "Core stack",
+                "v": "Kotlin, Java, Spring Boot, Kafka, Postgres, AWS"
+            },
+            {
+                "k": "Currently",
+                "v": "Technology Consultant at Technogise"
+            },
+            {
+                "k": "Learning",
+                "v": "Evals, RAG and agent design"
+            },
+            {
+                "k": "Open to",
+                "v": "Senior / Staff backend and AI platform roles"
+            }
+        ],
+        "portrait": {
+            "light": "./portrait-engraving-light.png",
+            "dark": "./portrait-engraving-dark.png"
+        }
     },
     "projects": [
         {
@@ -297,6 +329,10 @@
         }
     ],
     "log": [
+        {
+            "date": "2026-10-26",
+            "text": "Portfolio: About-first opening screen and phone-friendly layout"
+        },
         {
             "date": "2026-10-26",
             "text": "Portfolio rebuilt as an engineering notebook, with a terminal dark mode and a Studio App case study"

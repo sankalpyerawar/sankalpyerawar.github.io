@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Sankalp Yerawar | Senior Backend Engineer</title>
   <meta id="meta-desc" name="description" content="Sankalp Yerawar - senior backend engineer (Kotlin, Kafka, Postgres, AWS) building distributed systems and growing into AI engineering." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://sankalpyerawar.github.io/" />
   <meta property="og:title" content="Sankalp Yerawar | Senior Backend Engineer" />
-  <meta property="og:description" content="Distributed systems, data migrations and AI engineering. What I'm working on now, projects and experience." />
+  <meta property="og:description" content="Backend engineer in Pune. Distributed systems, data migrations and AI engineering." />
   <meta name="twitter:card" content="summary" />
   <meta name="theme-color" content="#f7f6f1" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0b0d0a" media="(prefers-color-scheme: dark)" />
@@ -24,32 +24,50 @@
   </script>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="doc-meta">
-        <span>DOC-001</span>
-        <span>Author: Sankalp Yerawar</span>
-        <span>Rev. <span id="rev"></span></span>
-        <span id="location">Pune, India</span>
-        <span class="grow"></span>
-        <span class="toggle" role="group" aria-label="Colour theme">
-          <button type="button" data-set-theme="light">Paper</button>
-          <button type="button" data-set-theme="dark">Terminal</button>
-        </span>
-      </div>
-      <nav class="toc" aria-label="Sections">
+  <nav class="bar" aria-label="Sections">
+    <div class="bar-in">
+      <a class="bar-name" href="#about">SY<span class="muted">/</span></a>
+      <div class="bar-links">
+        <a href="#about">About</a>
         <a href="#now">Now</a>
         <a href="#projects">Projects</a>
         <a href="#work">Work</a>
         <a href="#stack">Stack</a>
-        <a href="#changelog">Changelog</a>
+        <a href="#changelog">Log</a>
         <a href="#contact">Contact</a>
-        <a class="resume" id="resume-link" href="./resume.pdf">resume.pdf</a>
-      </nav>
+      </div>
+      <span class="toggle" role="group" aria-label="Colour theme">
+        <button type="button" data-set-theme="light" aria-label="Paper theme">Paper</button>
+        <button type="button" data-set-theme="dark" aria-label="Terminal theme">Term</button>
+      </span>
+    </div>
+  </nav>
 
-      <h1 class="title" id="headline">I design backend systems that <span class="mark">survive migrations.</span></h1>
-      <p class="lede" id="lede">Senior backend engineer, 8+ years in Kotlin, Kafka, Postgres and AWS.</p>
-      <p class="byline"><span class="hand" id="note"></span></p>
+  <div class="wrap">
+    <header class="about sec" id="about">
+      <div class="doc-meta">
+        <span>DOC-001</span>
+        <span class="hide-sm">Author: Sankalp Yerawar</span>
+        <span>Rev. <span id="rev"></span></span>
+      </div>
+
+      <div class="about-grid">
+        <figure class="portrait" id="portrait">
+          <div class="monogram" aria-hidden="true">SY</div>
+          <figcaption class="hand">fig. 1: the author, engraved</figcaption>
+        </figure>
+        <div class="about-main">
+          <h1 class="title name" id="name">Sankalp Yerawar</h1>
+          <p class="role mono" id="role">Senior Backend Engineer · Pune, India</p>
+          <div class="bio" id="bio"></div>
+          <p class="tagline"><span class="hand">→</span> <span class="mark" id="tagline"></span></p>
+          <div class="cta" id="cta">
+            <a class="btn" id="resume-link" href="./resume.pdf">↓ resume.pdf</a>
+          </div>
+        </div>
+      </div>
+
+      <dl class="facts" id="facts"></dl>
     </header>
 
     <main>
@@ -58,14 +76,14 @@
         <dl class="boxes" id="now-list"></dl>
       </section>
 
-      <section class="sec" id="decision" hidden>
-        <h2><span class="num">§2</span> <span id="decision-title">Decision record</span></h2>
-        <dl class="boxes" id="decision-list"></dl>
+      <section class="sec" id="projects">
+        <h2><span class="num">§2</span> Projects</h2>
+        <div id="project-list"></div>
       </section>
 
-      <section class="sec" id="projects">
-        <h2><span class="num">§3</span> Projects</h2>
-        <div id="project-list"></div>
+      <section class="sec" id="decision" hidden>
+        <h2><span class="num">§3</span> <span id="decision-title">Decision record</span></h2>
+        <dl class="boxes" id="decision-list"></dl>
       </section>
 
       <section class="sec" id="work">
