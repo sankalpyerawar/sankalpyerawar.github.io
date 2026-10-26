@@ -6,6 +6,7 @@ const socialIcons = {
   email: `<span class="material-symbols-outlined text-sky-400">mail</span>`,
   linkedin: `<span class="material-symbols-outlined text-sky-400">badge</span>`,
   github: `<span class="material-symbols-outlined text-sky-400">code</span>`,
+  medium: `<span class="material-symbols-outlined text-sky-400">edit_note</span>`,
   external: `<span class="material-symbols-outlined text-slate-600 group-hover:text-primary transition-colors">arrow_outward</span>`
 };
 
@@ -15,6 +16,63 @@ const themeIcons = {
 };
 
 // Helper to safely set text content
+const escapeHtml = (str) => String(str)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const isExternal = (url) => /^https?:\/\//.test(url);
+
+// Terminal: whoami, cat now.md, git log. Content comes from data.now / data.log.
+function renderTerminal(data) {
+  const body = document.getElementById('terminal-body');
+  if (!body) return;
+  const prompt = (cmd) => `<div class="mt-4 first:mt-0"><span class="text-[#98c379]">sankalp@pune</span><span class="text-slate-500">:~$</span> <span class="text-on-surface">${cmd}</span></div>`;
+
+  const now = (data.now || []).map(item => {
+    const text = escapeHtml(item.text);
+    const content = item.href
+      ? `<a href="${item.href}" ${isExternal(item.href) ? 'target="_blank" rel="noopener noreferrer"' : ''} class="hover:text-primary underline decoration-primary/30 underline-offset-4">${text}</a>`
+      : text;
+    return `<div class="flex gap-3 mt-1"><span class="text-primary shrink-0 w-20">${escapeHtml(item.key)}:</span><span>${content}</span></div>`;
+  }).join('');
+
+  const log = (data.log || []).map((entry, i) => `
+    <div class="flex gap-3 mt-1"><span class="text-[#e5c07b] shrink-0 w-20">${escapeHtml(entry.date)}</span><span>${escapeHtml(entry.text)}${i === 0 ? ' <span class="text-[#98c379]">(HEAD)</span>' : ''}</span></div>`).join('');
+
+  body.innerHTML = `
+    ${prompt('whoami')}
+    <div class="mt-1">${escapeHtml(data.profile.subtitle)}</div>
+    ${prompt('cat now.md')}
+    ${now}
+    ${prompt('git log --oneline -5')}
+    ${log}
+    <div class="mt-4 flex items-center flex-wrap gap-x-1"><span class="text-[#98c379]">sankalp@pune</span><span class="text-slate-500">:~$</span>
+      <button id="play-btn" type="button" class="text-on-surface hover:text-primary underline decoration-dotted underline-offset-4">./play</button>
+      <span class="inline-block w-2 h-4 bg-primary animate-pulse align-middle ml-1"></span>
+    </div>
+  `;
+
+  if (data.log && data.log.length) setText('last-updated', `Last commit: ${data.log[0].date}`);
+
+  // The game is an easter egg: initialised only when opened, so it never hijacks the space bar otherwise.
+  let gameStarted = false;
+  const openGame = () => {
+    const panel = document.getElementById('game-panel');
+    if (!panel) return;
+    panel.classList.remove('hidden');
+    if (!gameStarted) { initGame(); gameStarted = true; }
+    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  document.getElementById('play-btn')?.addEventListener('click', openGame);
+
+  // Typing "play" anywhere on the page opens it too.
+  let typed = '';
+  window.addEventListener('keydown', (e) => {
+    if (e.target instanceof HTMLElement && e.target.closest('input, textarea')) return;
+    typed = (typed + e.key).slice(-4).toLowerCase();
+    if (typed === 'play') openGame();
+  });
+}
+
 const setText = (id, text) => {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
@@ -40,7 +98,7 @@ async function initPortfolio() {
         heroEl.innerHTML = `
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full mb-8">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                <span class="text-[10px] mono-data text-primary uppercase font-bold tracking-widest">Architectural Registry</span>
+                <span class="text-[10px] mono-data text-primary uppercase font-bold tracking-widest">Pune, India · open to conversations</span>
             </div>
             <h2 class="text-7xl md:text-8xl font-black text-on-surface font-headline leading-none tracking-tighter mb-4 max-w-4xl uppercase text-center">
                 ${splitName}</span>
@@ -91,6 +149,7 @@ async function initPortfolio() {
     }
 
     setText('year', new Date().getFullYear());
+    renderTerminal(data);
 
     // Social Links / Contact Nodes
     const footerSocialContainer = document.getElementById('footer-socials');
@@ -99,7 +158,7 @@ async function initPortfolio() {
         .map(([key, url]) => {
           const icon = socialIcons[key] || socialIcons.external;
           const label = key.charAt(0).toUpperCase() + key.slice(1);
-          const desc = key === 'email' ? 'Direct SMTP Access' : key === 'github' ? 'Source Repositories' : 'Professional Network';
+          const desc = { email: 'sankalpyerawar@gmail.com', github: 'Source repositories', linkedin: 'Professional network', medium: 'Writing' }[key] || '';
           return `
             <a href="${url}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 bg-surface-container-low rounded-md group hover:bg-surface-container-highest transition-all duration-300">
                 <div class="flex items-center gap-4">
@@ -170,6 +229,7 @@ async function initPortfolio() {
                 <div>
                     <div class="flex gap-2 mb-4">
                         <span class="px-2 py-0.5 bg-primary-container text-on-primary-container rounded-full text-[10px] font-label font-bold tracking-widest uppercase">P_ID: 0${index + 1}</span>
+                        ${project.status ? `<span class="px-2 py-0.5 border border-[#98c379]/40 text-[#98c379] rounded-full text-[10px] font-label font-bold tracking-widest uppercase">${project.status}</span>` : ''}
                     </div>
                     <h3 class="text-2xl font-bold font-headline mb-4 group-hover:text-sky-400 transition-colors">${project.title}</h3>
                     <p class="text-on-surface-variant text-sm font-body leading-relaxed mb-6">
@@ -185,8 +245,8 @@ async function initPortfolio() {
                         <span class="material-symbols-outlined text-sm" data-icon="code">code</span> ${project.linkText || 'View Repo'}
                     </a>` : ''}
                     ${project.liveUrl ? `
-                    <a class="flex items-center gap-2 text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">
-                        <span class="material-symbols-outlined text-sm" data-icon="play_circle">play_circle</span> Live Demo
+                    <a class="flex items-center gap-2 text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="${project.liveUrl}" ${isExternal(project.liveUrl) ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                        <span class="material-symbols-outlined text-sm" data-icon="${project.liveText ? 'article' : 'play_circle'}">${project.liveText ? 'article' : 'play_circle'}</span> ${project.liveText || 'Live Demo'}
                     </a>` : ''}
                 </div>
             </div>
@@ -242,8 +302,6 @@ async function initPortfolio() {
       }).join('');
     }
 
-    // Initialize Game
-    initGame();
 
     // Force Dark Theme
     document.documentElement.classList.add('dark');

@@ -1,15 +1,15 @@
 {
     "meta": {
-        "title": "Sankalp Yerawar | Software Engineer",
-        "description": "Portfolio of Sankalp Yerawar - Senior Backend Engineer specializing in distributed systems, cloud architectures, and data streaming."
+        "title": "Sankalp Yerawar | Senior Backend Engineer",
+        "description": "Sankalp Yerawar - senior backend engineer (Kotlin, Kafka, Postgres, AWS) building distributed systems and growing into AI engineering. What I'm working on now, projects and experience."
     },
     "profile": {
         "name": "SANKALP YERAWAR",
         "initials": "SY",
-        "subtitle": "Backend Developer & Distributed Systems Architect",
+        "subtitle": "Senior Backend Engineer · Distributed Systems · AI Engineering",
         "resumeUrl": "/resume.pdf",
         "summary": [
-            "7+ years building scalable backend systems and event-driven microservices across automotive, healthcare, and manufacturing",
+            "8+ years building scalable backend systems and event-driven microservices across automotive, healthcare, manufacturing, fintech and rewards platforms",
             "Proficient in Kotlin, Java, and C# with hands-on expertise in Kafka, Cassandra, PostgreSQL, and AWS",
             "Practitioner of Clean Architecture, DDD, and TDD — focused on reliability and maintainability",
             "Actively using AI-assisted development (Kiro, Copilot) via custom agents, context engineering, and prompt design to accelerate delivery",
@@ -18,10 +18,26 @@
         "social": {
             "email": "mailto:sankalpyerawar@gmail.com",
             "linkedin": "https://www.linkedin.com/in/sankalpyerawar/",
-            "github": "https://github.com/sankalpyerawar"
+            "github": "https://github.com/sankalpyerawar",
+            "medium": "https://medium.com/@sankalpyerawar"
         }
     },
     "projects": [
+        {
+            "title": "Studio App",
+            "description": "A local-first Android app that replaces WhatsApp threads for an interior design studio: projects, owners' task lists, schedules, vendor library and bills. A deliberate no-backend design - SQLite on each device, Google Drive as the shared sync layer.",
+            "technologies": [
+                "Android",
+                "SQLite",
+                "Google Drive API",
+                "Local-first",
+                "Offline sync",
+                "Claude Code"
+            ],
+            "liveUrl": "./projects/studio-app/",
+            "liveText": "Read case study",
+            "status": "In development"
+        },
         {
             "title": "Personal Portfolio Website",
             "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dynamic JSON content loading and a clean UI. Redesigned using Google Stitch for UI design and migrated to Tailwind CSS, with Google Jules assisting in development.",
@@ -108,27 +124,38 @@
     "experience": [
         {
             "title": "Technology Consultant",
-            "company": "Technogise PVd. Ltd.",
+            "company": "Technogise Pvt. Ltd., Pune",
             "date": "Oct 2025 - Present",
-            "summary": "Building scalable serverless ETL platforms and enabling teams with AI-assisted development practices. Focus on high-quality delivery through agile execution and robust backend architecture.",
+            "summary": "Leading backend delivery on client engagements - from-scratch ETL platforms to large-scale data migrations - and enabling teams with AI-assisted development practices.",
             "technologies": [
                 "Java",
+                "Kotlin",
+                "Kafka",
+                "MongoDB",
+                "Oracle",
                 "AWS Step Functions",
                 "AWS Lambda",
-                "S3",
-                "Antigravity",
-                "Claude",
+                "Spring Boot",
+                "Claude Code",
                 "Kiro",
                 "Context Engineering"
             ],
             "nestedProjects": [
                 {
+                    "title": "Rewards Platform Data Migration",
+                    "summary": "Extracting a rewards capability out of a wallet system into its own microservice. Own the data migration of hundreds of millions of records into a single generic document model, with a dual-write then backfill then cutover strategy, a tracking table for per-record status, and Kafka-backed asynchronous migration for scale under per-region data-residency constraints."
+                },
+                {
                     "title": "Automated Per Diem ETL Platform",
-                    "summary": "Designed a serverless ETL platform using AWS Step Functions and Java Lambdas to automate per diem rate processing. Built a unified data model and validation framework, reducing manual errors and ensuring regulatory compliance."
+                    "summary": "Led the engagement and designed a serverless ETL platform on AWS Step Functions and Java Lambdas. A unified data model left only fetch and transform country-specific, so new country pipelines became cheap to add; delivered end-to-end on a timeline compressed by half."
                 },
                 {
                     "title": "On-Demand Learning Platform",
-                    "summary": "Built a full-stack internal learning platform using Spring Boot, React/TypeScript, and PostgreSQL in a monorepo setup. Leveraged Kiro and Antigravity as primary AI coding tools — applying context engineering, custom skills, and reusable prompts to streamline development. Designed structured workflows and custom agents tailored for planning, story creation, implementation, and review across the stack."
+                    "summary": "Built a full-stack internal learning platform using Spring Boot, React/TypeScript, and PostgreSQL in a monorepo setup, with custom agents for planning, story creation, implementation, and review."
+                },
+                {
+                    "title": "AI-Assisted Development Workshops",
+                    "summary": "Ran internal workshops for two batches of engineers on using AI coding agents across the SDLC: onboarding to legacy codebases, refactoring, planning, implementing and reviewing stories."
                 }
             ]
         },
@@ -241,6 +268,48 @@
             "degree": "B.Tech (Information Technology)",
             "university": "Walchand College of Engineering, Sangli",
             "date": "2014 - 2018"
+        }
+    ],
+    "now": [
+        {
+            "key": "work",
+            "text": "Owning a large-scale data migration: hundreds of millions of reward records from relational and document stores into one generic document model, with dual-write cutover and a Kafka-backed migration runner"
+        },
+        {
+            "key": "building",
+            "text": "Studio App - a local-first Android app for an interior design studio. SQLite on the phone, Google Drive as the sync layer, no backend",
+            "href": "./projects/studio-app/"
+        },
+        {
+            "key": "learning",
+            "text": "AI engineering for production: evals, RAG, tool calling and agent design, alongside distributed-systems depth"
+        },
+        {
+            "key": "writing",
+            "text": "Notes on AI-assisted development and backend design",
+            "href": "https://medium.com/@sankalpyerawar"
+        }
+    ],
+    "log": [
+        {
+            "date": "2026-10-26",
+            "text": "Portfolio: terminal hero, /now log and Studio App case study"
+        },
+        {
+            "date": "2026-10-19",
+            "text": "Studio App: published privacy policy ahead of Google sign-in review"
+        },
+        {
+            "date": "2026-10",
+            "text": "Studio App: started the Android build with Claude Code (SQLite + Drive sync)"
+        },
+        {
+            "date": "2026-07",
+            "text": "Joined a rewards-platform pod; designing the data migration and cutover"
+        },
+        {
+            "date": "2026-04",
+            "text": "Redesigned this site with AI tools and wrote about it on Medium"
         }
     ]
 }
