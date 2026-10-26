@@ -212,6 +212,14 @@ const OPS = {
   toggle: (old, op) => toggleTask(old, op.text, op.checked),
   jsonSet: (old, op) => { const o = parseOr(old, op.init || {}); setIn(o, op.keys, op.value); return json(o); },
   jsonPush: (old, op) => { const o = parseOr(old, op.init || {}); const a = getIn(o, op.keys); if (Array.isArray(a)) a.push(op.item); else setIn(o, op.keys, [op.item]); return json(o); },
+  moveLine: (old, op) => {
+    const lines = (old || '').split('\n');
+    const i = lines.findIndex((l) => /^\s*- /.test(l) && l.replace(/^\s*- (?:\[[ xX]\] )?/, '') === op.line);
+    if (i < 0) return old;
+    const [l] = lines.splice(i, 1);
+    return insertUnder(lines.join('\n'), op.section, l.replace(/ #from-app\b/, ''));
+  },
+  binary: (old) => old,
   jobStatus: (old, op) => { const o = parseOr(old, { jobs: [] }); const j = (o.jobs || []).find((x) => x.id === op.id); if (j) { j.status = op.status; j.statusChanged = op.at; } return json(o); },
 };
 
@@ -246,6 +254,7 @@ async function flush() {
 }
 
 async function pushOp(op) {
+  if (op.kind === 'binary') return pushBinary(op);
   for (let attempt = 0; attempt < 5; attempt++) {
     const cur = await getContents(op.path);
     if (op.kind === 'create' && cur) {
@@ -267,6 +276,19 @@ async function pushOp(op) {
     await failWith(r);
   }
   throw new HttpError(409, 'Could not save after several tries. It will retry on the next sync.');
+}
+
+async function pushBinary(op) {
+  const b64 = await kv.get('up:' + op.qid);
+  if (!b64) return;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const r = await gh(`/repos/${cfg.repo}/contents/${encPath(op.path)}`, { method: 'PUT', body: JSON.stringify({ message: op.message || 'app: upload', content: b64, branch: cfg.branch }), headers: { 'Content-Type': 'application/json' } });
+    if (r.ok) { const j = await r.json(); tree.files[op.path] = j.content.sha; tree.etag = null; saveTree(); await kv.set('up:' + op.qid, ''); return; }
+    if (r.status === 422) return; // already uploaded (a retry after a dropped response)
+    if (r.status === 409) { await new Promise((s2) => setTimeout(s2, 500 * (attempt + 1))); continue; }
+    await failWith(r);
+  }
+  throw new HttpError(409, 'Could not upload the image. It will retry on the next sync.');
 }
 
 /* ---------- sync ---------- */
@@ -303,7 +325,7 @@ async function sync({ rerender = true } = {}) {
 
 async function prefetch() {
   const daily = listDir(P.daily).slice(0, 3);
-  const paths = [...daily, ...daily.map((p) => P.log(p.slice(P.daily.length, -3))), P.todo, P.reading, P.watch, P.jobs, P.ladder, P.prep, P.story, P.presence, listDir(P.weekly)[0]];
+  const paths = [...daily, ...daily.map((p) => P.log(p.slice(P.daily.length, -3))), 'App/review.json', P.log(localDate()), P.todo, P.reading, P.watch, P.jobs, P.ladder, P.prep, P.story, P.presence, listDir(P.weekly)[0]];
   for (const p of paths) { if (p && tree.files[p]) { try { await readFile(p); } catch { return; } } }
 }
 
@@ -734,12 +756,13 @@ async function storyView(date, idx) {
   const { b, log } = data; const i = Number(idx) || 0; const n = b.news[i];
   if (!n) { location.hash = `#/today/${date}`; return; }
   const v = view();
-  v.innerHTML = readerTop(`Story ${i + 1} of ${b.news.length}`, `#/today${date === data.latest ? '' : '/' + date}`) +
+  v.innerHTML = readerTop(`Story ${i + 1} of ${b.news.length}`, `#/today${date === data.latest ? '' : '/' + date}`, listenBtn()) +
     `<article class="reader"><div class="tags"><span class="tag tone-${CAT_TONE[n.category] || 'green'}">${esc(n.category)}</span>${n.level ? `<span class="tag">${esc(levelName(n.level))}</span>` : ''}</div>
     <h1>${esc(n.title)}</h1><div class="body"></div></article>
     <div class="actionbar">${n.url ? `<a class="btn" href="${esc(n.url)}" target="_blank" rel="noopener">Source</a>` : ''}
       ${i + 1 < b.news.length ? `<a class="btn primary grow" href="#/b/${date}/news/${i + 1}">Next story</a>` : `<button class="btn primary grow" id="doneNews">Done with stories</button>`}</div>`;
   renderRich(n.md, $('.body', v));
+  wireListen($('.body', v), n.title);
   const dn = $('#doneNews');
   if (dn) dn.onclick = async () => {
     await enqueue({ kind: 'jsonSet', path: P.log(date), keys: ['done', 'news'], value: true, init: { date }, message: `app: news done ${date}` });
@@ -761,12 +784,13 @@ async function sectionView(date, kind, anchor) {
   let md = sec.md;
   if (kind === 'rung') md = md.replace(/^\*\*.+?\*\*[^\n]*\n?/, '');
   const v = view();
-  v.innerHTML = readerTop(kicker, back) + `<span class="progress"><span id="readProg"></span></span>
+  v.innerHTML = readerTop(kicker, back, kind === 'replies' ? '' : listenBtn()) + `<span class="progress"><span id="readProg"></span></span>
     <article class="reader"><h1>${esc(titles[kind])}</h1><div class="body"></div></article>
     ${kind === 'replies' ? '' : `<div class="actionbar"><button class="btn ${done ? '' : 'primary'} grow" id="markDone">${done ? 'Done ✓ · tap to undo' : kind === 'rung' ? 'Mark rung read' : kind === 'prep' ? 'Mark prep done' : 'Mark done'}</button></div>`}`;
   const body = $('.body', v);
   renderRich(md, body);
-  if (kind === 'rung') enhanceQuiz(body, log, P.log(date), date);
+  if (kind === 'rung') { enhanceQuiz(body, log, P.log(date), date); body.appendChild(explainBlock(log, date, b.rungTitle)); }
+  wireListen(body, titles[kind]);
   if (kind === 'prep') body.appendChild(replyBlock(log, P.log(date), date, 'Thursday mock answers or anything about today\'s task. The next brief scores and answers it.'));
   const mk = $('#markDone');
   if (mk) mk.onclick = async () => {
@@ -868,6 +892,7 @@ async function jobsView(filter = 'active') {
       await enqueue({ kind: 'jobStatus', path: P.jobs, id: j.id, status: e.target.value, at: new Date().toISOString(), message: `app: ${j.company} ${e.target.value}` });
       toast(`${j.company}: ${e.target.value}`);
     };
+    enhanceJobCard(card, j);
     box.appendChild(card);
   }
 }
@@ -924,8 +949,10 @@ async function linkListView(which) {
   }
   v.innerHTML = `<div class="pad">${pageHead('Lists')}${chips(LISTS, which, '#/inbox')}
     <form class="card addrow" id="quickLink"><label class="field"><span class="sr">Link</span><input type="url" id="ql" placeholder="Paste a link to ${which === 'reading' ? 'read' : 'watch'}" inputmode="url"></label><button class="btn primary" type="submit">Add</button></form>
-    ${groups.map((gr) => `<section class="card list"><div class="list-head"><h2>${esc(gr.name)}</h2><span class="muted">${gr.items.length}</span></div>${gr.items.length ? gr.items.map((it) => `<div class="row"><span class="row-main"><span class="row-title">${inline(it.replace(/#from-app/, ''))}</span></span></div>`).join('') : '<p class="empty">Empty</p>'}</section>`).join('')}</div>`;
+    ${groups.filter((gr) => gr.items.length || !/skipped/i.test(gr.name)).map((gr, gi) => `<section class="card list"><div class="list-head"><h2>${esc(gr.name)}</h2><span class="muted">${gr.items.length}</span></div>${gr.items.length ? gr.items.map((it, ii) => `<div class="row" data-g="${gi}" data-i="${ii}"><span class="row-main"><span class="row-title">${inline(it.replace(/#from-app/, ''))}</span>${/#from-app/.test(it) ? '<span class="row-sub">Claude adds a summary tomorrow morning</span>' : ''}</span></div>`).join('') : '<p class="empty">Empty</p>'}</section>`).join('')}</div>`;
   wireTop();
+  const shownGroups = groups.filter((gr) => gr.items.length || !/skipped/i.test(gr.name));
+  v.querySelectorAll('.row[data-g]').forEach((r) => { const gr = shownGroups[Number(r.dataset.g)]; triageActions(r, which, gr.items[Number(r.dataset.i)], gr.name); });
   v.querySelectorAll('.row-title a').forEach((a) => { if (!a.getAttribute('href').startsWith('#')) { a.target = '_blank'; a.rel = 'noopener'; } });
   $('#quickLink').onsubmit = (e) => { e.preventDefault(); openCapture('link', { url: $('#ql').value.trim(), list: which }); };
 }
@@ -1061,7 +1088,7 @@ async function saveCapture(kind) {
 
 /* ---------- router ---------- */
 async function route() {
-  const h = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+  const h = decodeURIComponent(location.hash.replace(/^#\/?/, '').split('?')[0]);
   const [root, ...rest] = h.split('/');
   const arg = rest.join('/');
   window.scrollTo(0, 0);
@@ -1075,14 +1102,23 @@ async function route() {
       return sectionView(date, kind, extra);
     }
     case 'learn':
-      if (arg === 'briefs') return listPage('learn', 'Learn', LEARN, 'briefs', '#/learn', fileRows(listDir(P.daily), (p) => '#/today/' + p.slice(P.daily.length, -3), (p) => fmtDate(p.slice(P.daily.length, -3), true), (p) => planWeek(p.slice(P.daily.length, -3))));
-      if (arg === 'weekly') return listPage('learn', 'Learn', LEARN, 'weekly', '#/learn', fileRows(listDir(P.weekly), (p) => '#/file/' + encodeURIComponent(p), (p) => 'Week ' + p.slice(P.weekly.length, -3).split('-W')[1], (p) => p.slice(P.weekly.length, P.weekly.length + 4)));
-      return noteView(P.ladder, { tab: 'learn', title: 'Learn', seg: '', segBase: '#/learn', segItems: LEARN });
+      if (arg === 'review') return reviewView();
+      if (arg === 'skills') return skillsView();
+      if (arg === 'briefs') return listPage('learn', 'Learn', LEARN2, 'briefs', '#/learn', fileRows(listDir(P.daily), (p) => '#/today/' + p.slice(P.daily.length, -3), (p) => fmtDate(p.slice(P.daily.length, -3), true), (p) => planWeek(p.slice(P.daily.length, -3))));
+      if (arg === 'weekly') return listPage('learn', 'Learn', LEARN2, 'weekly', '#/learn', fileRows(listDir(P.weekly), (p) => '#/file/' + encodeURIComponent(p), (p) => 'Week ' + p.slice(P.weekly.length, -3).split('-W')[1], (p) => p.slice(P.weekly.length, P.weekly.length + 4)));
+      return learnPathView();
     case 'prep':
-      if (arg === 'mocks') return listPage('prep', 'Prep', PREP, 'mocks', '#/prep', fileRows(listDir(P.mocks), (p) => '#/file/' + encodeURIComponent(p), (p) => 'Mock interview', (p) => fmtDate(p.slice(P.mocks.length, -3), true)));
-      if (arg === 'stories') return noteView(P.story, { tab: 'prep', title: 'Prep', seg: 'stories', segBase: '#/prep', segItems: PREP });
-      if (arg === 'presence') return noteView(P.presence, { tab: 'prep', title: 'Prep', seg: 'presence', segBase: '#/prep', segItems: PREP });
-      return noteView(P.prep, { tab: 'prep', title: 'Prep', seg: '', segBase: '#/prep', segItems: PREP });
+      if (arg === 'log') return problemsView();
+      if (arg === 'drill') return drillView();
+      if (arg === 'mistakes') return mistakesView();
+      if (arg === 'plan') return noteView(P.prep, { tab: 'prep', title: 'Prep', seg: 'plan', segBase: '#/prep', segItems: PREP2 });
+      if (arg === 'mocks') return listPage('prep', 'Prep', PREP2, 'mocks', '#/prep', fileRows(listDir(P.mocks), (p) => '#/file/' + encodeURIComponent(p), (p) => 'Mock interview', (p) => fmtDate(p.slice(P.mocks.length, -3), true)));
+      if (arg === 'stories') return noteView(P.story, { tab: 'prep', title: 'Prep', seg: 'stories', segBase: '#/prep', segItems: PREP2 });
+      if (arg === 'presence') return noteView(P.presence, { tab: 'prep', title: 'Prep', seg: 'presence', segBase: '#/prep', segItems: PREP2 });
+      return prepWeekView();
+    case 'share': return shareView();
+    case 'rung': { const latest = listDir(P.daily)[0]; location.replace(latest ? `#/b/${latest.slice(P.daily.length, -3)}/rung` : '#/today'); return; }
+    case 'capture': await todayView(null); return openCapture(arg || 'task');
     case 'jobs': return jobsView(arg || 'active');
     case 'inbox':
       if (arg === 'reading' || arg === 'watch') return linkListView(arg);
