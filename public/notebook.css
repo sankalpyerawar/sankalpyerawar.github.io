@@ -229,3 +229,14 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   .lede { font-size: 16px; }
   table.plain { font-size: 14px; }
 }
+
+/* ---------- Ink-sketch portrait ---------- */
+.sketch-frame { width: 100%; max-width: 220px; aspect-ratio: 1; border: 1px solid var(--ink); background-color: var(--card);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 12px 12px;
+  overflow: hidden; }
+.sketch { width: 100%; height: 100%; background: var(--ink);
+  -webkit-mask: var(--sketch) center bottom / 100% auto no-repeat; mask: var(--sketch) center bottom / 100% auto no-repeat;
+  filter: drop-shadow(var(--sketch-glow, 0 0 0 transparent)); }
+:root[data-theme="dark"] .sketch { --sketch-glow: 0 0 6px rgba(184, 245, 160, .45); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sketch { --sketch-glow: 0 0 6px rgba(184, 245, 160, .45); } }
+@media (max-width: 640px) { .sketch-frame { max-width: 104px; } .portrait { grid-template-columns: 104px auto; } }

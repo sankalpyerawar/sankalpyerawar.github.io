@@ -23,7 +23,6 @@
         },
         "location": "Pune, India",
         "role": "Senior Backend Engineer",
-        "photo": null,
         "bio": [
             "I'm a backend engineer in Pune with 8+ years of building systems that have to keep working while everything around them changes: event-driven services, ETL platforms, and large data migrations, mostly in Kotlin and Java on Kafka, Postgres and AWS.",
             "These days I'm going deeper into AI engineering, and I build side projects with AI coding agents. Outside work I'm a beginner photographer with a Nikon D5300, I play cricket, and I want to travel the world."
@@ -54,7 +53,8 @@
                 "k": "Open to",
                 "v": "Senior / Staff backend and AI platform roles"
             }
-        ]
+        ],
+        "sketch": "./portrait-sketch.png"
     },
     "projects": [
         {

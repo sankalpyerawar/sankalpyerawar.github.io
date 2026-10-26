@@ -71,7 +71,14 @@ function renderAbout(d) {
   $('role').textContent = [p.role, p.location].filter(Boolean).join(' · ');
   $('bio').innerHTML = (p.bio || []).map((para) => `<p>${esc(para)}</p>`).join('');
   if (p.tagline) $('tagline').textContent = p.tagline; else $('tagline').parentElement.hidden = true;
-  if (p.photo) {
+  if (p.sketch) {
+    // Ink sketch drawn as a mask, so it takes the theme's ink colour (ink on paper, phosphor green on the terminal).
+    const frame = document.createElement('div');
+    frame.className = 'sketch-frame';
+    frame.innerHTML = `<div class="sketch" role="img" aria-label="Ink sketch of ${esc(p.name)}"></div>`;
+    frame.firstElementChild.style.setProperty('--sketch', `url("${p.sketch}")`);
+    $('portrait').querySelector('.monogram').replaceWith(frame);
+  } else if (p.photo) {
     $('portrait').querySelector('.monogram').outerHTML = `<img src="${esc(p.photo)}" alt="Photo of ${esc(p.name)}" width="320" height="320">`;
   }
   if (p.resumeUrl) $('resume-link').href = `.${p.resumeUrl.startsWith('/') ? '' : '/'}${p.resumeUrl}`;
