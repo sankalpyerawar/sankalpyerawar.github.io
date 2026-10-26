@@ -1,0 +1,20 @@
+{
+  "name": "Growth",
+  "short_name": "Growth",
+  "description": "Daily engineering briefs, quizzes, prep, jobs and captures from your second-brain vault",
+  "start_url": "./#/today",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#152038",
+  "theme_color": "#152038",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Capture", "url": "./#/inbox", "description": "Tasks and lists" },
+    { "name": "Jobs", "url": "./#/jobs" }
+  ]
+}
