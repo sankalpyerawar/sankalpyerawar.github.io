@@ -31,9 +31,8 @@ function setupTheme() {
 }
 
 // ---------- Diagrams ----------
-const diagrams = {
-  'studio-sync': `
-    <svg class="diagram" viewBox="0 0 640 170" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
+const syncWide = `
+    <svg class="diagram wide" viewBox="0 0 640 170" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
       <g fill="none" class="d-ink" stroke-width="1.5">
         <rect x="24" y="40" width="150" height="90" rx="10"/><rect x="466" y="40" width="150" height="90" rx="10"/>
         <rect x="245" y="50" width="150" height="70"/>
@@ -45,21 +44,43 @@ const diagrams = {
         <text x="320" y="82">Google Drive</text><text x="320" y="102" class="d-mut-f">shared folder</text>
       </g>
       <text x="320" y="154" class="d-hand d-pen-f" text-anchor="middle">no server in the middle!</text>
-    </svg>`,
-};
+    </svg>`;
+const syncTall = `
+    <svg class="diagram tall" viewBox="0 0 300 330" role="img" aria-label="Two phones, each with a local SQLite database, sync through a shared Google Drive folder">
+      <g fill="none" class="d-ink" stroke-width="1.5">
+        <rect x="70" y="14" width="160" height="70" rx="10"/><rect x="70" y="246" width="160" height="70" rx="10"/>
+        <rect x="70" y="132" width="160" height="66"/>
+      </g>
+      <path d="M150 88 V128 M150 202 V242" class="d-pen" stroke-width="1.5" fill="none"/>
+      <g class="d-mono d-ink-f" text-anchor="middle" font-size="15">
+        <text x="150" y="45">Phone A</text><text x="150" y="67" class="d-mut-f">SQLite</text>
+        <text x="150" y="162">Google Drive</text><text x="150" y="184" class="d-mut-f">shared folder</text>
+        <text x="150" y="277">Phone B</text><text x="150" y="299" class="d-mut-f">SQLite</text>
+      </g>
+      <text x="250" y="102" class="d-hand d-pen-f" text-anchor="middle" font-size="16">no server</text>
+      <text x="250" y="120" class="d-hand d-pen-f" text-anchor="middle" font-size="16">here!</text>
+    </svg>`;
+const diagrams = { 'studio-sync': syncWide + syncTall };
 
 // ---------- Sections ----------
-function renderHeader(d) {
+function renderAbout(d) {
   document.title = d.meta.title;
   $('meta-desc').content = d.meta.description;
   const p = d.profile;
-  if (p.headline) {
-    $('headline').innerHTML = `${esc(p.headline)}${p.headlineMark ? ` <span class="mark">${esc(p.headlineMark)}</span>` : ''}`;
+  if (p.name) $('name').textContent = p.name;
+  $('role').textContent = [p.role, p.location].filter(Boolean).join(' · ');
+  $('bio').innerHTML = (p.bio || []).map((para) => `<p>${esc(para)}</p>`).join('');
+  if (p.tagline) $('tagline').textContent = p.tagline; else $('tagline').parentElement.hidden = true;
+  if (p.photo) {
+    $('portrait').querySelector('.monogram').outerHTML = `<img src="${esc(p.photo)}" alt="Photo of ${esc(p.name)}" width="320" height="320">`;
   }
-  if (p.lede) $('lede').textContent = p.lede;
-  if (p.note) $('note').textContent = p.note;
-  if (p.location) $('location').textContent = p.location;
   if (p.resumeUrl) $('resume-link').href = `.${p.resumeUrl.startsWith('/') ? '' : '/'}${p.resumeUrl}`;
+  const social = p.social || {};
+  const labels = { github: 'GitHub', linkedin: 'LinkedIn', medium: 'Medium' };
+  $('cta').insertAdjacentHTML('beforeend', Object.entries(labels)
+    .filter(([key]) => social[key])
+    .map(([key, label]) => `<a class="btn" href="${esc(social[key])}"${linkAttrs(social[key])}>${label} ↗</a>`).join(''));
+  $('facts').innerHTML = (p.facts || []).map((f) => `<div><dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd></div>`).join('');
   $('rev').textContent = d.log?.[0]?.date || '';
   $('year').textContent = new Date().getFullYear();
   const edu = d.education?.[0];
@@ -100,13 +121,17 @@ function renderProjects(d) {
 }
 
 function renderWork(d) {
-  $('work-list').innerHTML = (d.experience || []).map((job) => `
+  $('work-list').innerHTML = (d.experience || []).map((job, i) => `
     <div class="rev">
       <div class="when">${esc(job.date)}</div>
       <h3>${esc(job.title)}</h3>
       <div class="org">${esc(job.company)}</div>
       ${job.summary ? `<p>${esc(job.summary)}</p>` : ''}
-      ${job.nestedProjects?.length ? `<ul>${job.nestedProjects.map((np) => `<li><b>${esc(np.title)}.</b> ${esc(np.summary)}</li>`).join('')}</ul>` : ''}
+      ${job.nestedProjects?.length ? `
+        <details${i === 0 ? ' open' : ''}>
+          <summary>${job.nestedProjects.length} projects</summary>
+          <ul>${job.nestedProjects.map((np) => `<li><b>${esc(np.title)}.</b> ${esc(np.summary)}</li>`).join('')}</ul>
+        </details>` : ''}
     </div>`).join('');
 }
 
@@ -136,7 +161,7 @@ async function init() {
     const res = await fetch('./data.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error(`data.json: HTTP ${res.status}`);
     const data = await res.json();
-    [renderHeader, renderNow, renderDecision, renderProjects, renderWork, renderStack, renderLog, renderContact]
+    [renderAbout, renderNow, renderDecision, renderProjects, renderWork, renderStack, renderLog, renderContact]
       .forEach((fn) => fn(data));
   } catch (err) {
     console.error(err);

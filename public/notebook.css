@@ -151,3 +151,81 @@ pre.spec { margin: 0; border: 1px solid var(--ink); background: var(--card); pad
 .shot { aspect-ratio: 9 / 19; max-width: 100%; border: 1px dashed var(--muted); display: grid; place-items: center; text-align: center; padding: 12px; font: 13px var(--mono); color: var(--muted); background: var(--card); }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ---------- Sticky section bar ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 21; background: var(--paper); }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); border-bottom: 1px solid var(--ink);
+  padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.bar-in { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 14px; min-height: 48px; }
+.bar-name { font: 700 15px var(--mono); text-decoration: none; letter-spacing: .04em; }
+.bar-links { flex: 1; min-width: 0; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  mask-image: linear-gradient(90deg, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.bar-links::-webkit-scrollbar { display: none; }
+.bar-links a { font: 13px var(--mono); text-decoration: none; white-space: nowrap; padding: 12px 8px; }
+.bar-links a:hover { color: var(--pencil); }
+.bar .toggle { flex-shrink: 0; }
+.sec { scroll-margin-top: 64px; }
+
+/* ---------- About (first screen) ---------- */
+.about.sec { margin-top: 0; }
+.about-grid { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 36px; align-items: start; margin-top: 32px; }
+.portrait { margin: 0; display: grid; gap: 8px; justify-items: center; }
+.portrait img, .monogram { width: 100%; max-width: 220px; aspect-ratio: 1; border: 1px solid var(--ink); background: var(--card); display: block; object-fit: cover; }
+.monogram { display: grid; place-items: center; font: 400 96px/1 var(--display); color: var(--ink); text-shadow: var(--glow);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 12px 12px; }
+.portrait figcaption { font-size: 16px; }
+.name { margin: 0 0 6px; }
+.role { margin: 0; font-size: 14px; color: var(--muted); }
+.bio { margin-top: 18px; max-width: 62ch; }
+.bio p { margin: 0 0 12px; font-size: 17px; }
+.tagline { margin: 6px 0 0; font-weight: 600; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.btn { font: 600 13px var(--mono); text-decoration: none; border: 1px solid var(--ink); padding: 9px 14px; background: var(--card); display: inline-flex; align-items: center; min-height: 42px; }
+.btn:first-child { background: var(--ink); color: var(--paper); }
+.btn:hover { border-color: var(--pencil); color: var(--pencil); }
+.btn:first-child:hover { background: var(--pencil); color: var(--paper); }
+.facts { margin: 32px 0 0; display: grid; column-gap: 32px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); border-top: 1px solid var(--ink); }
+.facts > div { display: grid; grid-template-columns: 11ch minmax(0, 1fr); gap: 12px; padding: 9px 0; border-bottom: 1px dotted var(--muted); }
+.facts dt { font: 600 11px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-size: 15px; }
+
+/* ---------- Work history: collapsible projects ---------- */
+.rev details { margin-top: 10px; }
+.rev summary { cursor: pointer; font: 13px var(--mono); color: var(--pencil); list-style: none; padding: 6px 0; }
+.rev summary::-webkit-details-marker { display: none; }
+.rev summary::before { content: "[+] "; }
+.rev details[open] > summary::before { content: "[−] "; }
+
+/* ---------- Diagrams: wide on desktop, stacked on phones ---------- */
+.diagram.tall { display: none; max-width: 340px; margin: 0 auto; }
+
+/* ---------- Phones ---------- */
+@media (max-width: 640px) {
+  body { font-size: 15.5px; }
+  .wrap { padding: 20px 16px 72px; }
+  .bar { padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); }
+  .bar-in { gap: 8px; }
+  .bar .toggle button { padding: 6px 8px; }
+  .hide-sm { display: none; }
+  .about-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 20px; }
+  .portrait { grid-template-columns: 88px auto; justify-items: start; align-items: end; justify-content: start; gap: 12px; }
+  .portrait img, .monogram { max-width: 88px; }
+  .monogram { font-size: 44px; }
+  .portrait figcaption { font-size: 15px; }
+  .title { font-size: clamp(34px, 10vw, 44px); }
+  .bio p { font-size: 16px; }
+  .cta .btn { flex: 1 1 auto; justify-content: center; }
+  .sec { margin-top: 40px; }
+  .boxes > div { padding: 12px 14px; }
+  .project { padding: 16px; gap: 10px; }
+  .project h3 { font-size: 20px; }
+  .diagram.wide { display: none; }
+  .diagram.tall { display: block; }
+  .rev { padding-left: 20px; padding-bottom: 24px; }
+  .rev h3 { font-size: 17px; }
+  .log li { grid-template-columns: 1fr; gap: 0; }
+  .log li > span:first-child { font-size: 12px; color: var(--muted); }
+  .facts > div { grid-template-columns: 10ch minmax(0, 1fr); }
+  .lede { font-size: 16px; }
+  table.plain { font-size: 14px; }
+}
