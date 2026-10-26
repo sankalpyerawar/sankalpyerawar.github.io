@@ -1,5 +1,5 @@
 /* App-shell cache. GitHub API calls are never cached here; the app caches vault files itself. */
-const VERSION = 'growth-v1';
+const VERSION = 'growth-v2';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'vendor/marked.js', 'vendor/purify.js', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

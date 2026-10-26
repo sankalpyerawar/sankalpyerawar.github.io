@@ -7,6 +7,7 @@ const API = 'https://api.github.com';
 const P = {
   daily: '10 Journal/Daily/',
   weekly: '10 Journal/Weekly/',
+  mocks: '10 Journal/Mocks/',
   todo: 'Lists/To-do.md',
   reading: 'Lists/Reading list.md',
   watch: 'Lists/Watch list.md',
@@ -577,7 +578,7 @@ async function noteView(path, { tab, seg, segBase, segItems, title }) {
 }
 
 const LEARN = [['', 'Ladder'], ['briefs', 'Past briefs'], ['weekly', 'Weekly reviews']];
-const PREP = [['', 'Plan & tracker'], ['stories', 'Story bank'], ['presence', 'Presence']];
+const PREP = [['', 'Plan & tracker'], ['mocks', 'Mocks'], ['stories', 'Story bank'], ['presence', 'Presence']];
 const LISTS = [['', 'To-do'], ['reading', 'Reading'], ['watch', 'Watch'], ['notes', 'Notes'], ['vault', 'Vault']];
 
 function fileList(paths, hrefFor, labelFor, metaFor) {
@@ -839,6 +840,7 @@ async function route() {
       if (arg === 'briefs' || arg === 'weekly') return learnList(arg);
       return noteView(P.ladder, { tab: 'learn', seg: '', segBase: '#/learn', segItems: LEARN });
     case 'prep':
+      if (arg === 'mocks') { setActiveTab('prep'); view().innerHTML = segmented(PREP, 'mocks', '#/prep') + `<section class="block">${fileList(listDir(P.mocks), (p) => '#/file/' + encodeURIComponent(p), (p) => 'Mock, ' + fmtDate(p.slice(P.mocks.length, -3)), null)}</section>`; wireSeg(); wireRows(); return; }
       if (arg === 'stories') return noteView(P.story, { tab: 'prep', seg: 'stories', segBase: '#/prep', segItems: PREP });
       if (arg === 'presence') return noteView(P.presence, { tab: 'prep', seg: 'presence', segBase: '#/prep', segItems: PREP });
       return noteView(P.prep, { tab: 'prep', seg: '', segBase: '#/prep', segItems: PREP });
