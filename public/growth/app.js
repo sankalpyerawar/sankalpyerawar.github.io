@@ -627,9 +627,11 @@ function welcomeView() {
 
 /* ---------- Today ---------- */
 function planWeek(dateStr) {
-  const start = new Date(2026, 8, 28); const d = parseDate(dateStr);
+  // 6-week sprint restarted Tue 27 Oct 2026; weeks run Mon-Sun, so week 1 is counted from Mon 26 Oct.
+  const start = new Date(2026, 9, 26); const d = parseDate(dateStr);
+  if (d < new Date(2026, 9, 27)) return '';
   const w = Math.floor((d - start) / (7 * 864e5)) + 1;
-  return w >= 1 && w <= 10 ? `Week ${w} of 10` : '';
+  return w >= 1 && w <= 6 ? `Week ${w} of 6` : '';
 }
 async function loadBrief(date) {
   const dailies = listDir(P.daily);
@@ -647,7 +649,7 @@ async function todayView(date) {
   shell({ tab: 'today' }); skeleton();
   let data; try { data = await loadBrief(date); } catch (e) { failView(e); return; }
   const v = view();
-  if (!data) { v.innerHTML = `<div class="pad"><header class="hero"><div class="hero-row"><h1>Today</h1>${syncChip()}</div><p class="sub">No briefs yet. The next one arrives at 7:00 on a weekday.</p></header></div>`; wireTop(); return; }
+  if (!data) { v.innerHTML = `<div class="pad"><header class="hero"><div class="hero-row"><h1>Today</h1>${syncChip()}</div><p class="sub">Fresh start. Your first brief arrives at 7:00 on Tue 27 Oct, and a new one every weekday after.</p></header></div>`; wireTop(); return; }
   if (data.missing) { v.innerHTML = `<div class="pad"><header class="hero"><h1>No brief for ${esc(fmtDate(data.briefDate))}</h1></header><a class="btn" href="#/today">Go to the newest</a></div>`; return; }
   const { briefDate, b, log, latest } = data;
   const done = log.done || {};
