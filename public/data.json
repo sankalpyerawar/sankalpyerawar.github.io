@@ -20,7 +20,12 @@
             "linkedin": "https://www.linkedin.com/in/sankalpyerawar/",
             "github": "https://github.com/sankalpyerawar",
             "medium": "https://medium.com/@sankalpyerawar"
-        }
+        },
+        "headline": "I design backend systems that",
+        "headlineMark": "survive migrations.",
+        "lede": "Senior backend engineer, 8+ years in Kotlin, Java, Kafka, Postgres and AWS. I work on event-driven services, ETL platforms and large data migrations, and I'm growing into AI engineering.",
+        "note": "currently: evals, RAG and agent design",
+        "location": "Pune, India"
     },
     "projects": [
         {
@@ -36,20 +41,20 @@
             ],
             "liveUrl": "./projects/studio-app/",
             "liveText": "Read case study",
-            "status": "In development"
+            "status": "In development",
+            "diagram": "studio-sync"
         },
         {
             "title": "Personal Portfolio Website",
-            "description": "A minimal, responsive portfolio website built with Vite and Vanilla JS. Features dynamic JSON content loading and a clean UI. Redesigned using Google Stitch for UI design and migrated to Tailwind CSS, with Google Jules assisting in development.",
+            "description": "This site. Written like an engineering notebook in light mode and a retro terminal in dark mode. Every section renders from one JSON file, so updating it is a one-line commit.",
             "technologies": [
                 "Vite",
-                "Tailwind CSS",
-                "Google Stitch",
-                "Google Jules",
-                "AI-Assisted Development"
+                "Vanilla JS",
+                "CSS",
+                "GitHub Actions",
+                "GitHub Pages"
             ],
-            "link": "https://github.com/sankalpyerawar/sankalpyerawar",
-            "liveUrl": "https://sankalpyerawar.github.io",
+            "link": "https://github.com/sankalpyerawar/sankalpyerawar.github.io",
             "linkText": "View Source"
         },
         {
@@ -273,7 +278,8 @@
     "now": [
         {
             "key": "work",
-            "text": "Owning a large-scale data migration: hundreds of millions of reward records from relational and document stores into one generic document model, with dual-write cutover and a Kafka-backed migration runner"
+            "text": "Owning a large-scale data migration into a single generic document model. Decision record below.",
+            "href": "#decision"
         },
         {
             "key": "building",
@@ -293,7 +299,7 @@
     "log": [
         {
             "date": "2026-10-26",
-            "text": "Portfolio: terminal hero, /now log and Studio App case study"
+            "text": "Portfolio rebuilt as an engineering notebook, with a terminal dark mode and a Studio App case study"
         },
         {
             "date": "2026-10-19",
@@ -311,5 +317,27 @@
             "date": "2026-04",
             "text": "Redesigned this site with AI tools and wrote about it on Medium"
         }
-    ]
+    ],
+    "decision": {
+        "title": "Decision record: rewards data migration",
+        "items": [
+            {
+                "label": "Context",
+                "text": "A rewards capability is being pulled out of a wallet system into its own service. Data sits across several relational tables and document collections, in separate databases per region."
+            },
+            {
+                "label": "Decision",
+                "text": "Dual-write to old and new systems, backfill during that window, then cut over. Kafka-backed asynchronous migration with a tracking table recording which records migrated and which failed."
+            },
+            {
+                "label": "Trade-off",
+                "text": "Harder to deploy than a one-shot script, but it scales, can be re-run safely, and gives a reconciliation report per setup."
+            },
+            {
+                "label": "Status",
+                "text": "In progress",
+                "stamp": true
+            }
+        ]
+    }
 }
