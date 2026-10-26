@@ -1101,4 +1101,4 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#she
 window.addEventListener('online', () => sync());
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Date.now() - (tree.at || 0) > 60000) sync(); });
 route().then(() => { if (cfg.token && Date.now() - (tree.at || 0) > 5000) sync(); });
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((r) => r.update()).catch(() => {});

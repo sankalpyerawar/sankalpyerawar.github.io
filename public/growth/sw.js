@@ -1,5 +1,5 @@
 /* App-shell cache. GitHub API calls are never cached here; the app caches vault files itself. */
-const VERSION = 'growth-v3';
+const VERSION = 'growth-v4';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'vendor/marked.js', 'vendor/purify.js', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -17,7 +17,7 @@ self.addEventListener('fetch', (e) => {
   e.respondWith((async () => {
     const cache = await caches.open(VERSION);
     try {
-      const res = await fetch(e.request);
+      const res = await fetch(e.request, sameOrigin ? { cache: 'no-cache' } : {});
       if (res && (res.ok || res.type === 'opaque')) cache.put(e.request, res.clone());
       return res;
     } catch {
