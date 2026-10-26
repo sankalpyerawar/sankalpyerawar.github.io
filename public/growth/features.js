@@ -524,10 +524,40 @@ function triageActions(row, which, rawLine, section) {
       const to = b.dataset.t === 'done' ? (which === 'watch' ? 'Watched' : 'Done') : 'Skipped';
       row.classList.add('is-done');
       await enqueue({ kind: 'moveLine', path: which === 'watch' ? P.watch : P.reading, line: rawLine, section: to, message: `app: ${to.toLowerCase()} ${which}` });
+      toast(`${to === 'Skipped' ? 'Skipped' : 'Marked ' + to.toLowerCase()}. It's in History below.`);
       route();
     };
   });
   row.appendChild(box);
+}
+function historyActions(row, which, rawLine, section) {
+  const box = el('span', 'triage');
+  box.innerHTML = `<span class="tag">${esc(section)}</span><button class="btn small ghost" type="button">Undo</button>`;
+  $('button', box).onclick = async () => {
+    await enqueue({ kind: 'moveLine', path: which === 'watch' ? P.watch : P.reading, line: rawLine, section: which === 'watch' ? 'To watch' : 'To read', message: `app: back to ${which} list` });
+    toast('Moved back to your list'); route();
+  };
+  row.appendChild(box);
+}
+/* same link already saved? YouTube links match on the video id, others on the URL without query/hash */
+function linkKey(u) {
+  try {
+    const x = new URL(u); const h = x.hostname.replace(/^(www\.|m\.)/, '');
+    if (h === 'youtu.be') return 'yt:' + x.pathname.slice(1);
+    if (/youtube\.com$/.test(h)) return 'yt:' + (x.searchParams.get('v') || x.pathname.split('/').pop());
+    return h + x.pathname.replace(/\/$/, '');
+  } catch { return u; }
+}
+async function findInLists(url) {
+  const key = linkKey(url);
+  for (const [path, name] of [[P.watch, 'Watch list'], [P.reading, 'Reading list']]) {
+    let section = '';
+    for (const line of ((await readFile(path).catch(() => '')) || '').split('\n')) {
+      const h = /^##\s+(.*)$/.exec(line); if (h) { section = h[1]; continue; }
+      for (const m of line.matchAll(/\((https?:\/\/[^)\s]+)\)/g)) if (linkKey(m[1]) === key) return { msg: `Already in your ${name} under "${section}"`, path };
+    }
+  }
+  return null;
 }
 
 /* =====================================================================
@@ -612,6 +642,8 @@ async function saveShare(kind, d, title, text, why) {
   if (kind === 'watch' || kind === 'reading') {
     if (!url) throw new Error('No link found in what you shared');
     const watch = kind === 'watch';
+    const dup = await findInLists(url);
+    if (dup) { toast(dup.msg); return; }
     await enqueue({ kind: 'addLine', path: watch ? P.watch : P.reading, section: watch ? 'To watch' : 'To read', line: `- [${t}](${url})${why ? ' — ' + why : ''} #from-app`, message: `capture: ${t}` });
     toast(watch ? 'Added to Watch list' : 'Added to Reading list');
   } else if (kind === 'highlight') {

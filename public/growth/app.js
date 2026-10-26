@@ -947,12 +947,18 @@ async function linkListView(which) {
     const h = /^##\s+(.*)$/.exec(line); if (h) { g = { name: h[1], items: [] }; groups.push(g); continue; }
     const m = /^\s*- (?:\[[ xX]\] )?(.*)$/.exec(line); if (m && g) g.items.push(m[1]);
   }
+  const HIST = /^(done|watched|skipped)$/i;
+  const active = groups.filter((gr, i) => !HIST.test(gr.name) && (gr.items.length || i === 0));
+  const history = groups.filter((gr) => HIST.test(gr.name)).flatMap((gr) => gr.items.map((it) => ({ it, section: gr.name }))).reverse();
+  const row = (it, attrs) => `<div class="row" ${attrs}><span class="row-main"><span class="row-title">${inline(it.replace(/#from-app/, ''))}</span>${/#from-app/.test(it) ? '<span class="row-sub">Claude adds a summary tomorrow morning</span>' : ''}</span></div>`;
   v.innerHTML = `<div class="pad">${pageHead('Lists')}${chips(LISTS, which, '#/inbox')}
     <form class="card addrow" id="quickLink"><label class="field"><span class="sr">Link</span><input type="url" id="ql" placeholder="Paste a link to ${which === 'reading' ? 'read' : 'watch'}" inputmode="url"></label><button class="btn primary" type="submit">Add</button></form>
-    ${groups.filter((gr) => gr.items.length || !/skipped/i.test(gr.name)).map((gr, gi) => `<section class="card list"><div class="list-head"><h2>${esc(gr.name)}</h2><span class="muted">${gr.items.length}</span></div>${gr.items.length ? gr.items.map((it, ii) => `<div class="row" data-g="${gi}" data-i="${ii}"><span class="row-main"><span class="row-title">${inline(it.replace(/#from-app/, ''))}</span>${/#from-app/.test(it) ? '<span class="row-sub">Claude adds a summary tomorrow morning</span>' : ''}</span></div>`).join('') : '<p class="empty">Empty</p>'}</section>`).join('')}</div>`;
+    ${active.map((gr, gi) => `<section class="card list"><div class="list-head"><h2>${esc(gr.name)}</h2><span class="muted">${gr.items.length}</span></div>${gr.items.length ? gr.items.map((it, ii) => row(it, `data-g="${gi}" data-i="${ii}"`)).join('') : '<p class="empty">Nothing waiting. Share a link to Growth, or paste one above.</p>'}</section>`).join('')}
+    <details class="card fold history" ${history.length ? '' : 'hidden'}><summary><span>History · ${history.length}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <div class="list">${history.map((h, hi) => row(h.it, `data-h="${hi}"`)).join('')}</div></details></div>`;
   wireTop();
-  const shownGroups = groups.filter((gr) => gr.items.length || !/skipped/i.test(gr.name));
-  v.querySelectorAll('.row[data-g]').forEach((r) => { const gr = shownGroups[Number(r.dataset.g)]; triageActions(r, which, gr.items[Number(r.dataset.i)], gr.name); });
+  v.querySelectorAll('.row[data-g]').forEach((r) => { const gr = active[Number(r.dataset.g)]; triageActions(r, which, gr.items[Number(r.dataset.i)], gr.name); });
+  v.querySelectorAll('.row[data-h]').forEach((r) => { const h = history[Number(r.dataset.h)]; historyActions(r, which, h.it, h.section); });
   v.querySelectorAll('.row-title a').forEach((a) => { if (!a.getAttribute('href').startsWith('#')) { a.target = '_blank'; a.rel = 'noopener'; } });
   $('#quickLink').onsubmit = (e) => { e.preventDefault(); openCapture('link', { url: $('#ql').value.trim(), list: which }); };
 }
@@ -1077,6 +1083,8 @@ async function saveCapture(kind) {
     const url = val('fUrl'); if (!/^https?:\/\//.test(url)) throw new Error('Paste a full link starting with https://');
     const title = (val('fTitle') || url).replace(/[[\]]/g, ''); const why = val('fWhy');
     const watch = val('fList') === 'watch';
+    const dup = await findInLists(url);
+    if (dup) { toast(dup.msg); return; }
     await enqueue({ kind: 'addLine', path: watch ? P.watch : P.reading, section: watch ? 'To watch' : 'To read', line: `- [${title}](${url})${why ? ' — ' + why : ''} #from-app`, message: `capture: ${title}` });
     toast(watch ? 'Added to watch list' : 'Added to reading list');
   } else if (kind === 'ask') {

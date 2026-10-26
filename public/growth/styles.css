@@ -398,3 +398,7 @@ figure { margin: 0; }
 
 .xform .pick, .share .pick { flex-wrap: wrap; overflow: visible; margin-left: 0; margin-right: 0; padding: 2px 0; }
 .explain .quiz-head { flex-wrap: wrap; gap: 2px 10px; }
+
+.history .list .row:first-child { border-top: 1px solid var(--line); }
+.history .row-title { color: var(--muted); font-weight: 500; }
+.history .triage { align-items: center; }
