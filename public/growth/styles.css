@@ -402,3 +402,10 @@ figure { margin: 0; }
 .history .list .row:first-child { border-top: 1px solid var(--line); }
 .history .row-title { color: var(--muted); font-weight: 500; }
 .history .triage { align-items: center; }
+
+/* day switcher, catch-up card, endless stories */
+.daystrip { margin-top: 4px; }
+.catchup { margin-top: 12px; }
+.catchup .linkrow-icon { font-weight: 800; font-size: 1.05em; background: var(--t-peach); color: var(--t-peach-ink); }
+.story.more { background: var(--soft); box-shadow: none; justify-content: center; }
+.story.more .story-cat { background: var(--surface); color: var(--accent-text); }

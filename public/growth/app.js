@@ -324,7 +324,7 @@ async function sync({ rerender = true } = {}) {
 }
 
 async function prefetch() {
-  const daily = listDir(P.daily).slice(0, 3);
+  const daily = listDir(P.daily).slice(0, 5);
   const paths = [...daily, ...daily.map((p) => P.log(p.slice(P.daily.length, -3))), 'App/review.json', P.log(localDate()), P.todo, P.reading, P.watch, P.jobs, P.ladder, P.prep, P.story, P.presence, listDir(P.weekly)[0]];
   for (const p of paths) { if (p && tree.files[p]) { try { await readFile(p); } catch { return; } } }
 }
@@ -665,6 +665,20 @@ async function loadBrief(date) {
   const log = (await readJson(P.log(briefDate), {})) || {};
   return { briefDate, b: parseBrief(md), log, latest: dailies[0].slice(P.daily.length, -3) };
 }
+const briefDates = () => listDir(P.daily).map((p) => p.slice(P.daily.length, -3));
+const olderBrief = (date) => { const ds = briefDates(); const i = ds.indexOf(date); return i >= 0 ? ds[i + 1] || null : null; };
+const dayHref = (date, latest) => `#/today${date === latest ? '' : '/' + date}`;
+function dayStrip(current, latest) {
+  const ds = briefDates().slice(0, 10);
+  return `<div class="chips daystrip" role="toolbar" aria-label="Briefs by day">${ds.map((d) => `<a role="button" aria-pressed="${d === current}" href="${dayHref(d, latest)}">${esc(d === localDate() ? 'Today' : fmtDate(d).replace(/ \w+$/, ''))}</a>`).join('')}</div>`;
+}
+async function openSteps(date) {
+  try {
+    const md = await readFile(P.daily + date + '.md'); if (md == null) return null;
+    const b = parseBrief(md); const done = ((await readJson(P.log(date), {})) || {}).done || {};
+    return { b, open: b.steps.filter((s) => s.type !== 'try' && !done[s.type]) };
+  } catch { return null; }
+}
 const stepHref = (date, s) => ({ news: `#/b/${date}/news/0`, rung: `#/b/${date}/rung`, try: `#/b/${date}/rung`, quiz: `#/b/${date}/rung/quiz`, watch: `#/b/${date}/watch`, prep: `#/b/${date}/prep` }[s.type]);
 
 async function todayView(date) {
@@ -688,8 +702,8 @@ async function todayView(date) {
       <div class="hero-row"><h1>${isLatest && !stale ? 'Today' : esc(fmtDate(briefDate, true).split(' ')[0])}</h1>
         <span class="ring" role="img" aria-label="${doneCount} of ${steps.length} done" style="--p:${pct}"><span>${doneCount}/${steps.length}</span></span></div>
       ${stale ? '<p class="sub">Newest brief. The next one arrives at 7:00 on a weekday.</p>' : ''}
-      ${!isLatest ? `<p class="sub">A past brief. <a href="#/today">Go to today</a></p>` : ''}
-    </header>`;
+      ${!isLatest ? `<p class="sub">A past brief. You can still read it and tick things off.</p>` : ''}
+    </header>${dayStrip(briefDate, latest)}<div id="catchup"></div>`;
 
   if (next) {
     const sub = next.type === 'rung' ? 'A short read with a diagram, then two quiz questions.' : next.type === 'news' ? (b.tldr[0] || '') : next.type === 'quiz' ? 'Two short questions. Tomorrow\'s brief grades them.' : next.type === 'prep' ? 'Tick it off when you finish, so the Sunday review counts it.' : '';
@@ -712,7 +726,8 @@ async function todayView(date) {
 
   if (b.news.length) {
     html += `<div class="sect-head"><h2>Stories</h2><span class="muted">${b.news.length}</span></div><div class="hscroll">
-      ${b.news.map((n, i) => `<a class="story tone-${CAT_TONE[n.category] || 'green'}" href="#/b/${briefDate}/news/${i}"><span class="story-cat">${esc(n.category)}</span><span class="story-title">${esc(n.title)}</span></a>`).join('')}</div>`;
+      ${b.news.map((n, i) => `<a class="story tone-${CAT_TONE[n.category] || 'green'}" href="#/b/${briefDate}/news/${i}"><span class="story-cat">${esc(n.category)}</span><span class="story-title">${esc(n.title)}</span></a>`).join('')}
+      ${olderBrief(briefDate) ? `<a class="story more" href="#/b/${olderBrief(briefDate)}/news/0"><span class="story-cat">Earlier</span><span class="story-title">Keep reading: stories from ${esc(fmtDate(olderBrief(briefDate)))}</span></a>` : ''}</div>`;
   }
   const replies = b.sections.find((s) => s.kind === 'replies');
   if (replies) html += `<a class="card linkrow" href="#/b/${briefDate}/replies"><span class="linkrow-icon">${ICON.chat}</span><span class="row-main"><span class="row-title">Claude answered you</span><span class="row-sub">Replies to your answers and questions</span></span><span class="row-chev">${ICON.chev}</span></a>`;
@@ -730,6 +745,11 @@ async function todayView(date) {
       await enqueue({ kind: 'jsonSet', path: P.log(briefDate), keys: ['done', type], value: now, init: { date: briefDate }, message: `app: ${type} ${now ? 'done' : 'not done'} ${briefDate}` });
       todayView(date);
     };
+  });
+  const prev = olderBrief(briefDate);
+  if (prev) openSteps(prev).then((r) => {
+    const box = $('#catchup'); if (!r || !r.open.length || !box) return;
+    box.innerHTML = `<a class="card linkrow catchup" href="#/today/${prev}"><span class="linkrow-icon">${r.open.length}</span><span class="row-main"><span class="row-title">${esc(fmtDate(prev, true).split(' ')[0])}: ${r.open.length} left</span><span class="row-sub">${esc(r.open.map((s) => s.label).join(' · '))}</span></span><span class="row-chev">${ICON.chev}</span></a>`;
   });
 }
 
@@ -756,18 +776,20 @@ async function storyView(date, idx) {
   const { b, log } = data; const i = Number(idx) || 0; const n = b.news[i];
   if (!n) { location.hash = `#/today/${date}`; return; }
   const v = view();
-  v.innerHTML = readerTop(`Story ${i + 1} of ${b.news.length}`, `#/today${date === data.latest ? '' : '/' + date}`, listenBtn()) +
+  const older = olderBrief(date);
+  const isLast = i + 1 >= b.news.length;
+  v.innerHTML = readerTop(`Story ${i + 1} of ${b.news.length}${date === localDate() ? '' : ' · ' + fmtDate(date).replace(/ \w+$/, '')}`, dayHref(date, data.latest), listenBtn()) +
     `<article class="reader"><div class="tags"><span class="tag tone-${CAT_TONE[n.category] || 'green'}">${esc(n.category)}</span>${n.level ? `<span class="tag">${esc(levelName(n.level))}</span>` : ''}</div>
     <h1>${esc(n.title)}</h1><div class="body"></div></article>
     <div class="actionbar">${n.url ? `<a class="btn" href="${esc(n.url)}" target="_blank" rel="noopener">Source</a>` : ''}
-      ${i + 1 < b.news.length ? `<a class="btn primary grow" href="#/b/${date}/news/${i + 1}">Next story</a>` : `<button class="btn primary grow" id="doneNews">Done with stories</button>`}</div>`;
+      ${!isLast ? `<a class="btn primary grow" href="#/b/${date}/news/${i + 1}">Next story</a>` : older ? `<button class="btn" id="doneNews">Done</button><button class="btn primary grow" id="olderNews">Older stories · ${esc(fmtDate(older).replace(/ \w+$/, ''))}</button>` : `<button class="btn primary grow" id="doneNews">Done with stories</button>`}</div>`;
   renderRich(n.md, $('.body', v));
   wireListen($('.body', v), n.title);
+  const markNews = () => ((log.done || {}).news ? null : enqueue({ kind: 'jsonSet', path: P.log(date), keys: ['done', 'news'], value: true, init: { date }, message: `app: news done ${date}` }));
   const dn = $('#doneNews');
-  if (dn) dn.onclick = async () => {
-    await enqueue({ kind: 'jsonSet', path: P.log(date), keys: ['done', 'news'], value: true, init: { date }, message: `app: news done ${date}` });
-    location.hash = `#/today${date === data.latest ? '' : '/' + date}`;
-  };
+  if (dn) dn.onclick = async () => { await markNews(); location.hash = dayHref(date, data.latest); };
+  const on = $('#olderNews');
+  if (on) on.onclick = async () => { await markNews(); location.hash = `#/b/${older}/news/0`; };
 }
 
 async function sectionView(date, kind, anchor) {
