@@ -11,6 +11,7 @@ const P = {
   todo: 'Lists/To-do.md',
   reading: 'Lists/Reading list.md',
   watch: 'Lists/Watch list.md',
+  tools: 'Lists/Tools.md',
   inbox: '00 Inbox/',
   ideas: '40 Library/Ideas/',
   ladder: '30 Areas/Learning/Learning ladder.md',
@@ -325,7 +326,7 @@ async function sync({ rerender = true } = {}) {
 
 async function prefetch() {
   const daily = listDir(P.daily).slice(0, 5);
-  const paths = [...daily, ...daily.map((p) => P.log(p.slice(P.daily.length, -3))), 'App/review.json', P.log(localDate()), P.todo, P.reading, P.watch, P.jobs, P.ladder, P.prep, P.story, P.presence, listDir(P.weekly)[0]];
+  const paths = [...daily, ...daily.map((p) => P.log(p.slice(P.daily.length, -3))), 'App/review.json', P.log(localDate()), P.todo, P.tools, P.reading, P.watch, P.jobs, P.ladder, P.prep, P.story, P.presence, listDir(P.weekly)[0]];
   for (const p of paths) { if (p && tree.files[p]) { try { await readFile(p); } catch { return; } } }
 }
 
@@ -858,7 +859,7 @@ function enhanceQuiz(body, log, logPath, date) {
 /* ---------- notes, learn, prep ---------- */
 const LEARN = [['', 'Ladder'], ['briefs', 'Past briefs'], ['weekly', 'Weekly reviews']];
 const PREP = [['', 'Plan'], ['mocks', 'Mocks'], ['stories', 'Story bank'], ['presence', 'Presence']];
-const LISTS = [['', 'To-do'], ['reading', 'Reading'], ['watch', 'Watch'], ['notes', 'Notes'], ['vault', 'Vault']];
+const LISTS = [['', 'To-do'], ['tools', 'Tools'], ['reading', 'Reading'], ['watch', 'Watch'], ['notes', 'Notes'], ['vault', 'Vault']];
 
 function pageHead(title, sub = '') {
   return `<header class="hero"><div class="hero-row"><h1>${esc(title)}</h1><div class="hero-actions">${syncChip()}<button class="iconbtn" id="gearBtn" aria-label="Settings">${ICON.gear}</button></div></div>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}</header>`;
@@ -985,6 +986,65 @@ async function linkListView(which) {
   $('#quickLink').onsubmit = (e) => { e.preventDefault(); openCapture('link', { url: $('#ql').value.trim(), list: which }); };
 }
 
+/* ---------- tools shelf: links to keep handy, not to read once ---------- */
+const TOOL_GROUPS = ['AI', 'Backend', 'Data', 'Cloud', 'Interview', 'Other'];
+const TOOLS_INIT = '---\ntype: list\ntags: [list, tools]\n---\n\n# Tools\n\nLinks to keep handy. Saved from the Growth app.\n';
+async function saveTool(name, url, note, group) {
+  const dup = await findInLists(url);
+  if (dup) { toast(dup.msg); return false; }
+  const t = (name || hostOf(url)).replace(/[[\]]/g, '');
+  await enqueue({ kind: 'addLine', path: P.tools, section: group || 'Other', line: `- [${t}](${url})${note ? ' — ' + note : ''}`, init: TOOLS_INIT, message: `tools: add ${t}` });
+  toast('Saved to Tools'); return true;
+}
+function parseTools(md) {
+  const groups = []; let g = null;
+  for (const line of splitFm(md || '').body.split('\n')) {
+    const h = /^##\s+(.*)$/.exec(line); if (h) { g = { name: h[1].trim(), items: [] }; groups.push(g); continue; }
+    const m = /^\s*- \[([^\]]+)\]\((\S+?)\)(?:\s+—\s+(.*))?$/.exec(line);
+    if (m && g) g.items.push({ raw: line.replace(/^\s*- /, ''), name: m[1], url: m[2], note: m[3] || '' });
+  }
+  return groups;
+}
+async function toolsView() {
+  shell({ tab: 'inbox' }); skeleton();
+  let md; try { md = await readFile(P.tools); } catch (e) { failView(e); return; }
+  const groups = parseTools(md).filter((g) => !/^removed$/i.test(g.name) && g.items.length);
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+  const v = view();
+  const STARTER = { name: 'OpenAI Tokenizer', url: 'https://platform.openai.com/tokenizer', note: 'See how text splits into tokens and count them', group: 'AI' };
+  const tile = (it, gi, ii) => `<div class="row tool" data-g="${gi}" data-i="${ii}"><a class="row-main" href="${esc(it.url)}" target="_blank" rel="noopener"><span class="row-title">${esc(it.name)}</span><span class="row-sub">${esc(it.note || hostOf(it.url))}</span></a><button class="iconbtn rm" aria-label="Remove ${esc(it.name)}">×</button></div>`;
+  v.innerHTML = `<div class="pad">${pageHead('Lists')}${chips(LISTS, 'tools', '#/inbox')}
+    ${total > 6 ? `<label class="field toolsearch"><span class="sr">Find a tool</span><input type="search" id="tq" placeholder="Find a tool"></label>` : ''}
+    <details class="card fold addfold" ${total ? '' : 'open'}><summary><span>Add a tool</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <form class="form addtool" id="addTool">
+      <label class="field"><span>Link</span><input type="url" id="tUrl" placeholder="https://" inputmode="url" required></label>
+      <label class="field"><span>Name</span><input type="text" id="tName" placeholder="e.g. Kafka partition calculator"></label>
+      <div class="two"><label class="field"><span>Group</span><select id="tGroup">${TOOL_GROUPS.map((x) => `<option>${x}</option>`).join('')}</select></label>
+      <label class="field"><span>Used for (optional)</span><input type="text" id="tNote" placeholder="One line"></label></div>
+      <button class="btn primary" type="submit">Save tool</button></form></details>
+    ${total ? '' : `<section class="card list"><div class="list-head"><h2>Start with</h2></div><div class="row"><span class="row-main"><span class="row-title">${esc(STARTER.name)}</span><span class="row-sub">${esc(STARTER.note)}</span></span><button class="btn primary" id="addStarter">Add</button></div></section><p class="empty">Tools you save stay here, one tap away. Share a link to Growth and pick “Tool” to add from any app.</p>`}
+    ${groups.map((g, gi) => `<section class="card list" data-sec="${gi}"><div class="list-head"><h2>${esc(g.name)}</h2><span class="muted">${g.items.length}</span></div>${g.items.map((it, ii) => tile(it, gi, ii)).join('')}</section>`).join('')}</div>`;
+  wireTop();
+  $('#addTool').onsubmit = async (e) => {
+    e.preventDefault(); const url = $('#tUrl').value.trim();
+    if (!/^https?:\/\//.test(url)) { toast('Paste a full link starting with https://'); return; }
+    if (await saveTool($('#tName').value.trim(), url, $('#tNote').value.trim(), $('#tGroup').value)) toolsView();
+  };
+  const st = $('#addStarter'); if (st) st.onclick = async () => { if (await saveTool(STARTER.name, STARTER.url, STARTER.note, STARTER.group)) toolsView(); };
+  v.querySelectorAll('.row.tool').forEach((r) => {
+    const it = groups[Number(r.dataset.g)].items[Number(r.dataset.i)];
+    $('.rm', r).onclick = async () => {
+      if (!confirm(`Remove ${it.name} from Tools?`)) return;
+      await enqueue({ kind: 'moveLine', path: P.tools, line: it.raw, section: 'Removed', message: `tools: remove ${it.name}` });
+      toast('Removed'); toolsView();
+    };
+  });
+  const q = $('#tq'); if (q) q.oninput = () => {
+    const t = q.value.toLowerCase();
+    v.querySelectorAll('section[data-sec]').forEach((sec) => { let any = false; sec.querySelectorAll('.row.tool').forEach((r) => { const ok = r.textContent.toLowerCase().includes(t); r.hidden = !ok; any = any || ok; }); sec.hidden = !any; });
+  };
+}
+
 function vaultView(dir = '') {
   const prefix = dir ? dir + '/' : '';
   const dirs = new Set(), files = [];
@@ -1069,7 +1129,7 @@ function openCapture(kind = 'task', prefill = {}) {
     note: `<label class="field"><span>Title</span><input type="text" id="fTitle" placeholder="Short title"></label><label class="field"><span>Note</span><textarea id="fBody" rows="5" placeholder="Anything worth keeping"></textarea></label>`,
     idea: `<label class="field"><span>Idea</span><input type="text" id="fTitle" placeholder="One line"></label><label class="field"><span>Why it matters (optional)</span><textarea id="fBody" rows="3"></textarea></label>`,
     link: `<label class="field"><span>Link</span><input type="url" id="fUrl" placeholder="https://" value="${esc(prefill.url || '')}"></label><label class="field"><span>Title</span><input type="text" id="fTitle" placeholder="What is it?"></label>
-      <label class="field"><span>Add to</span><select id="fList"><option value="reading" ${prefill.list !== 'watch' ? 'selected' : ''}>Reading list</option><option value="watch" ${prefill.list === 'watch' ? 'selected' : ''}>Watch list</option></select></label>
+      <label class="field"><span>Add to</span><select id="fList"><option value="reading" ${prefill.list !== 'watch' ? 'selected' : ''}>Reading list</option><option value="watch" ${prefill.list === 'watch' ? 'selected' : ''}>Watch list</option><option value="tools" ${prefill.list === 'tools' ? 'selected' : ''}>Tools (keep handy)</option></select></label>
       <label class="field"><span>Why save it (optional)</span><input type="text" id="fWhy"></label>`,
     ask: `<label class="field"><span>Question or request</span><textarea id="fBody" rows="5" placeholder="e.g. Explain vacuum again with a Kafka analogy"></textarea></label><p class="hint">Claude answers in the next morning's brief.</p>`,
   };
@@ -1104,6 +1164,7 @@ async function saveCapture(kind) {
   } else if (kind === 'link') {
     const url = val('fUrl'); if (!/^https?:\/\//.test(url)) throw new Error('Paste a full link starting with https://');
     const title = (val('fTitle') || url).replace(/[[\]]/g, ''); const why = val('fWhy');
+    if (val('fList') === 'tools') { await saveTool(title === url ? hostOf(url) : title, url, why, 'Other'); return; }
     const watch = val('fList') === 'watch';
     const dup = await findInLists(url);
     if (dup) { toast(dup.msg); return; }
@@ -1152,6 +1213,7 @@ async function route() {
     case 'jobs': return jobsView(arg || 'active');
     case 'inbox':
       if (arg === 'reading' || arg === 'watch') return linkListView(arg);
+      if (arg === 'tools') return toolsView();
       if (arg === 'notes') return listPage('inbox', 'Lists', LISTS, 'notes', '#/inbox', '<div class="list-head"><h2>Inbox</h2></div>' + fileRows(listDir(P.inbox), (p) => '#/file/' + encodeURIComponent(p), (p) => p.slice(P.inbox.length + 11, -3) || p.slice(P.inbox.length, -3), (p) => fmtDate(p.slice(P.inbox.length, P.inbox.length + 10))) + '<div class="list-head"><h2>Ideas</h2></div>' + fileRows(listDir(P.ideas), (p) => '#/file/' + encodeURIComponent(p), (p) => p.slice(P.ideas.length, -3)));
       if (arg.startsWith('vault')) return vaultView(arg.slice(6));
       return todoView();

@@ -409,3 +409,7 @@ figure { margin: 0; }
 .catchup .linkrow-icon { font-weight: 800; font-size: 1.05em; background: var(--t-peach); color: var(--t-peach-ink); }
 .story.more { background: var(--soft); box-shadow: none; justify-content: center; }
 .story.more .story-cat { background: var(--surface); color: var(--accent-text); }
+.addtool { margin-top: 12px; }
+.toolsearch { margin-top: 12px; }
+.row.tool .rm { flex: none; font-size: 1.3em; color: var(--muted); }
+.addfold { margin-top: 12px; } .addfold .addtool { padding: 0 18px 18px; }

@@ -550,7 +550,7 @@ function linkKey(u) {
 }
 async function findInLists(url) {
   const key = linkKey(url);
-  for (const [path, name] of [[P.watch, 'Watch list'], [P.reading, 'Reading list']]) {
+  for (const [path, name] of [[P.watch, 'Watch list'], [P.reading, 'Reading list'], [P.tools, 'Tools']]) {
     let section = '';
     for (const line of ((await readFile(path).catch(() => '')) || '').split('\n')) {
       const h = /^##\s+(.*)$/.exec(line); if (h) { section = h[1]; continue; }
@@ -611,7 +611,7 @@ async function shareView() {
   const quote = (d.text || '').replace(/https?:\/\/\S+/g, '').trim().replace(/^["“]|["”]$/g, '');
   const host = hostOf(d.url);
   const v = view();
-  const KINDS2 = [['watch', 'Watch later'], ['reading', 'Read later'], ['highlight', 'Highlight'], ['idea', 'Post idea'], ['ask', 'Ask Claude'], ...(d.blobs.length ? [['screenshot', 'Screenshot']] : [])];
+  const KINDS2 = [['watch', 'Watch later'], ['reading', 'Read later'], ['tool', 'Tool'], ['highlight', 'Highlight'], ['idea', 'Post idea'], ['ask', 'Ask Claude'], ...(d.blobs.length ? [['screenshot', 'Screenshot']] : [])];
   const draw = () => {
     v.innerHTML = `<div class="pad">${pageHead('Save to Growth')}
       <section class="card form share">
@@ -621,7 +621,7 @@ async function shareView() {
         <label class="field"><span>Title</span><input type="text" id="sTitle" value="${esc(d.title || '')}" placeholder="${kind === 'watch' ? 'Video title' : 'What is it?'}"></label>
         ${quote && kind !== 'watch' && kind !== 'reading' ? `<label class="field"><span>${kind === 'highlight' ? 'Highlight' : 'Text'}</span><textarea id="sText" rows="4">${esc(quote)}</textarea></label>` : ''}
         <label class="field"><span>${kind === 'ask' ? 'Your question' : 'Why save it (optional)'}</span><input type="text" id="sWhy" placeholder="${kind === 'idea' ? 'Your angle for a post' : kind === 'ask' ? 'e.g. Is this worth my time before 6 Dec?' : 'e.g. for the Kafka rung'}"></label>
-        <p class="hint">${{ watch: 'Goes to your Watch list. Claude adds a summary, length and how it fits your plan.', reading: 'Goes to your Reading list. Claude summarises it and sorts it into This week or After 6 Dec.', highlight: 'Saved as a highlight with its source. Claude files it next to the related note.', idea: 'Saved as a post idea for your presence backlog.', ask: 'Claude answers in the next morning brief.', screenshot: 'Uploaded to your vault. Claude reads it the next morning and files it.', note: '' }[kind] || ''}</p>
+        <p class="hint">${{ tool: 'Kept on your Tools shelf (Lists → Tools), one tap away whenever you need it.', watch: 'Goes to your Watch list. Claude adds a summary, length and how it fits your plan.', reading: 'Goes to your Reading list. Claude summarises it and sorts it into This week or After 6 Dec.', highlight: 'Saved as a highlight with its source. Claude files it next to the related note.', idea: 'Saved as a post idea for your presence backlog.', ask: 'Claude answers in the next morning brief.', screenshot: 'Uploaded to your vault. Claude reads it the next morning and files it.', note: '' }[kind] || ''}</p>
         <div class="btnrow end"><button class="btn" id="sCancel">Discard</button><button class="btn primary" id="sSave">Save</button></div></section></div>`;
     wireTop();
     v.querySelectorAll('.thumbs img').forEach((img) => { img.src = URL.createObjectURL(d.blobs[Number(img.dataset.i)]); });
@@ -629,7 +629,7 @@ async function shareView() {
     $('#sCancel').onclick = async () => { await clearShare(); location.hash = '#/inbox'; };
     $('#sSave').onclick = async () => {
       const btn = $('#sSave'); btn.disabled = true; btn.textContent = 'Saving…';
-      try { await saveShare(kind, d, $('#sTitle').value.trim(), ($('#sText') ? $('#sText').value.trim() : quote), $('#sWhy').value.trim()); await clearShare(); location.hash = kind === 'watch' ? '#/inbox/watch' : kind === 'reading' ? '#/inbox/reading' : '#/inbox/notes'; }
+      try { await saveShare(kind, d, $('#sTitle').value.trim(), ($('#sText') ? $('#sText').value.trim() : quote), $('#sWhy').value.trim()); await clearShare(); location.hash = kind === 'tool' ? '#/inbox/tools' : kind === 'watch' ? '#/inbox/watch' : kind === 'reading' ? '#/inbox/reading' : '#/inbox/notes'; }
       catch (e) { btn.disabled = false; btn.textContent = 'Save'; toast(e.message); }
     };
   };
@@ -639,6 +639,10 @@ async function saveShare(kind, d, title, text, why) {
   const today = localDate(); const url = d.url;
   const t = (title || hostOf(url) || text.slice(0, 50) || 'Shared').replace(/[[\]]/g, '');
   const fm = (type, tags) => `---\ntype: ${type}\ntags: [${tags}]\ncreated: ${today}\nsource: growth-app\n${url ? `link: ${url}\n` : ''}---\n\n`;
+  if (kind === 'tool') {
+    if (!url) throw new Error('No link found in what you shared');
+    await saveTool(t, url, why, 'Other'); return;
+  }
   if (kind === 'watch' || kind === 'reading') {
     if (!url) throw new Error('No link found in what you shared');
     const watch = kind === 'watch';
