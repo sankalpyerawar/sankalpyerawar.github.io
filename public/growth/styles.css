@@ -413,3 +413,15 @@ figure { margin: 0; }
 .toolsearch { margin-top: 12px; }
 .row.tool .rm { flex: none; font-size: 1.3em; color: var(--muted); }
 .addfold { margin-top: 12px; } .addfold .addtool { padding: 0 18px 18px; }
+
+/* sent / editing state for quiz and explain-it-back */
+.sentbadge { margin-left: auto; margin-right: 8px; font-size: .76em; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: var(--t-green); color: var(--t-green-ink); }
+.locked textarea { background: var(--soft); border-color: transparent; color: var(--text); }
+.locked .feel button[aria-pressed="false"] { opacity: .5; }
+.sentnote { color: var(--done); font-weight: 600; }
+.mic-state { display: flex; flex-direction: column; gap: 2px; }
+.mic-label { font-size: .82em; color: var(--muted); }
+.micbtn:disabled { opacity: .4; }
+.tryit { border: 2px solid var(--soft); border-radius: 18px; }
+.try-actions { margin-top: 12px; }
+.try-actions .hint { margin: 0 0 8px; }

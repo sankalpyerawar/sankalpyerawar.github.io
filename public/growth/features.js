@@ -228,38 +228,59 @@ async function skillsView() {
 
 /* ---------- explain it back (rung screen) ---------- */
 function explainBlock(log, date, rungTitle) {
-  const prev = (log.explains || []).slice(-1)[0];
+  let prev = (log.explains || []).slice(-1)[0] || null;
   const s = el('section', 'card explain');
   const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  s.innerHTML = `<div class="quiz-head"><h2>Explain it back</h2><span class="muted">60 seconds · graded tomorrow</span></div>
-    <p class="hint">Explain today's idea as if an interviewer asked "how does this work?" No peeking. ${Rec ? 'Tap the mic and talk.' : 'Use your keyboard\'s mic to talk.'}</p>
-    <div class="explain-row">${Rec ? `<button class="micbtn" id="micBtn" aria-label="Start talking"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>` : ''}<span class="timer" id="exT">0:00</span></div>
-    <label class="field"><span class="sr">Your explanation</span><textarea id="exText" rows="5" placeholder="It works like this…">${esc(prev ? prev.text : '')}</textarea></label>
-    ${prev ? `<p class="hint ok">Saved ${esc(fmtTime(prev.at))}. Saving again adds a new try.</p>` : ''}
-    <button class="btn primary block" id="exSave">Send explanation</button>`;
-  let t0 = 0, tick = null, rec = null, listening = false;
-  const ta = $('#exText', s), tEl = $('#exT', s);
-  const startTimer = () => { if (tick) return; t0 = Date.now(); tick = setInterval(() => { const sec = Math.round((Date.now() - t0) / 1000); tEl.textContent = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`; tEl.classList.toggle('over', sec > 60); }, 500); };
-  ta.addEventListener('input', startTimer, { once: true });
-  const mic = $('#micBtn', s);
-  if (mic) mic.onclick = () => {
-    if (listening) { rec.stop(); return; }
-    rec = new Rec(); rec.lang = 'en-IN'; rec.continuous = true; rec.interimResults = true;
-    const base = ta.value ? ta.value.replace(/\s*$/, ' ') : '';
-    let finals = '';
-    rec.onresult = (e) => { let interim = ''; for (let k = e.resultIndex; k < e.results.length; k++) { if (e.results[k].isFinal) finals += e.results[k][0].transcript + ' '; else interim += e.results[k][0].transcript; } ta.value = base + finals + interim; };
-    rec.onend = () => { listening = false; mic.classList.remove('on'); mic.setAttribute('aria-label', 'Start talking'); };
-    rec.onerror = (e) => { if (e.error === 'not-allowed') toast('Allow the microphone for this app to talk'); };
-    rec.start(); listening = true; mic.classList.add('on'); mic.setAttribute('aria-label', 'Stop'); startTimer();
+  s.innerHTML = `<div class="quiz-head"><h2>Explain it back</h2><span class="sentbadge" hidden></span><span class="muted">1-2 min · graded in the next brief</span></div>
+    <p class="hint">Explain today's idea as if an interviewer asked "how does this work?" No peeking. ${Rec ? 'Tap the mic and talk for as long as you need. Tap again to stop, then tidy the text before sending.' : 'Use your keyboard\'s mic to talk.'}</p>
+    <div class="explain-row">${Rec ? `<button class="micbtn" id="micBtn" type="button" aria-label="Start talking"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>` : ''}<span class="mic-state"><span class="timer" id="exT">0:00</span><span class="mic-label" id="micLabel">${Rec ? 'Tap to talk' : ''}</span></span></div>
+    <label class="field"><span class="sr">Your explanation</span><textarea id="exText" rows="7" placeholder="It works like this…">${esc(prev ? prev.text : '')}</textarea></label>
+    <p class="hint sentnote" hidden></p>
+    <div class="btnrow"><button class="btn primary grow" type="button" id="exSave">Send explanation</button><button class="btn" type="button" id="exNew" hidden>New try</button></div>`;
+  const ta = $('#exText', s), tEl = $('#exT', s), label = $('#micLabel', s), mic = $('#micBtn', s), saveBtn = $('#exSave', s), newBtn = $('#exNew', s);
+  let editing = !prev, elapsed = 0, tick = null, rec = null, wantMic = false, committed = '';
+  const fmt = (sec) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+  const startTimer = () => { if (tick) return; const t0 = Date.now() - elapsed * 1000; tick = setInterval(() => { elapsed = Math.round((Date.now() - t0) / 1000); tEl.textContent = fmt(elapsed); tEl.classList.toggle('over', elapsed > 180); }, 500); };
+  const stopTimer = () => { clearInterval(tick); tick = null; };
+  const setMode = () => {
+    s.classList.toggle('locked', !editing); ta.readOnly = !editing;
+    if (mic) mic.disabled = !editing;
+    const badge = $('.sentbadge', s), note = $('.sentnote', s);
+    badge.hidden = !prev; badge.textContent = editing && prev ? 'Editing' : '✓ Sent';
+    note.hidden = !prev;
+    note.textContent = !prev ? '' : editing ? `Editing the explanation you sent ${whenSent(prev.at)}. Send again and Claude grades the newest one.` : `Sent ${whenSent(prev.at)}${prev.seconds ? ` · ${fmt(prev.seconds)} spoken` : ''}. Claude grades it in the next brief.`;
+    saveBtn.textContent = !prev ? 'Send explanation' : editing ? 'Send updated explanation' : 'Edit';
+    saveBtn.classList.toggle('primary', editing);
+    newBtn.hidden = editing || !prev;
   };
-  $('#exSave', s).onclick = async () => {
+  const stopMic = () => { wantMic = false; if (rec) try { rec.stop(); } catch { /* already stopped */ } };
+  if (mic) mic.onclick = () => {
+    if (wantMic) { stopMic(); return; }
+    wantMic = true;
+    committed = ta.value ? ta.value.replace(/\s*$/, ' ') : '';
+    const begin = () => {
+      rec = new Rec(); rec.lang = 'en-IN'; rec.continuous = true; rec.interimResults = true;
+      let session = '';
+      rec.onresult = (e) => { session = [...e.results].map((r) => r[0].transcript).join(' ').replace(/\s+/g, ' '); ta.value = committed + session; ta.scrollTop = ta.scrollHeight; };
+      // Android ends recognition after a pause; keep listening until he taps stop.
+      rec.onend = () => { committed = (committed + session).replace(/\s*$/, ' '); if (wantMic) { try { begin(); } catch { wantMic = false; } } if (!wantMic) { mic.classList.remove('on'); mic.setAttribute('aria-label', 'Start talking'); label.textContent = 'Stopped. Edit the text, then send'; stopTimer(); ta.value = ta.value.trim(); } };
+      rec.onerror = (e) => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { wantMic = false; toast('Allow the microphone for this app to talk'); } };
+      rec.start();
+    };
+    begin(); mic.classList.add('on'); mic.setAttribute('aria-label', 'Stop'); label.textContent = 'Listening… tap to stop'; startTimer();
+  };
+  ta.addEventListener('input', () => { if (editing) startTimer(); });
+  const send = async () => {
+    stopMic(); stopTimer();
     const text = ta.value.trim(); if (text.length < 15) { toast('Say or type a little more first'); return; }
-    if (rec && listening) rec.stop();
-    const seconds = t0 ? Math.round((Date.now() - t0) / 1000) : null;
-    clearInterval(tick);
-    await enqueue({ kind: 'jsonPush', path: P.log(date), keys: ['explains'], item: { rung: rungTitle, text, seconds, at: new Date().toISOString() }, init: { date }, message: `app: explain-back ${date}` });
+    const item = { rung: rungTitle, text, seconds: elapsed || null, at: new Date().toISOString() };
+    await enqueue({ kind: 'jsonPush', path: P.log(date), keys: ['explains'], item, init: { date }, message: `app: explain-back ${date}` });
+    prev = item; editing = false; setMode(); label.textContent = Rec ? 'Tap to talk' : '';
     toast('Sent. Claude grades it in the next brief.');
   };
+  saveBtn.onclick = () => { if (!editing) { editing = true; setMode(); ta.focus(); return; } send(); };
+  newBtn.onclick = () => { editing = true; ta.value = ''; elapsed = 0; tEl.textContent = '0:00'; setMode(); ta.focus(); };
+  setMode();
   return s;
 }
 

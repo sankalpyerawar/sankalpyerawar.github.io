@@ -39,6 +39,9 @@ function fmtDate(s, long = false) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s || '')) return s || '';
   return parseDate(s).toLocaleDateString('en-GB', long ? { weekday: 'long', day: 'numeric', month: 'short' } : { weekday: 'short', day: 'numeric', month: 'short' });
 }
+function whenSent(iso) {
+  try { const d = new Date(iso); const day = localDate(d) === localDate() ? 'today' : d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); return `${day} at ${fmtTime(iso)}`; } catch { return ''; }
+}
 function fmtTime(iso) { try { return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); } catch { return ''; } }
 function b64enc(s) {
   const bytes = new TextEncoder().encode(s); let bin = '';
@@ -522,6 +525,7 @@ function chartFrom(src) {
 
 /* ---------- daily brief parsing ---------- */
 function stepType(label) {
+  if (/🎯|^\W*Prep\b/i.test(label)) return 'prep';
   if (/TL;DR|news|stor/i.test(label)) return 'news';
   if (/^\W*Try it/i.test(label)) return 'try';
   if (/Quiz/i.test(label)) return 'quiz';
@@ -680,7 +684,7 @@ async function openSteps(date) {
     return { b, open: b.steps.filter((s) => s.type !== 'try' && !done[s.type]) };
   } catch { return null; }
 }
-const stepHref = (date, s) => ({ news: `#/b/${date}/news/0`, rung: `#/b/${date}/rung`, try: `#/b/${date}/rung`, quiz: `#/b/${date}/rung/quiz`, watch: `#/b/${date}/watch`, prep: `#/b/${date}/prep` }[s.type]);
+const stepHref = (date, s) => ({ news: `#/b/${date}/news/0`, rung: `#/b/${date}/rung`, try: `#/b/${date}/rung/try`, quiz: `#/b/${date}/rung/quiz`, watch: `#/b/${date}/watch`, prep: `#/b/${date}/prep` }[s.type]);
 
 async function todayView(date) {
   shell({ tab: 'today' }); skeleton();
@@ -823,6 +827,20 @@ async function sectionView(date, kind, anchor) {
   const prog = $('#readProg');
   const onScroll = () => { if (!document.body.contains(prog)) { window.removeEventListener('scroll', onScroll); return; } const h = document.documentElement.scrollHeight - innerHeight; prog.style.width = (h > 0 ? Math.min(100, 100 * scrollY / h) : 100) + '%'; };
   window.addEventListener('scroll', onScroll, { passive: true });
+  if (kind === 'rung') {
+    const tryFold = [...body.querySelectorAll('details.fold')].find((d) => /^try it/i.test(d.querySelector('summary').textContent.trim()));
+    if (tryFold) {
+      tryFold.classList.add('tryit');
+      const tdone = !!(log.done || {}).try;
+      const tb = el('div', 'try-actions', `<p class="hint">Run it on your laptop, then tick it off here.</p><button class="btn ${tdone ? '' : 'primary'}" type="button">${tdone ? 'Done ✓ · tap to undo' : 'Mark Try it done'}</button>`);
+      $('.fold-body', tryFold).appendChild(tb);
+      $('button', tb).onclick = async () => {
+        await enqueue({ kind: 'jsonSet', path: P.log(date), keys: ['done', 'try'], value: !tdone, init: { date }, message: `app: try ${!tdone ? 'done' : 'not done'} ${date}` });
+        toast(!tdone ? 'Ticked off' : 'Unticked'); location.hash = back;
+      };
+      if (anchor === 'try') { tryFold.open = true; setTimeout(() => tryFold.scrollIntoView({ block: 'start' }), 80); }
+    }
+  }
   if (anchor === 'quiz') setTimeout(() => { const q = $('.quiz'); if (q) q.scrollIntoView({ block: 'start' }); }, 80);
 }
 
@@ -834,24 +852,37 @@ function enhanceQuiz(body, log, logPath, date) {
   const qs = [...ol.children].map((li) => li.innerHTML);
   const prev = log.quiz || {};
   const box = el('section', 'quiz');
-  box.innerHTML = `<div class="quiz-head"><h2>Quiz</h2><span class="muted">${qs.length} questions · graded tomorrow</span></div>
+  box.innerHTML = `<div class="quiz-head"><h2>Quiz</h2><span class="sentbadge" hidden></span><span class="muted">${qs.length} questions · graded in the next brief</span></div>
     ${qs.map((q, i) => `<div class="q"><span class="q-n">Question ${i + 1}</span><div class="q-text">${q}</div><label class="field"><span class="sr">Your answer to question ${i + 1}</span><textarea id="qa${i}" rows="3" placeholder="A line or two is enough">${esc((prev.answers || [])[i] || '')}</textarea></label></div>`).join('')}
     <div class="feel" role="group" aria-label="How did the rung feel?">${['Too easy', 'About right', 'Too hard'].map((f) => `<button type="button" aria-pressed="${prev.feel === f.toLowerCase()}">${f}</button>`).join('')}</div>
-    ${prev.at ? `<p class="hint ok">Sent ${esc(fmtTime(prev.at))}. Edit and send again if you like.</p>` : ''}
-    <button class="btn primary block" type="button" id="sendQuiz">${prev.at ? 'Update answers' : 'Send answers'}</button>`;
+    <p class="hint sentnote" hidden></p>
+    <button class="btn primary block" type="button" id="sendQuiz">Send answers</button>`;
   p.remove(); ol.replaceWith(box);
   let feel = prev.feel || '';
+  let sentAt = prev.at || null, editing = !sentAt;
+  const setMode = () => {
+    box.classList.toggle('locked', !editing);
+    box.querySelectorAll('textarea').forEach((t) => { t.readOnly = !editing; });
+    const badge = $('.sentbadge', box), note = $('.sentnote', box), btn = $('#sendQuiz', box);
+    badge.hidden = !sentAt; badge.textContent = editing && sentAt ? 'Editing' : '✓ Sent';
+    note.hidden = !sentAt;
+    note.textContent = editing ? `Editing answers you sent ${whenSent(sentAt)}. Send again to replace them.` : `Sent ${whenSent(sentAt)}. Claude grades these in the next brief.`;
+    btn.textContent = !sentAt ? 'Send answers' : editing ? 'Send updated answers' : 'Edit answers';
+    btn.classList.toggle('primary', editing);
+  };
   box.querySelectorAll('.feel button').forEach((btn) => {
-    btn.onclick = () => { feel = btn.getAttribute('aria-pressed') === 'true' ? '' : btn.textContent.toLowerCase(); box.querySelectorAll('.feel button').forEach((x) => x.setAttribute('aria-pressed', x.textContent.toLowerCase() === feel)); };
+    btn.onclick = () => { if (!editing) return; feel = btn.getAttribute('aria-pressed') === 'true' ? '' : btn.textContent.toLowerCase(); box.querySelectorAll('.feel button').forEach((x) => x.setAttribute('aria-pressed', x.textContent.toLowerCase() === feel)); };
   });
+  setMode();
   $('#sendQuiz', box).onclick = async () => {
+    if (!editing) { editing = true; setMode(); $('textarea', box).focus(); return; }
     const answers = qs.map((_, i) => $(`#qa${i}`, box).value.trim());
     if (!answers.some(Boolean) && !feel) { toast('Write at least one answer first'); return; }
     const at = new Date().toISOString();
     const qtext = [...ol.children].map((li) => li.textContent.trim());
     await enqueue({ kind: 'jsonSet', path: logPath, keys: ['quiz'], value: { questions: qtext, answers, feel, at }, init: { date }, message: `app: quiz answers ${date}` });
     await enqueue({ kind: 'jsonSet', path: logPath, keys: ['done', 'quiz'], value: true, init: { date }, message: `app: quiz done ${date}` });
-    $('#sendQuiz', box).textContent = 'Update answers';
+    sentAt = at; editing = false; setMode();
     toast('Answers sent. Claude grades them in the next brief.');
   };
 }
